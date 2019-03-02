@@ -1,7 +1,6 @@
 package data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class DataTree {
@@ -21,7 +20,7 @@ public class DataTree {
         }
         List<Node> childs;
         Node parent = getParentFromNode(rootNode, child.getPathKey());
-        System.out.println("parent" + parent);
+//        System.out.println("parent" + parent);
         if(parent != null) {
             Relation relation = child.getRelationParent();
 
@@ -29,11 +28,11 @@ public class DataTree {
                 case CHA:
                 case ME:
                     String idMother = child.getIdMother();
-                    if(child.getId().equals("338")) {
+                    /*if(child.getId().equals("338")) {
                         System.out.println("unknow" + parent.toString());
                         System.out.println("child" + child.toString());
                         System.out.println("idMother" + idMother);
-                    }
+                    }*/
                     if(!idMother.equals("")) {
                         Node mother = getMotherFromNode(parent, child.getIdMother());
                         if (mother != null) {
@@ -45,9 +44,9 @@ public class DataTree {
                             mother.setChilds(childs);
                         }
                     }else {
-                        System.out.println("unknow" + parent.toString());
+                        System.out.println("unknow" + parent.toString() + "| child " + child);
                         Node childUnknown = parent.getNodeUnknown();
-                        parent.getChilds().add(childUnknown);
+//                        parent.getChilds().add(childUnknown);
                         childUnknown.getChilds().add(child);
                     }
 

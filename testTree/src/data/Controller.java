@@ -16,9 +16,8 @@ import java.util.List;
 
 public class Controller {
     private static List<Node> dataNode = new ArrayList<>();
-    public static HashMap<String, Node> dataNodeByKey = new HashMap<>();
-    public DataTree dataTree = new DataTree();
-    public Gson gson = new Gson();
+    private DataTree dataTree = new DataTree();
+    private Gson gson = new Gson();
     private static Controller instance;
     public static Controller getInstance() {
         if(instance == null) {
@@ -33,7 +32,7 @@ public class Controller {
             workbook = Workbook.getWorkbook(new File("C:\\Users\\vuong_000\\IdeaProjects\\testTree\\src\\inputExcel\\data.xls"));
             Sheet sheet = workbook.getSheet("Sheet1");
             int rows =  sheet.getRows();
-            int cols = sheet.getColumns();
+//            int cols = sheet.getColumns();
             for (int row = 0; row < rows; row++) {
                 String id = sheet.getCell(0, row).getContents();
                 String pathKey = sheet.getCell(1, row).getContents();
@@ -44,7 +43,6 @@ public class Controller {
                 String relation = sheet.getCell(6, row).getContents();
                 Node node = new Node(id, pathKey, idParent, idMonther,Integer.parseInt(liftIndex), name, Integer.parseInt(relation + ""));
                 dataNode.add(node);
-                dataNodeByKey.put(id, node);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,6 +54,7 @@ public class Controller {
     public void generateTree () {
         for (Node c: dataNode) {
             dataTree.addNode(c);
+//            System.out.println(c);
         }
         System.out.println("data " + gson.toJson(dataTree.getRootNode()));
     }

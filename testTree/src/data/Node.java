@@ -101,17 +101,20 @@ public class Node {
                 + this.idMother + "_"
                 + this.liftIndex + "_"
                 + this.name + "_"
-                + this.relationParent + "_";
+                + this.relationParent;
     }
 
     public Node getNodeUnknown () {
         for(Node c: childs) {
             if(c.getId().equals("-1")){
+                System.out.println("get node retain " + c);
                 return c;
             }
         }
         Node node = new Node();
+        node.setChilds(new ArrayList<>());
         node.setId("-1");
+        node.setName("unknown");
         childs.add(node);
         return node;
     }

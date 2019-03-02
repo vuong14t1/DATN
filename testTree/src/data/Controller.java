@@ -33,7 +33,7 @@ public class Controller {
             Sheet sheet = workbook.getSheet("Sheet1");
             int rows =  sheet.getRows();
 //            int cols = sheet.getColumns();
-            for (int row = 0; row < rows; row++) {
+            for (int row = 1; row < rows; row++) {
                 String id = sheet.getCell(0, row).getContents();
                 String pathKey = sheet.getCell(1, row).getContents();
                 String idParent = sheet.getCell(2, row).getContents();

@@ -28,12 +28,13 @@ public class DataTree {
                 case CHA:
                 case ME:
                     String idMother = child.getIdMother();
+                    String idParent = child.getIdParent();
                     /*if(child.getId().equals("338")) {
                         System.out.println("unknow" + parent.toString());
                         System.out.println("child" + child.toString());
                         System.out.println("idMother" + idMother);
                     }*/
-                    if(!idMother.equals("")) {
+                    if(!idMother.equals("") || !idParent.equals("")) {
                         Node mother = getMotherFromNode(parent, child.getIdMother());
                         if (mother != null) {
                             childs = mother.getChilds();

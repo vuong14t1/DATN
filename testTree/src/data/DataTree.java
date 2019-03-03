@@ -20,6 +20,10 @@ public class DataTree {
         }
         List<Node> childs;
         Node parent = findNodeByPathKey(getRootNode(), child.getPathKey());
+        if(child.getId().equals("332")) {
+            System.out.println("parent" + parent.toString());
+            System.out.println("child" + child.toString());
+        }
 //        System.out.println("parent" + parent);
         if(parent != null) {
             Relation relation = child.getRelationParent();
@@ -29,27 +33,24 @@ public class DataTree {
                 case ME:
                     String idMother = child.getIdMother();
                     String idParent = child.getIdParent();
-                    if(child.getId().equals("338")) {
-                        System.out.println("parent" + parent.toString());
-                        System.out.println("child" + child.toString());
-                        System.out.println("idMother" + idMother);
-                    }
+
                     if(idMother.equals("") || idParent.equals("")) {
 
                         System.out.println("unknow" + parent.toString() + "| child " + child);
                         Node childUnknown = parent.getNodeUnknown();
-                        childUnknown.setRelationParent(idMother.equals("")? Relation.VO: Relation.CHONG);
+                        childUnknown.setRelationParent(relation == Relation.ME ? Relation.CHONG: Relation.VO);
                         childUnknown.setLeftIndex(child.getLeftIndex());
-//                        parent.getChilds().add(childUnknown);
                         childUnknown.getChilds().add(child);
 
                     }else {
 
                         Node node = null;
                         if (relation == Relation.ME) {
-                            node = findNodeByIdMother(parent, child.getIdMother());
-                        }else {
+                            //neu moi quan he la me thi tim node gan nhat la cha
                             node = findNodeByIdParent(parent, child.getIdParent());
+                        }else {
+                            //neu moi quan he la cha thi tim node gan nhat la me
+                            node = findNodeByIdMother(parent, child.getIdMother());
                         }
                         if (node != null) {
                             childs = node.getChilds();
@@ -58,6 +59,14 @@ public class DataTree {
                             }
                             childs.add(child);
                             node.setChilds(childs);
+                        }else {
+
+                            System.out.println("unknow" + parent.toString() + "| child " + child);
+                            Node childUnknown = parent.getNodeUnknown();
+                            childUnknown.setRelationParent(relation == Relation.ME ? Relation.CHONG: Relation.VO);
+                            childUnknown.setLeftIndex(child.getLeftIndex());
+                            childUnknown.getChilds().add(child);
+
                         }
                     }
 

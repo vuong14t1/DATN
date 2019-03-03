@@ -29,7 +29,7 @@ public class Controller {
     public void loadDataNode () {
         Workbook workbook;
         try {
-            workbook = Workbook.getWorkbook(new File("C:\\Users\\vuong_000\\IdeaProjects\\testTree\\src\\inputExcel\\data.xls"));
+            workbook = Workbook.getWorkbook(new File("F:\\DATN\\source\\testTree\\src\\inputExcel\\data.xls"));
             Sheet sheet = workbook.getSheet("Sheet1");
             int rows =  sheet.getRows();
 //            int cols = sheet.getColumns();
@@ -54,7 +54,9 @@ public class Controller {
     public void generateTree () {
         for (Node c: dataNode) {
             dataTree.addNode(c);
-//            System.out.println(c);
+            if(c.getId().equals("368")){
+                System.out.println(c);
+            }
         }
         System.out.println("data " + gson.toJson(dataTree.getRootNode()));
     }

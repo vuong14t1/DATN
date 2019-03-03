@@ -8,7 +8,7 @@ public class Node {
     private String pathKey;
     private String idParent;
     private String idMother;
-    private int liftIndex;
+    private int leftIndex;
     private String name;
     private Relation relationParent;
     private List<Node> childs;
@@ -23,7 +23,7 @@ public class Node {
         this.pathKey = pathKey;
         this.idParent = idParent;
         this.idMother = idMother;
-        this.liftIndex = liftIndex;
+        this.leftIndex = liftIndex;
         this.name = name;
         this.relationParent = Relation.getByCode(relateParent);
         this.childs = new ArrayList<>(1);
@@ -61,12 +61,12 @@ public class Node {
         this.idMother = idMother;
     }
 
-    public int getLiftIndex() {
-        return liftIndex;
+    public int getLeftIndex() {
+        return leftIndex;
     }
 
-    public void setLiftIndex(int liftIndex) {
-        this.liftIndex = liftIndex;
+    public void setLeftIndex(int leftIndex) {
+        this.leftIndex = leftIndex;
     }
 
     public String getName() {
@@ -99,7 +99,7 @@ public class Node {
                 + this.pathKey + "_"
                 + this.idParent + "_"
                 + this.idMother + "_"
-                + this.liftIndex + "_"
+                + this.leftIndex + "_"
                 + this.name + "_"
                 + this.relationParent;
     }
@@ -114,6 +114,10 @@ public class Node {
         Node node = new Node();
         node.setChilds(new ArrayList<>());
         node.setId("-1");
+        node.setIdMother("-1");
+        node.setIdParent("-1");
+        node.setLeftIndex(-1);
+        node.setPathKey("");
         node.setName("unknown");
         childs.add(node);
         return node;

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/user :: head"> </head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/user :: header"> </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/user :: aside_menu"> </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 th:text="#{genealogy.header}">
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active"  ><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Your Page Content Here -->
+
+
+            <h1>Spring Boot - Multiple file upload example - AJAX</h1>
+
+            <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
+                <input type="text" name="extraField"/><br/><br/>
+                <input type="file" name="files"/><br/><br/>
+                <input type="file" name="files"/><br/><br/>
+                <input type="submit" value="Submit" id="btnSubmit"/>
+            </form>
+
+            <h1>Ajax Post Result</h1>
+            <pre>
+                <span id="result"></span>
+            </pre>
+
+            <div style="width:55%">
+                <h1>HTML5 Ajax Multi-file Upload With Progress Bar</h1>
+                <div id='progressBar' style='height: 20px; border: 2px solid green; margin-bottom: 20px'>
+                    <div id='bar' style='height: 100%; background: #33dd33; width: 0%'>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/user :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/user :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/user :: js"/>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnSubmit").click(function (event) {
+
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+
+            fire_ajax_submit();
+
+        });
+
+    });
+
+    function fire_ajax_submit() {
+
+        // Get form
+        var form = $('#fileUploadForm')[0];
+
+        var data = new FormData(form);
+
+        data.append("CustomField", "This is some extra data, testing");
+
+        $("#btnSubmit").prop("disabled", true);
+
+        $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        //Do something with upload progress here
+                        console.log("percent" + percentComplete);
+                        var bar = document.getElementById('bar');
+                        bar.style.width = percentComplete*100 + '%';
+                        bar.innerHTML = percentComplete + ' % complete';
+                    }
+                }, false);
+
+                xhr.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        //Do something with download progress
+                        console.log("percentComplete : progress :" + percentComplete);
+
+                    }
+                }, false);
+
+                return xhr;
+            },
+            type: "POST",
+            // enctype: 'multipart/form-data',
+            enctype: 'application/x-www-form-urlencoded',
+            url: "/api/upload/multi",
+            data: data,
+            //http://api.jquery.com/jQuery.ajax/
+            //https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+
+                $("#result").text(data);
+                console.log("SUCCESS : ", data);
+                $("#btnSubmit").prop("disabled", false);
+
+            },
+            error: function (e) {
+
+                $("#result").text(e.responseText);
+                console.log("ERROR : ", e);
+                $("#btnSubmit").prop("disabled", false);
+
+            }
+        });
+
+    }
+</script>
+
+</body>
+</html>

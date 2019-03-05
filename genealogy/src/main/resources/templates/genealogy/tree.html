@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/user :: head"> </head>
+
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/user :: header"> </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/user :: aside_menu"> </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 th:text="#{genealogy.header}">
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active"  ><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Your Page Content Here -->
+            <link rel="stylesheet" th:href="@{/css/jquery-ui.css}"/>
+            <div class="box box-info" id="containment-wrapper" style="width: 100%; height: 100%">
+                <div class="chart" id="collapsable-example"></div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/user :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/user :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/user :: js"/>
+
+<script th:src="@{/treant/vendor/raphael.js}"></script>
+<script th:src="@{/treant/Treant.js}"></script>
+<script th:src="@{/treant/collapsable.js}"></script>
+<script th:src="@{/js/jquery-ui.js}"></script>
+<script>
+    var data = {"chart":{"container":"#collapsable-example","animateOnInit":true,"node":{"collapsable":true},"animation":{"nodeAnimation":"easeOutBounce","nodeSpeed":700,"connectorsAnimation":"bounce","connectorsSpeed":700}},"nodeStructure":{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Gốc","title":"0"},"collapsed":false,"childrenDropLevel":0,"children":[{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Cả","title":"1"},"collapsed":false,"childrenDropLevel":0,"children":[{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn B","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"75","HTMLclass":"people_chart_node","data-parentKey":"r_61_66","data-id":75},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn C","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"74","HTMLclass":"people_chart_node","data-parentKey":"r_61_66","data-id":74}],"HTMLid":"66","HTMLclass":"people_chart_node","data-parentKey":"r_61","data-id":66},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Hai","title":"1"},"collapsed":false,"childrenDropLevel":0,"children":[{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn A","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"71","HTMLclass":"people_chart_node","data-parentKey":"r_61_65","data-id":71},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn C","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"72","HTMLclass":"people_chart_node","data-parentKey":"r_61_65","data-id":72},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Hai 5","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"73","HTMLclass":"people_chart_node","data-parentKey":"r_61_65","data-id":73}],"HTMLid":"65","HTMLclass":"people_chart_node","data-parentKey":"r_61","data-id":65},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Ba","title":"1"},"collapsed":false,"childrenDropLevel":0,"children":[{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Hai 1","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"69","HTMLclass":"people_chart_node","data-parentKey":"r_61_64","data-id":69},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Hai 2","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"70","HTMLclass":"people_chart_node","data-parentKey":"r_61_64","data-id":70},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Hai 3","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"67","HTMLclass":"people_chart_node","data-parentKey":"r_61_64","data-id":67},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Hai 4","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"68","HTMLclass":"people_chart_node","data-parentKey":"r_61_64","data-id":68}],"HTMLid":"64","HTMLclass":"people_chart_node","data-parentKey":"r_61","data-id":64},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Bốn","title":"1"},"collapsed":false,"childrenDropLevel":0,"children":[{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn A","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"78","HTMLclass":"people_chart_node","data-parentKey":"r_61_63","data-id":78},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn B","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"79","HTMLclass":"people_chart_node","data-parentKey":"r_61_63","data-id":79},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn C","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"77","HTMLclass":"people_chart_node","data-parentKey":"r_61_63","data-id":77},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn A","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"76","HTMLclass":"people_chart_node","data-parentKey":"r_61_63","data-id":76}],"HTMLid":"63","HTMLclass":"people_chart_node","data-parentKey":"r_61","data-id":63},{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn Năm","title":"1"},"collapsed":false,"childrenDropLevel":0,"children":[{"image":"/dist/img/user2-160x160.jpg","text":{"name":"Nguyễn Văn B","title":"2"},"collapsed":false,"childrenDropLevel":0,"HTMLid":"80","HTMLclass":"people_chart_node","data-parentKey":"r_61_62","data-id":80}],"HTMLid":"62","HTMLclass":"people_chart_node","data-parentKey":"r_61","data-id":62}],"HTMLid":"61","HTMLclass":"people_chart_node","data-parentKey":"r","data-id":61}}
+    console.log(JSON.stringify(chart_config));
+    new Treant( data );
+
+
+</script>
+<!--<script>
+    $( function() {
+        $( "#collapsable-example" ).getElementsByTagName("svg")[0].draggable({ scroll: true });
+    } );
+</script>-->
+</body>
+</html>

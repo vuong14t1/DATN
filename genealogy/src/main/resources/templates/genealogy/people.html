@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/user :: head"> </head>
+
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/user :: header"> </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/user :: aside_menu"> </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 th:text="#{genealogy.header}">
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active"  ><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Your Page Content Here -->
+
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <a th:href="'/genealogy/'+${idGenealogy}+'/pedigree/'+${idPedigree}+'/people/add'" class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus"></span><span  th:text="#{add}"></span></a>
+                </div>
+                <!-- /.box-header -->
+                <table id="table">
+                    <thead>
+                    <tr>
+                        <th data-width="20%" data-sortable="true" data-field="name" th:text="#{genealogy.find.table.name}"></th>
+                        <th data-width="70%" data-field="history" th:text="#{genealogy.find.table.description}"></th>
+                        <th data-width="150px" data-formatter="actionFormatter" data-events="actionEvents" data-field="action" th:text="#{genealogy.find.table.action}"></th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/user :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/user :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/user :: js"/>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function actionFormatter(value, row, index) {
+        console.log("value "  + JSON.stringify(value));
+        console.log("row "  + JSON.stringify(row));
+        console.log("index "  + JSON.stringify(index));
+        return [
+            '<a href="javascript:void(0)" title="View" type="button" class="view btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>',
+            '<a href="javascript:void(0)" title="Edit" type="button" class="edit btn btn-warning"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>',
+            '<a href="javascript:void(0)" title="Remove" type="button" class="remove btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>'
+        ].join(' ');
+    }
+    window.actionEvents = {
+        'click .view': function (e, value, row, index) {
+            window.location.href =('/genealogy/detail/'+ row["id"] + "/");
+        },
+        'click .edit': function (e, value, row, index) {
+
+        },
+        'click .remove': function (e, value, row, index) {
+            alert('You click remove icon, row: ' + JSON.stringify(row));
+            console.log("value" + JSON.stringify(value));
+            console.log("row" + JSON.stringify(row));
+            console.log("index" + JSON.stringify(index));
+        },
+        'change ':function (e,value,row,index) {
+            console.log("chane" + JSON.stringify(index));
+        },
+        'mouseenter ':function (e,value,row,index) {
+            console.log("blur" + JSON.stringify(index));
+        }
+    };
+    var idGenealogy = [[${idGenealogy}]];
+    var idPedigree = [[${idPedigree}]];
+
+    $(function () {
+        console.log("load bootstrap table" + idGenealogy);
+        $('#table').bootstrapTable({
+            search: true,
+            pagination: true,
+            url: "https://"+ document.location.host  +'/rest/genealogy/'+idGenealogy+'/pedigree/' + idPedigree,
+            // data: data
+        });
+    });
+
+    /*]]>*/
+</script>
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/user :: head"></head>
+
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/user :: header"></header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/user :: aside_menu"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 th:text="#{genealogy.header}">
+            </h1>
+           <ol class="breadcrumb">
+               <a th:href="'/genealogy/'+ ${idGenealogy} +'/'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Dòng tộc</span></a>
+               <a th:href="'/genealogy/'+ ${idGenealogy} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Thành Viên</span></a>
+               <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/people-list'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Danh sách Người trong phả hệ</span></a>
+               <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/detail'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Quay lại Phả hệ</span></a>
+
+               <li>
+                   <a href="/genealogy">
+                       <i class="fa fa-dashboard"></i>
+                       <span th:text="#{genealogy}"></span>
+                   </a>
+               </li>
+               <li>
+                   <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/detail'">
+                       <span>Phả hệ</span>
+                   </a>
+               </li>
+               <li class="active"> Cây Phả hệ</li>
+
+               <!--<li class="active"><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>-->
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Your Page Content Here -->
+            <link rel="stylesheet" th:href="@{/css/jquery-ui.css}"/>
+            <div class="box box-info" id="nodeXemQuanHe">
+                <div class="box-header with-border">
+                    <div class="col-lg-9">
+                        Xem cách gọi tên
+                    </div>
+                    <div class="col-lg-3 ">
+                        <button class="btn btn-danger pull-right" id="btnCloseNodeXemQuanHe"><span> X </span></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <img src="/dist/img/default-avatar.png" class="img-circle center-block" alt="User Image" id="imgPeopleRelation1" width="100px" height="100px"/>
+                        <p class="text-center" id="imgPeopleRelationName1"> Người thứ nhất </p>
+                    </div>
+                    <div class="col-lg-4 ">
+                        <p class="text-center">
+                            <button class="btn btn-success" id="btnXacNhanXemQuanHe"><span> Xem </span></button>
+                            <button class="btn btn-warning" id="btnResetXemQuanHe"><span> Chọn Lại </span></button>
+                        </p>
+                        <div id="resultXemQuanHe">
+                            <p>Nguyễn Văn A gọi Nguyễn Văn B là Cậu</p>
+                            <p class="pull-right">Nguyễn Văn B gọi Nguyễn Văn A là Cháu</p>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4">
+                        <img src="/dist/img/default-avatar.png" class="img-circle center-block" alt="User Image" id="imgPeopleRelation2" width="100px" height="100px"/>
+                        <p class="text-center" id="imgPeopleRelationName2">Người thứ hai</p>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-info" id="containment-wrapper">
+                <div class="chart" id="collapsable-example"></div>
+            </div>
+
+            <div class="box box-info" id="nodeCreateFirstChild">
+                <div class="box-header with-border ">
+                    TẠO MỚI NGƯỜI ĐẦU TIÊN
+                </div>
+                <!-- /.box-header -->
+                <p class="text-center">
+                    <a th:href="'/genealogy/'+${idGenealogy}+'/pedigree/'+${idPedigree}+'/import'" class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus"></span><span>Import danh sách từ file</span></a>
+                    <button class="btn btn-success" id="btnCreateRoot"><span> Tạo Người Đầu tiên </span></button>
+                </p>
+
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/user :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/user :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+    
+    <!-- Modal add child -->
+    <div class="modal fade" id="modalAddChild" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thêm con của </h4>
+                    <h1 class="modal-title" id="addChildInputNameParent"></h1>
+                </div>
+                <div class="modal-body">
+                    <form id="addNewChild">
+                        <input type="hidden" class="form-control" id="addChildIdParent" name="addChildIdParent"/>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image" id="addChildImgPeople" width="250px" height="250px"/>
+                                <div class="form-group row">
+                                    <div class="custom-file col-lg-12 center-block">
+                                        <input type="file" class="form-control" name="addChildInputFileImg" id="addChildInputFileImg" onchange="readURLAddChild(this);"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="addChildInputIdMother" class="col-sm-6 col-form-label">Quan hệ với gốc</label>
+                                    <div class="col-sm-6">
+                                        <select name="addChildInputRelation" class="form-control" id="addChildInputRelation">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="addChildInputIdMother" class="col-sm-3 col-form-label">Cha/Mẹ(nếu có)</label>
+                                    <div class="col-sm-9">
+                                        <select name="addChildInputIdMother" class="form-control" id="addChildInputIdMother">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="addChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
+                                    <div class="col-sm-6">
+                                        <select name="addChildInputConThu" class="form-control" id="addChildInputConThu">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="addChildInputName" class="col-sm-3 col-form-label">Họ tên</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control"  name="addChildInputName" id="addChildInputName" placeholder="Nguyễn Văn X"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="addChildInputNickName" class="col-sm-3 col-form-label">Thường gọi</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="addChildInputNickName"  id="addChildInputNickName" placeholder="X Nguyễn"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="addChildInputGender" class="col-sm-3 col-form-label">Giới tính</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control"  name="addChildInputGender" id="addChildInputGender">
+                                            <option value="1" selected="true"> Nam</option>
+                                            <option value="0"> Nữ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!--<div class="form-group col-md-4">
+                                <label for="inputTinhThanhPho">Tỉnh/Thành phố</label>
+                                <select class="form-control" id="inputTinhThanhPho" readonly="true"></select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputQuanHuyen">Quận/Huyện</label>
+                                <select class="form-control" id="inputQuanHuyen" readonly="true"></select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputPhuongXa">Phường/Xã</label>
+                                <select class="form-control" id="inputPhuongXa" readonly="true"></select>
+                            </div>-->
+                            <div class="form-group col-md-12">
+                                <label for="addChildInputAddress">Địa chỉ</label>
+                                <input type="text" class="form-control"  name="addChildInputAddress" id="addChildInputAddress" placeholder="phường/xã, quận/huyện, tỉnh/thành phố"/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="addChildInputBirthday">Ngày sinh</label>
+                                <input type="text" class="form-control"  name="addChildInputBirthday"  id="addChildInputBirthday" placeholder="mm/dd/yyyy"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="addChildInputDeadDay">Ngày mất</label>
+                                <input type="text" class="form-control"  name="addChildInputDeadDay"  id="addChildInputDeadDay" placeholder="mm/dd/yyyy"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="addChildInputDegree">Trình độ</label>
+                            <textarea class="form-control"  name="addChildInputDegree"   id="addChildInputDegree" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="addChildInputDes">Câu nói, lý lich</label>
+                            <textarea class="form-control"  name="addChildInputDes"  id="addChildInputDes" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="addChildInputDataExtra">Mô tả thêm</label>
+                            <textarea class="form-control"  name="addChildInputDataExtra"  id="addChildInputDataExtra" rows="3"></textarea>
+                        </div>
+                        <button id="" type="submit" class="btn btn-warning" data-dismiss="modal">Lưu</button>
+                        <button type="button"btnAddChildSubmit class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    </form>
+                </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--</div>-->
+            </div>
+
+        </div>
+    </div>
+    <!-- end modal add child -->
+
+    <!-- Modal view child -->
+    <div class="modal fade" id="modalViewInfo" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thông tin chi tiết </h4>
+                    <h1 class="modal-title" id="viewChildNameParent"></h1>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="hidden" class="form-control" id="viewChildIdParent" name="viewChildIdParent"/>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image" id="viewChildImgPeople" width="250px" height="250px"/>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="viewChildInputIdMother" class="col-sm-6 col-form-label">Quan hệ với gốc</label>
+                                    <div class="col-sm-6">
+                                        <select name="viewChildInputRelation" class="form-control" id="viewChildInputRelation" readonly="true">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="viewChildInputIdMother" class="col-sm-3 col-form-label">Cha/Mẹ(nếu có)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control"  name="viewChildInputIdMother" id="viewChildInputIdMother" placeholder=""  readonly="true"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="viewChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
+                                     <div class="col-sm-6">
+                                        <select name="viewChildInputConThu" class="form-control" id="viewChildInputConThu"  readonly="true">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="viewChildInputName" class="col-sm-3 col-form-label">Họ tên</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control"  name="viewChildInputName" id="viewChildInputName" placeholder=""  readonly="true"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="viewChildInputNickName" class="col-sm-3 col-form-label">Thường gọi</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="viewChildInputNickName"  id="viewChildInputNickName" placeholder=""  readonly="true"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="viewChildInputGender" class="col-sm-3 col-form-label">Giới tính</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="viewChildInputGender"  id="viewChildInputGender" placeholder=""  readonly="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!--<div class="form-group col-md-4">
+                                <label for="inputTinhThanhPho">Tỉnh/Thành phố</label>
+                                <select class="form-control" id="inputTinhThanhPho" readonly="true"></select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputQuanHuyen">Quận/Huyện</label>
+                                <select class="form-control" id="inputQuanHuyen" readonly="true"></select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputPhuongXa">Phường/Xã</label>
+                                <select class="form-control" id="inputPhuongXa" readonly="true"></select>
+                            </div>-->
+                            <div class="form-group col-md-12">
+                                <label for="viewChildInputAddress">Địa chỉ</label>
+                                <input type="text" class="form-control"  name="viewChildInputAddress" id="viewChildInputAddress" placeholder=""  readonly="true"/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="viewChildInputBirthday">Ngày sinh</label>
+                                <input type="text" class="form-control"  name="viewChildInputBirthday"  id="viewChildInputBirthday" placeholder="mm/dd/yyyy"  readonly="true"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="viewChildInputDeadDay">Ngày mất</label>
+                                <input type="text" class="form-control"  name="viewChildInputDeadDay"  id="viewChildInputDeadDay" placeholder="mm/dd/yyyy"  readonly="true"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewChildInputDegree">Trình độ</label>
+                            <textarea class="form-control"  name="viewChildInputDegree"   id="viewChildInputDegree" rows="3"  readonly="true"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewChildInputDes">Câu nói, lý lich</label>
+                            <textarea class="form-control"  name="viewChildInputDes"  id="viewChildInputDes" rows="3"  readonly="true"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="viewChildInputDataExtra">Mô tả thêm</label>
+                            <textarea class="form-control"  name="viewChildInputDataExtra"  id="viewChildInputDataExtra" rows="3"  readonly="true"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </form>
+                </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--</div>-->
+            </div>
+
+        </div>
+    </div>
+    <!-- end modal view child -->
+
+    <!-- Modal edit child -->
+    <div class="modal fade" id="modalEditInfo" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Sửa thông tin </h4>
+                    <h1 class="modal-title" id="editChildNameParent"></h1>
+                </div>
+                <div class="modal-body">
+                    <form id="editChild">
+                        <input type="hidden" class="form-control" id="editChildId" name="editChildId"/>
+                        <input type="hidden" class="form-control" id="editChildIdParent" name="editChildIdParent"/>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image" id="editChildImgPeople" width="250px" height="250px"/>
+                                <div class="form-group row">
+                                    <div class="custom-file col-lg-12 center-block">
+                                        <input type="file" class="form-control" name="editChildInputFileImg" id="editChildInputFileImg" onchange="readURLeditChild(this);"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="editChildInputRelation" class="col-sm-6 col-form-label">Quan hệ với gốc</label>
+                                    <div class="col-sm-6">
+                                        <select name="editChildInputRelation" class="form-control" id="editChildInputRelation" readonly="true" disabled="true">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="editChildInputIdMother" class="col-sm-3 col-form-label">Cha/Mẹ(nếu có)</label>
+                                    <div class="col-sm-9">
+                                        <select name="editChildInputIdMother" class="form-control" id="editChildInputIdMother" readonly="true" disabled="true">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="editChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
+                                    <div class="col-sm-6">
+                                        <select name="editChildInputConThu" class="form-control" id="editChildInputConThu">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="editChildInputName" class="col-sm-3 col-form-label">Họ tên</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control"  name="editChildInputName" id="editChildInputName" placeholder="..."/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="editChildInputNickName" class="col-sm-3 col-form-label">Thường gọi</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="editChildInputNickName"  id="editChildInputNickName" placeholder="..."/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="editChildInputGender" class="col-sm-3 col-form-label">Giới tính</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control"  name="editChildInputGender" id="editChildInputGender">
+                                            <option value="1" selected="true"> Nam</option>
+                                            <option value="0"> Nữ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!--<div class="form-group col-md-4">
+                                <label for="inputTinhThanhPho">Tỉnh/Thành phố</label>
+                                <select class="form-control" id="inputTinhThanhPho" readonly="true"></select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputQuanHuyen">Quận/Huyện</label>
+                                <select class="form-control" id="inputQuanHuyen" readonly="true"></select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputPhuongXa">Phường/Xã</label>
+                                <select class="form-control" id="inputPhuongXa" readonly="true"></select>
+                            </div>-->
+                            <div class="form-group col-md-12">
+                                <label for="editChildInputAddress">Địa chỉ</label>
+                                <input type="text" class="form-control"  name="editChildInputAddress" id="editChildInputAddress" placeholder="phường/xã, quận/huyện, tỉnh/thành phố"/>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editChildInputBirthday">Ngày sinh</label>
+                                <input type="text" class="form-control"  name="editChildInputBirthday"  id="editChildInputBirthday" placeholder="mm/dd/yyyy"/>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editChildInputDeadDay">Ngày mất</label>
+                                <input type="text" class="form-control"  name="editChildInputDeadDay"  id="editChildInputDeadDay" placeholder="mm/dd/yyyy"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editChildInputDegree">Trình độ</label>
+                            <textarea class="form-control"  name="editChildInputDegree"   id="editChildInputDegree" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editChildInputDes">Câu nói, lý lich</label>
+                            <textarea class="form-control"  name="editChildInputDes"  id="editChildInputDes" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editChildInputDataExtra">Mô tả thêm</label>
+                            <textarea class="form-control"  name="editChildInputDataExtra"  id="editChildInputDataExtra" rows="3"></textarea>
+                        </div>
+                        <button id="btnEditChildSubmit" type="submit" class="btn btn-warning" data-dismiss="modal">Lưu</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    </form>
+                </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--</div>-->
+            </div>
+
+        </div>
+    </div>
+    <!-- end modal edit child -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/user :: js"/>
+<script th:src="@{/treant/vendor/raphael.js}"></script>
+<script th:src="@{/treant/Treant.js}"></script>
+<script th:src="@{/treant/collapsable.js}"></script>
+
+<link th:href="@{/treant/vendor/perfect-scrollbar/perfect-scrollbar.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/treant/vendor/jquery.easing.js}"></
+script>
+<script th:src="@{/treant/vendor/jquery.mousewheel.js}"></script>
+<script th:src="@{/treant/vendor/perfect-scrollbar/perfect-scrollbar.js}"></script>
+
+
+<script th:src="@{/js/jquery-ui.js}"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var idGenealogy     = [[${idGenealogy}]];
+    var idPedigree      = [[${idPedigree}]];
+    var idPermission      = [[${idPermission}]];
+
+    var idXemQuanHe1,
+        idXemQuanHe2;
+    var readURL = function (input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgPeopleDetail')
+                    .attr('src', e.target.result)
+                    .width(250)
+                    .height(250);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    var readURLAddChild = function (input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#addChildImgPeople')
+                    .attr('src', e.target.result)
+                    .width(250)
+                    .height(250);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    var loadTree = function () {
+        $.ajax({
+            type       : "GET",
+            url        : "/rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/list-people-tree",
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache      : false,
+            timeout    : 600000,
+            success    : function (data) {
+                if(data.nodeStructure == null){
+                    $('#nodeCreateFirstChild').fadeIn();
+                    $('#containment-wrapper').fadeOut();
+                }else{
+                    $('#nodeCreateFirstChild').hide();
+                    $('#containment-wrapper').fadeIn();
+                    new Treant(data, initViewDetailNode);
+                    $('#modalAddChild').modal('hide');
+                    $('#modalViewInfo').modal('hide');
+                    $('#modalEditInfo').modal('hide');
+                }
+                console.log("SUCCESS : ", data);
+            },
+            error      : function (e) {
+                console.log("ERROR : ", e);
+            }
+        });
+    };
+
+
+    var initViewDetailNode = function () {
+        console.log("init view detail node");
+        var result  =[];
+        result.push(
+            '<div class="people_chart_node_edit">' +
+            '<a onclick="viewRelation(this)"><i class="fa fa-check-square-o fa-lg" data-toggle="tooltip" data-placement="top" title="Xem Cách gọi tên"></i></a> '
+        );
+        switch (idPermission){
+            case 1:
+                result.push(
+                '<a onclick="deleteInfoNode(this)"><i class="fa fa-trash fa-lg" data-toggle="tooltip" data-placement="top" title="Xóa"></i></a>  '
+            );
+            case 2:
+                result.push(
+                    '<a onclick="addChildNode(this)"><i class="fa fa-plus-circle fa-lg" data-toggle="tooltip" data-placement="top" title="Thêm con mới"></i></a>  ' +
+                    '<a onclick="editInfoNode(this)"><i class="fa fa-pencil fa-lg" data-toggle="tooltip" data-placement="top" title="Sửa thông tin"></i></a>  '
+                );
+            case 4:
+                result.push(
+                    '<a onclick="viewInfoNode(this)"><i class="fa fa-exclamation-circle fa-lg" data-toggle="tooltip" data-placement="top" title="Xem thông tin chi tiết"></i></a>  '
+                );
+                break;
+
+        }
+        result.push('</div>');
+        result.push('<div class="people_chart_node_collapsed"><i class="fa fa-folder-open fa-2x" data-toggle="tooltip" data-placement="top" title="Click vào giữa hình để mở"></i></div>');
+        $(".people_chart_node")
+            .append(result.join(' '));
+        // $(".people_chart_node")
+        //     .append('' +
+        //         '<div class="people_chart_node_edit">' +
+        //         '<a onclick="viewRelation(this)"><i class="fa fa-check-square-o fa-lg" data-toggle="tooltip" data-placement="top" title="Xem Cách gọi tên"></i></a>  ' +
+        //         '<a onclick="addChildNode(this)"><i class="fa fa-plus-circle fa-lg" data-toggle="tooltip" data-placement="top" title="Thêm con mới"></i></a>  ' +
+        //         '<a onclick="editInfoNode(this)"><i class="fa fa-pencil fa-lg" data-toggle="tooltip" data-placement="top" title="Sửa thông tin"></i></a>  ' +
+        //         '<a onclick="viewInfoNode(this)"><i class="fa fa-exclamation-circle fa-lg" data-toggle="tooltip" data-placement="top" title="Xem thông tin chi tiết"></i></a>  ' +
+        //         '</div>' +
+        //         '<div class="people_chart_node_collapsed">' +
+        //         '<i class="fa fa-folder-open fa-2x" data-toggle="tooltip" data-placement="top" title="Click vào giữa hình để mở"></i>'+
+        //         '</div>'
+        //     );
+    };
+    var viewRelation = function (sender) {
+        var id       = $(sender)
+            .parent()
+            .parent()
+            .attr('id');
+        var srcImg   = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
+        var idPeople = sender.parentElement.parentElement.getAttribute('id');
+        var classParent  = sender.parentElement.parentElement.getAttribute('class');
+        if(classParent.includes('people_node_unknown')){
+            toastr["error"]("Người này không tồn tại", "Vui lòng chọn lại")
+            return;
+        }
+        var name     = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        var date     = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
+        date         = date.split(" - ");
+        if (idXemQuanHe1 == null) {
+            idXemQuanHe1 = idPeople;
+            $("#imgPeopleRelation1")
+                .attr('src', srcImg);
+            $("#imgPeopleRelationName1")
+                .text(name);
+        } else {
+            idXemQuanHe2 = idPeople;
+            $("#imgPeopleRelation2")
+                .attr('src', srcImg);
+            $("#imgPeopleRelationName2")
+                .text(name);
+        }
+        // console.log(srcImg);
+        // console.log('viewRelation' + id);
+        // $("#nodeXemQuanHe").append('<img src="/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" id="imgPeopleDetail" width="250px" height="250px"/>');
+        // $("#inputName").text(name);
+        // $("#inputBirthday").text(date[0]);
+        // $("#inputDeadDay").text(date[1]);
+        $('#nodeXemQuanHe')
+            .fadeIn();
+
+        // $("#modalEditInfo")
+        //     .modal();
+    };
+    var addChildNode = function (sender) {
+        var id       = $(sender)
+            .parent()
+            .parent()
+            .attr('id');
+        var srcImg   = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
+        var idPeople = sender.parentElement.parentElement.getAttribute('id');
+        var name     = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        var date     = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
+        date         = date.split(" - ");
+
+        console.log(srcImg);
+        console.log('addChildNode' + id);
+        $("#addChildImgPeople")
+            .attr("src", "/dist/img/default-avatar.png");
+        $("#addChildIdParent")
+            .val(idPeople);
+        $("#modalAddChild")
+            .modal();
+
+        //get select wife or husband
+        $.ajax({
+            type: "GET",
+            // https://localhost:89991/pedigree/1/people/3/get-info-add
+            url: "/rest/genealogy/"+idGenealogy +'/pedigree/'  + idPedigree + '/people/'+ idPeople + '/get-info-add',
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            timeout: 600000,
+            success: function (data) {
+                /*{
+                 "idParent": 2,
+                 "nameParent": "Phạm Văn Vân",
+                 "findHusbandWifes": [
+                 {
+                 "id": 3,
+                 "name": "Võ Thị Đừng"
+                 }
+                 ]
+                 }*/
+                $('#addChildIdParent').val(data.idParent);
+                $('#addChildInputNameParent').html(data.nameParent);
+                $('#addChildInputIdMother').html('');
+                for (var i in data.findHusbandWifes) {
+                    var id = data.findHusbandWifes[i].id;
+                    var name = data.findHusbandWifes[i].name;
+                    $("#addChildInputIdMother").append('<option value="'+id+'">'+name+'</option>');
+                }
+                // $("#addChildInputIdMother select").val(-1);
+            },
+            error: function (e) {
+            }
+        });
+
+    };
+
+    var editInfoNode = function (sender) {
+        var srcImg   = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
+        var idPeople = sender.parentElement.parentElement.getAttribute('id');
+        var name     = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        var date     = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
+        date         = date.split(" - ");
+
+        console.log(srcImg);
+        console.log('viewRelation' + idPeople);
+        $("#editChildId").val(idPeople);
+        $("#editChildImgPeople").attr("src", srcImg);
+        $("#editChildInputName").val(name);
+        $("#editChildInputBirthday").val(date[0]);
+        $("#editChildInputDeadDay").val(date[1]);
+
+        //get select wife or husband
+        $.ajax({
+            type: "GET",
+            // https://localhost:89991/pedigree/1/people/3/get-info-add
+            url: "/rest/genealogy/"+idGenealogy +'/pedigree/'  + idPedigree + '/people/'+ idPeople + '/get-mother',
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            timeout: 600000,
+            success: function (data) {
+                /*{
+                 "id": 3,
+                 "name": "Võ Thị Đừng"
+                 }*/
+                $('#editChildInputIdMother').html('');
+                $("#editChildInputIdMother").append('<option value="'+data.id+'">'+data.name+'</option>');
+            },
+            error: function (e) {
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: "/rest/people/detail/" + idPeople,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            timeout: 600000,
+            success: function (data) {
+                /*{
+                 "nameParent": null,
+                 "name": "Phạm Văn Vân",
+                 "relation": 0,
+                 "nameMother": null,
+                 "lifeIndex": 0,
+                 "nickName": null,
+                 "gender": 0,
+                 "address": null,
+                 "des": null,
+                 "birthDay": "?",
+                 "deadDay": "?",
+                 "degree": null,
+                 "dataExtra": null
+                 }*/
+                if(data.nameParent)  $("#editChildNameParent").html(data.nameParent);
+                if(data.img)  $("#editChildImgPeople").attr("src",data.img);
+                if(data.name)  $("#editChildInputName").val(data.name);
+                if(data.nickName)  $("#editChildInputName").val(data.nickName);
+                if(data.nameMother)  $("#editChildInputIdMother").val(data.nameMother);
+                if(data.relation != null){
+                    $("#editChildInputRelation").val(data.relation +'').attr("selected",true);
+                }
+                $("#editChildInputGender").val(data.gender +'').attr("selected",true);
+                $("#editChildInputConThu").val(data.childIndex +'').attr("selected",true);
+                $("#editChildInputAddress").val(data.address);
+                $("#editChildInputDes").val(data.des);
+                $("#editChildInputBirthday").val(data.birthDay);
+                $("#editChildInputDeadDay").val(data.deadDay);
+                $("#editChildInputDegree").val(data.degree);
+                $("#editChildInputDataExtra").val(data.dataExtra);
+                console.log("SUCCESS : ", data);
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+            }
+        });
+        $("#modalEditInfo")
+            .modal();
+    };
+    var deleteInfoNode = function (sender) {
+        var idPeople = sender.parentElement.parentElement.getAttribute('id');
+        var classParent  = sender.parentElement.parentElement.getAttribute('class');
+        if(classParent.includes('people_node_unknown')){
+            toastr["error"]("Người này không tồn tại", "Vui lòng chọn lại")
+            return;
+        }
+        bootbox.confirm({
+            message: "Sẽ xóa tất cả các con kèm theo, và không thể khôi phục, bạn chắc chắn",
+            backdrop: true,//click ra ngoai huy
+            className: 'bb-alternate-modal',// giật giật
+            buttons: {
+                confirm: {
+                    label: 'Đồng ý',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Hủy',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if(result){
+                    $.ajax({
+                        type: "POST",
+                        // https://localhost:89991/pedigree/1/people/3/get-info-add
+                        url: "/rest/genealogy/"+idGenealogy +'/pedigree/'  + idPedigree + '/people/'+ idPeople + '/delete',
+                        processData: false, //prevent jQuery from automatically transforming the data into a query string
+                        timeout: 600000,
+                        success: function (data) {
+                            loadTree();
+                            toastr["success"]("Đã xóa thành công", "Thông báo");
+                        },
+                        error: function (e) {
+                            toastr["error"]("Đã không xóa thành công", "Thông báo");
+
+                        }
+                    });
+                }
+                console.log('This was logged in the callback: ' + result);
+            }
+        });
+    };
+
+    var viewInfoNode = function (sender) {
+        var srcImg   = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
+        var idPeople = sender.parentElement.parentElement.getAttribute('id');
+        var name     = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        var date     = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
+        date         = date.split(" - ");
+
+        console.log(srcImg);
+        console.log('viewRelation' + idPeople);
+        $("#inputId")
+            .val(idPeople);
+        $("#imgPeopleDetail")
+            .attr("src", srcImg);
+        $("#inputName")
+            .val(name);
+        $("#inputBirthday")
+            .val(date[0]);
+        $("#inputDeadDay")
+            .val(date[1]);
+
+        $.ajax({
+            type: "GET",
+            url: "/rest/people/detail/" + idPeople,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            timeout: 600000,
+            success: function (data) {
+                /*{
+                 "nameParent": null,
+                 "name": "Phạm Văn Vân",
+                 "relation": 0,
+                 "nameMother": null,
+                 "lifeIndex": 0,
+                 "nickName": null,
+                 "gender": 0,
+                 "address": null,
+                 "des": null,
+                 "birthDay": "?",
+                 "deadDay": "?",
+                 "degree": null,
+                 "dataExtra": null
+                 }*/
+                if(data.nameParent)  $("#viewChildNameParent").html(data.nameParent);
+                if(data.img)  $("#viewChildImgPeople").attr("src",data.img);
+                if(data.name)  $("#viewChildInputName").val(data.name);
+                if(data.nickName)  $("#viewChildInputName").val(data.nickName);
+                if(data.nameMother)  $("#viewChildInputIdMother").val(data.nameMother);
+                if(data.relation != null){
+                    $("#viewChildInputRelation").val(data.relation +'').attr("selected",true);
+                }
+
+                switch (data.gender){
+                    case 0:
+                        $("#viewChildInputGender").val("Nữ");
+                        break;
+                    case 1:
+                        $("#viewChildInputGender").val("Nam");
+                        break;
+                    default:
+                        $("#viewChildInputGender").val("");
+
+                }
+                $("#viewChildInputConThu").val(data.childIndex +'').attr("selected",true);
+                $("#viewChildInputAddress").val(data.address);
+                $("#viewChildInputDes").val(data.des);
+                $("#viewChildInputBirthday").val(data.birthDay);
+                $("#viewChildInputDeadDay").val(data.deadDay);
+                $("#viewChildInputDegree").val(data.degree);
+                $("#viewChildInputDataExtra").val(data.dataExtra);
+                console.log("SUCCESS : ", data);
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+            }
+        });
+
+        $("#modalViewInfo")
+            .modal();
+
+
+
+    };
+    $(function () {
+        $("#inputConThu").html('');
+        $("#inputConThu").append('<option value="1">Con cả</option>\n');
+        for (var i = 2; i < 100; i++) {$("#inputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+
+        $("#addChildInputConThu").html('');
+        $("#addChildInputConThu").append('<option value="1">Con cả</option>\n');
+        for (var i = 2; i < 100; i++) {$("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+
+        $("#editChildInputConThu").html('');
+        $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
+        for (var i = 2; i < 100; i++) {$("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+
+        $("#viewChildInputConThu").html('');
+        $("#viewChildInputConThu").append('<option value="1">Con cả</option>\n');
+        for (var i = 2; i < 100; i++) {$("#viewChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+
+        $("#addChildInputRelation").html('');
+        $("#addChildInputRelation").append('<option value="0">Cha</option>');
+        $("#addChildInputRelation").append('<option value="1">Mẹ</option>');
+        $("#addChildInputRelation").append('<option value="2">Chồng</option>');
+        $("#addChildInputRelation").append('<option value="3">Vợ</option>');
+
+        $("#editChildInputRelation").html('');
+        $("#editChildInputRelation").append('<option value="0">Cha</option>');
+        $("#editChildInputRelation").append('<option value="1">Mẹ</option>');
+        $("#editChildInputRelation").append('<option value="2">Chồng</option>');
+        $("#editChildInputRelation").append('<option value="3">Vợ</option>');
+        
+        $("#viewChildInputRelation").html('');
+        $("#viewChildInputRelation").append('<option value="0">Cha</option>');
+        $("#viewChildInputRelation").append('<option value="1">Mẹ</option>');
+        $("#viewChildInputRelation").append('<option value="2">Chồng</option>');
+        $("#viewChildInputRelation").append('<option value="3">Vợ</option>');
+
+    });
+    $('#addChildInputDeadDay').datepicker({autoclose: true});
+    $('#addChildInputBirthday').datepicker({autoclose: true});
+    $('#editChildInputDeadDay').datepicker({autoclose: true});
+    $('#editChildInputBirthday').datepicker({autoclose: true});
+
+
+    $(document).ready(function () {
+            loadTree();
+            $('#containment-wrapper').hide();
+            $('#nodeCreateFirstChild').hide();
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+    $('#btnCloseNodeXemQuanHe').click(function () {
+        $('#nodeXemQuanHe').fadeOut();
+    });
+
+    $('#btnResetXemQuanHe')
+        .click(function () {
+            $('#imgPeopleRelation1').attr('src', '/dist/img/default-avatar.png');
+            $('#imgPeopleRelation2').attr('src', '/dist/img/default-avatar.png');
+            $('#imgPeopleRelationName1').text('Người thứ nhất');
+            $('#imgPeopleRelationName2').text('Người thứ hai');
+            idXemQuanHe1 = null;
+            idXemQuanHe2 = null;
+        });
+
+    $('#btnXacNhanXemQuanHe')
+        .click(function () {
+            if(idXemQuanHe1 == null || idXemQuanHe2 == null){
+                toastr["error"]("Chọn người muốn xem cách gọi tên ở bên dưới và thử lại", "Vui lòng chọn")
+            }else{
+                $("#btnXacNhanXemQuanHe").prop("disabled", true);
+                $.ajax({
+                    type: "GET",
+                    url: "/rest/people/relation/"+ idXemQuanHe1+"/"+ idXemQuanHe2,
+                    processData: false, //prevent jQuery from automatically transforming the data into a query string
+                    timeout: 600000,
+                    success: function (data) {
+                        console.log("SUCCESS : ", data);
+                        data  = data.split("|")
+                        var name1 =$("#imgPeopleRelationName1").text();
+                        var name2 =$("#imgPeopleRelationName2").text();
+                        $("#resultXemQuanHe").html(
+                            '<p>'+name1+' gọi '+name2+' là:'+ data[0]+'</p>'+
+                                '<p class="pull-right">'+name2+' gọi '+ name1+' là: '+data[1]+ '</p>'
+                        );
+                        $("#btnXacNhanXemQuanHe").prop("disabled", false);
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                        $("#btnXacNhanXemQuanHe").prop("disabled", false);
+                    }
+                });
+            }
+        });
+    $("#btnAddChildSubmit").click(function (event) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            addChildPeople();
+        });
+    $("#btnEditChildSubmit").click(function (event) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            editChildPeople();
+        });
+    $("#btnCreateRoot").click(function (event) {
+        $('#addChildIdParent').val("-1");
+        $("#addChildInputIdMother").append('<option value="-1">...</option>');
+        $('#addChildInputIdMother').attr("readonly", true);
+        $("#addChildInputIdMother").val(-1);
+        $("#modalAddChild").modal();
+        });
+    var addChildPeople = function () {
+        // Get form
+        var form = $('#addNewChild')[0];
+        var data = new FormData(form);
+        data.append("idPedigree",idPedigree +"");
+        data.append("idGenealogy",idGenealogy + '');
+        console.log(JSON.stringify(data));
+        console.log(data);
+        $("#btnAddChildSubmit").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            enctype: 'application/x-www-form-urlencoded',
+            url: "/rest/people/add",
+            data: data,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (errorCode) {
+                console.log("SUCCESS : ", errorCode);
+                if(errorCode == '1'){
+                    loadTree();
+                }else{
+                    toastr["error"]("Không thể thêm", "Vui lòng chọn")
+                }
+                $("#btnAddChildSubmit").prop("disabled", false);
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+                $("#btnAddChildSubmit").prop("disabled", false);
+            }
+        });
+    };
+
+    var editChildPeople = function () {
+        // Get form
+        var form = $('#editChild')[0];
+        var data = new FormData(form);
+        data.append("idPedigree",idPedigree +"");
+        data.append("idGenealogy",idGenealogy + '');
+        console.log(JSON.stringify(data));
+        console.log(data);
+        $("#btnEditChildSubmit").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            enctype: 'application/x-www-form-urlencoded',
+            url: "/rest/people/edit",
+            data: data,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (errorCode) {
+                console.log("SUCCESS : ", errorCode);
+                if(errorCode == '1'){
+                    loadTree();
+                }else{
+                    toastr["error"]("Không thể thêm", "Vui lòng chọn")
+                }
+                $("#btnEditChildSubmit").prop("disabled", false);
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+                $("#btnEditChildSubmit").prop("disabled", false);
+            }
+        });
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>

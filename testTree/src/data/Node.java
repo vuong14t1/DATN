@@ -107,7 +107,7 @@ public class Node {
     public Node getNodeUnknown () {
         for(Node c: childs) {
             if(c.getId().equals("-1")){
-                System.out.println("get node retain " + c);
+//                System.out.println("get node retain " + c);
                 return c;
             }
         }

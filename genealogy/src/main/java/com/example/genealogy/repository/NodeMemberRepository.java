@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface NodeMemberRepository extends JpaRepository<NodeMemberModel, Long> {
+public interface NodeMemberRepository extends JpaRepository<NodeMemberModel, Integer> {
     List<NodeMemberModel> findAllByPedigreeAndGenealogyAndPatchKeyStartsWith(PedigreeModel pedigreeModel, GenealogyModel genealogyModel, String patchKeyStartsKey);
 
     List<NodeMemberModel> findAllByPedigreeAndGenealogyAndPatchKeyStartsWithOrderByPatchKeyAscMotherIdAscRelationAsc (PedigreeModel pedigreeModel, GenealogyModel genealogyModel, String patchKeyStartsKey);

@@ -59,7 +59,7 @@ public class GenealogyServiceImpl implements GenealogyService {
             System.out.println("genealogy null");
             return;
         }
-        //TODO thu TH chi luu userpermission thoi xem thu no luu may cai kia khong
+        //TODO thu TH chi luu user_permission thoi xem thu no luu may cai kia khong
         UserPermissionModel userPermissionModel = new UserPermissionModel();
         genealogyRepository.save(genealogyModel);
         UserModel userModel = userRepository.findByEmail(email);

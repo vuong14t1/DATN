@@ -77,9 +77,9 @@
     <!-- Logo -->
     <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>LM</b></span>
+        <span class="logo-mini"><b>PQV</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>L</b>ee<b>M</b>in</span>
+        <span class="logo-lg">PQV</span>
     </a>
 
     <!-- Header Navbar -->
@@ -97,19 +97,19 @@
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu">
                     <!-- Menu toggle button -->
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="comingSoon()">
-                        <i class="fa fa-envelope-o"></i>
-                    </a>
+                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="comingSoon()">-->
+                        <!--<i class="fa fa-envelope-o"></i>-->
+                    <!--</a>-->
                 </li>
                 <!-- /.messages-menu -->
 
                 <!-- Notifications Menu -->
                 <li class="dropdown notifications-menu">
                     <!-- Menu toggle button -->
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="comingSoon()">
-                        <i class="fa fa-bell-o"></i>
-                        <!--<span class="label label-warning">0</span>-->
-                    </a>
+                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="comingSoon()">-->
+                        <!--<i class="fa fa-bell-o"></i>-->
+                        <!--&lt;!&ndash;<span class="label label-warning">0</span>&ndash;&gt;-->
+                    <!--</a>-->
                     <!--<ul class="dropdown-menu">
                         <li class="header">You have 10 notifications</li>
                         <li>
@@ -129,10 +129,10 @@
                 <!-- Tasks Menu -->
                 <li class="dropdown tasks-menu">
                     <!-- Menu Toggle Button -->
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="comingSoon()">
-                        <i class="fa fa-flag-o"></i>
-                        <!--<span class="label label-danger">9</span>-->
-                    </a>
+                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="comingSoon()">-->
+                        <!--<i class="fa fa-flag-o"></i>-->
+                        <!--&lt;!&ndash;<span class="label label-danger">9</span>&ndash;&gt;-->
+                    <!--</a>-->
                     <!--  <ul class="dropdown-menu">
                           <li class="header">You have 9 tasks</li>
                           <li>
@@ -171,7 +171,7 @@
                         <!-- The user image in the navbar-->
                         <img src="" class="user-image userImgAvatarMenu" alt="User Image"/>
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs" th:text="${#authentication.getPrincipal().getUsername()}"></span>
+                        <!--<span class="hidden-xs" th:text="${#authentication.getPrincipal().getUsername()}"></span>-->
 
                     </a>
                     <!--<ul class="dropdown-menu">
@@ -229,7 +229,7 @@
                 <img  src=""  class="img-circle userImgAvatarMenu" width="50" height="50" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p th:text="${#authentication.getPrincipal().getUsername()}">Username here</p>
+                <!--<p th:text="${#authentication.getPrincipal().getUsername()}">Username here</p>-->
                 <!-- Status -->
                 <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-circle text-success"></i><span th:text="#{sidebar.menu.profile.edit}"></span></a>
             </div>
@@ -257,7 +257,7 @@
             <li><a href="/admin/thongke"><i class="fa fa-dashboard"></i><span>Thống kê</span></a></li>
             <li class="header" th:text="#{sidebar.menu.sub.main}"></li>
             <li><a href="/profile"><i class="fa fa-group"></i> <span th:text="#{sidebar.menu.profile}"></span></a></li>
-            <li><a  onclick="comingSoon()"><i class="fa fa-gears"></i> <span th:text="#{sidebar.menu.setting}"></span></a></li> <!--data-toggle="modal" href="#modalSetting"-->
+            <!--<li><a  onclick="comingSoon()"><i class="fa fa-gears"></i> <span th:text="#{sidebar.menu.setting}"></span></a></li> &lt;!&ndash;data-toggle="modal" href="#modalSetting"&ndash;&gt;-->
             <li><a href="/facebook/logout"><i class="fa fa fa-odnoklassniki"></i> <span th:text="#{sidebar.menu.exit}"></span></a></li>
         </ul>
 
@@ -270,7 +270,7 @@
 <footer class="main-footer" th:fragment="footer">
     <!-- To the right -->
     <!-- Default to the left -->
-    <strong> ® 2018 Lee Min™</strong>
+    <strong> ® 2019 PQV™</strong>
 </footer>
 <aside class="control-sidebar control-sidebar-dark" th:fragment="aside">
     <!-- Create the tabs -->

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface PedigreeService {
     List<PedigreeModel> findAll();
 
-    List<PedigreeModel> findAllByGenealogyId(Integer genealogyId);
+//    List<PedigreeModel> findAllByGenealogyId(Integer genealogyId);
 
     Optional<PedigreeModel> findById(Integer id);
 

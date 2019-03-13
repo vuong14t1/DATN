@@ -6,11 +6,12 @@ import com.example.genealogy.model.NodeMemberModel;
 import com.example.genealogy.model.PedigreeModel;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface NodeMemberService {
     void add(NodeMemberModel nodeMemberModel, DescriptionMemberModel descriptionMemberModel);
 
-    NodeMemberModel findById(Integer id);
+    Optional<NodeMemberModel> findById(Integer id);
 
     NodeMemberModel findByIdAndFetch(Integer id);
 
@@ -27,6 +28,8 @@ public interface NodeMemberService {
     void deleteByIdAndPatchKey(Integer id, String patchKey);
 
     void deleteById(Integer id);
+
+    void deleteAll();
 
     void updatePatchKey(String oldPatch, String newPatch);
 

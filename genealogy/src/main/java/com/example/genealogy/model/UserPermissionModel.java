@@ -26,7 +26,6 @@ public class UserPermissionModel implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumns({ @JoinColumn(name="permission_id", referencedColumnName="permission_id")})
-//    @JoinColumn(name="permission_id", nullable=true)
     private PermissionModel  permission;
 
     public Integer getId() {
@@ -66,8 +65,6 @@ public class UserPermissionModel implements Serializable {
     }
 
     public void setPedigreeModel(PedigreeModel pedigreeModel) {
-
-
         this.pedigree = pedigreeModel;
     }
 

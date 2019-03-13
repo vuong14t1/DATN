@@ -199,7 +199,7 @@
                         <!-- The user image in the navbar-->
                         <img src="" class="user-image userImgAvatarMenu" alt="User Image"/>
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs" th:text="${#authentication.getPrincipal().getUsername()}"></span>
+                        <!--<span class="hidden-xs" th:text="${#authentication.getPrincipal().getUsername()}"></span>-->
 
                     </a>
                     <!--<ul class="dropdown-menu">
@@ -257,7 +257,7 @@
                 <img  src=""  class="img-circle userImgAvatarMenu" width="50" height="50" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p th:text="${#authentication.getPrincipal().getUsername()}">Username here</p>
+                <!--<p th:text="${#authentication.getPrincipal().getUsername()}">Username here</p>-->
                 <!-- Status -->
                 <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-circle text-success"></i><span th:text="#{sidebar.menu.profile.edit}"></span></a>
             </div>
@@ -319,7 +319,7 @@
 <footer class="main-footer" th:fragment="footer">
     <!-- To the right -->
     <!-- Default to the left -->
-    <strong> ® 2018 Lee Min™</strong>
+    <strong> ® 2019 PQV™</strong>
 </footer>
 <aside class="control-sidebar control-sidebar-dark" th:fragment="aside">
     <!-- Create the tabs -->

@@ -11,6 +11,7 @@ public class GenealogyApplicationTests {
 
     @Test
     public void contextLoads() {
+        System.out.println("sdfsdf");
     }
 
 }

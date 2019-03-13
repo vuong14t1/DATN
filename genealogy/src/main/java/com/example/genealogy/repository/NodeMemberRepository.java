@@ -11,20 +11,19 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface NodeMemberRepository extends JpaRepository<NodeMemberModel, Integer> {
-    List<NodeMemberModel> findAllByPedigreeAndGenealogyAndPatchKeyStartsWith(PedigreeModel pedigreeModel, GenealogyModel genealogyModel, String patchKeyStartsKey);
+    List<NodeMemberModel> findAllByPedigreeAndPatchKeyStartsWith(PedigreeModel pedigreeModel, String patchKeyStartsKey);
 
-    List<NodeMemberModel> findAllByPedigreeAndGenealogyAndPatchKeyStartsWithOrderByPatchKeyAscMotherIdAscRelationAsc (PedigreeModel pedigreeModel, GenealogyModel genealogyModel, String patchKeyStartsKey);
+    List<NodeMemberModel> findAllByPedigreeAndPatchKeyStartsWithOrderByPatchKeyAscMotherIdAscRelationAsc (PedigreeModel pedigreeModel, String patchKeyStartsKey);
 
-    List<NodeMemberModel> findAllByPedigreeAndGenealogyAndPatchKey (PedigreeModel pedigreeModel, GenealogyModel genealogyModel, String patchKeyStartsKey);
+    List<NodeMemberModel> findAllByPedigreeAndPatchKey (PedigreeModel pedigreeModel, String patchKeyStartsKey);
 
-    List<NodeMemberModel> findAllByPedigreeAndGenealogyAndPatchKeyAndRelationEquals(PedigreeModel pedigreeModel, GenealogyModel genealogyModel, String patchKeyStartsKey, Integer relation);
+    List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndRelationEquals(PedigreeModel pedigreeModel, String patchKeyStartsKey, Integer relation);
 
-    void removeAllByPedigreeAndGenealogy(PedigreeModel pedigreeModel, GenealogyModel genealogyModel);
+    void removeAllByPedigree(PedigreeModel pedigreeModel);
 
-    void removeAllByGenealogy(GenealogyModel genealogyModel);
 
     @Query("SELECT p FROM NodeMemberModel p JOIN FETCH  p.parent WHERE p.id = :id")
-    NodeMemberModel findByIdAndFetch(@Param("id") long id);
+    NodeMemberModel findByIdAndFetch(@Param("id") int id);
 
     void deleteAllByIdOrPatchKeyStartsWith(Integer id, String patchKey);
 

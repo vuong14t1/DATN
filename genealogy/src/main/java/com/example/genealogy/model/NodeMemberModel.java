@@ -16,10 +16,10 @@ public class NodeMemberModel {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumns({ @JoinColumn(name="pedigree_id", referencedColumnName="pedigree_id")})
     private PedigreeModel pedigree;
-
+/*
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumns({ @JoinColumn(name="genealogy_id", referencedColumnName="genealogy_id")})
-    private GenealogyModel genealogy;
+    private GenealogyModel genealogy;*/
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumns({ @JoinColumn(name="parent_id", referencedColumnName="node_member_id")})
@@ -46,10 +46,10 @@ public class NodeMemberModel {
     private Integer gender;
 
     @Column(name = "child_index")
-    private String childIndex;
+    private Integer childIndex;
 
     @Column(name = "life_index")
-    private String lifeIndex;
+    private Integer lifeIndex;
 
     @Column(name = "patch_key")
     private String patchKey;
@@ -75,14 +75,14 @@ public class NodeMemberModel {
     public void setPedigree(PedigreeModel pedigree) {
         this.pedigree = pedigree;
     }
-
+/*
     public GenealogyModel getGenealogy() {
         return genealogy;
     }
 
     public void setGenealogy(GenealogyModel genealogy) {
         this.genealogy = genealogy;
-    }
+    }*/
 
     public NodeMemberModel getParent() {
         return parent;
@@ -116,19 +116,19 @@ public class NodeMemberModel {
         this.gender = gender;
     }
 
-    public String getChildIndex() {
+    public Integer getChildIndex() {
         return childIndex;
     }
 
-    public void setChildIndex(String childIndex) {
+    public void setChildIndex(int childIndex) {
         this.childIndex = childIndex;
     }
 
-    public String getLifeIndex() {
+    public Integer getLifeIndex() {
         return lifeIndex;
     }
 
-    public void setLifeIndex(String lifeIndex) {
+    public void setLifeIndex(Integer lifeIndex) {
         this.lifeIndex = lifeIndex;
     }
 

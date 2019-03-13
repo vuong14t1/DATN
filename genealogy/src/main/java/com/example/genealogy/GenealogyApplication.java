@@ -21,7 +21,7 @@ public class GenealogyApplication {
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         //localeResolver.setDefaultLocale(Locale.US);
-        localeResolver.setDefaultLocale(Locale.forLanguageTag("vi-VI"));
+        localeResolver.setDefaultLocale(Locale.forLanguageTag("vie-VIE"));
         return localeResolver;
     }
 

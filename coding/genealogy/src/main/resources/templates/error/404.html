@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="/fragments/header/common :: header-css"/>
+</head>
+<body>
+
+<div th:replace="/fragments/header/common :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>404 - NOT FOUND</h1>
+        <div th:inline="text">Hello '[[${#httpServletRequest.remoteUser}]]',
+            you do not have permission to access this page.</div>
+    </div>
+
+</div>
+<!-- /.container -->
+
+<div th:replace="/fragments/footer/common :: footer"/>
+
+</body>
+</html>

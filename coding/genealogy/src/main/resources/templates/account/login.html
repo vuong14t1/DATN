@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">-->
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <!--<div th:replace="/fragments/header/common :: header-css"/>-->
+    <div th:fragment="header-css">
+        <!-- this is header-css -->
+        <title th:text="#{title.app}"></title>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+
+        <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"/>
+
+        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-social.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+
+        <script type="text/javascript" th:src="@{/js/jquery-2.2.4.min.js}"></script>
+        <!--<script  type="text/javascript"  th:src="@{/js/solid.js}"></script>-->
+        <!--<script  type="text/javascript"  th:src="@{/js/fontawesome.js}"></script>-->
+
+        <script async='async' src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js"
+                integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l"
+                crossorigin="anonymous"></script>
+        <script async='async' src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js"
+                integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c"
+                crossorigin="anonymous"></script>
+    </div>
+</head>
+<body>
+<!--<div th:replace="/fragments/header/common :: header"/>-->
+<div th:fragment="header">
+    <!-- this is header -->
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}" th:text="#{title.app}"> ahihi</a>
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="container">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <form th:action="@{/login}" th:object="${user}" method="post" role="form">
+            <fieldset>
+                <h1 th:text="#{login.label}"></h1>
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger" th:text="#{login.invalid}">
+                    </div>
+                </div>
+                <div th:if="${param.logout}">
+                    <div class="alert alert-info" th:text="#{login.logout}">
+                    </div>
+                </div>
+                <div th:if="${param.success}">
+                    <div class="alert alert-info" th:text="#{login.register.success}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input th:field="*{email}" type="text" name="username" id="username" class="form-control input-lg"
+                           th:placeholder="#{login.user}" required="true" autofocus="true"/>
+                </div>
+                <div class="form-group">
+                    <input th:field="*{password}" type="password" name="password" id="password"
+                           class="form-control input-lg" th:placeholder="#{login.pass}" required="true"/>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" th:value="#{login.submit}"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <a class="btn btn-lg btn-primary btn-block" th:text="#{login.register}"
+                               href="/registration"></a>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+        <form th:action="@{/login/facebook}" method="post">
+            <input type="hidden" name="scope" value="user_posts"/>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <a id="loginFacebook" type="submit" class="btn btn-block btn-social btn-lg btn-facebook">
+                            <i class="fa fa-facebook pr-1"></i>
+                            <p th:text="#{login.fb}"></p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:replace="/fragments/footer/common :: footer"/>
+<script type="text/javascript" th:src="@{/js/facebook.js}"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+<!--Toast message-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    //http://codeseven.github.io/toastr/demo.html
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+</script>
+<!--end toast-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    function commingSoon() {
+        toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
+    }
+
+    /*]]>*/
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/user :: head"> </head>
+
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/user :: header"> </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/user :: aside_menu"> </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 th:text="${genealogy.getName()}"></h1>
+            <ol class="breadcrumb">
+                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Thành Viên</span></a>
+                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/tree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Cây Pha Giả</span></a>
+                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/list'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Danh sách</span></a>
+                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/edit'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Sửa</span></a>
+                <li>
+                    <a href="/genealogy">
+                        <i class="fa fa-dashboard"></i>
+                        <span th:text="#{genealogy}"></span>
+                    </a>
+                </li>
+                <li class="active">detail</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Your Page Content Here -->
+            <h1>Lời ngỏ</h1>
+            <div id="history" th:utext="${genealogy.getHistory()}"></div>
+            <hr/>
+            <h1>Phả ký</h1>
+            <div id="thuyTo" th:utext="${genealogy.getThuyTo()}"></div>
+            <hr/>
+
+            <h1>Phả hệ</h1>
+            <div th:utext="${pedigree.getName()}"></div>
+            <hr/>
+            <h1>History</h1>
+            <div th:utext="${pedigree.getHistory()}"></div>
+            <hr/>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/user :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/user :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/user :: js"/>
+<!--<script>-->
+    <!--$(document).ready(function () {-->
+
+
+        <!--$("#history").html($("#history").attr("text"));-->
+        <!--$("#history").attr("text","");-->
+        <!--$("#thuyTo").html($("#thuyTo").attr("text"));-->
+        <!--$("#thuyTo").attr("text","");-->
+    <!--});-->
+<!--</script>-->
+</body>
+</html>

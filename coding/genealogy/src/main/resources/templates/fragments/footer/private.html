@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+<div th:fragment="footer">
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            Anything you want
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+        <span sec:authorize="isAuthenticated()">
+                | Logged user: <span sec:authentication="name"></span> |
+                Roles: <span sec:authentication="principal.authorities"></span> |
+                <a th:href="@{/logout}">Sign Out</a>
+            </span>
+        <a th:href="@{/facebook/logout}">Sign Out</a>
+
+    </footer>
+
+</div>
+
+<div th:fragment="js">
+    <!-- REQUIRED JS SCRIPTS -->
+
+    <!-- jQuery 2.2.3 -->
+    <script th:src="@{/js/jquery-2.2.4.min.js}"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <!-- AdminLTE App -->
+    <script th:src="@{/dist/js/app.min.js}"></script>
+
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+         Both of these plugins are recommended to enhance the
+         user experience. Slimscroll is required when using the
+         fixed layout. -->
+</div>
+</body>
+</html>

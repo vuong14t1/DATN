@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:fragment="header-css">
+        <!-- this is header-css -->
+        <title th:text="#{title.app}"></title>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+
+        <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"/>
+
+        <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-social.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome.css}"/>
+
+        <script type="text/javascript" th:src="@{/js/jquery-2.2.4.min.js}"></script>
+        <!--<script  type="text/javascript"  th:src="@{/js/solid.js}"></script>-->
+        <!--<script  type="text/javascript"  th:src="@{/js/fontawesome.js}"></script>-->
+
+        <!--<script async='async' src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js"-->
+        <!--integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l"-->
+        <!--crossorigin="anonymous"></script>-->
+        <!--<script async='async' src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js"-->
+        <!--integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c"-->
+        <!--crossorigin="anonymous"></script>-->
+
+
+        <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+        <!--</script>-->
+    </div>
+</head>
+<body>
+<div th:fragment="header">
+    <!-- this is header -->
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}" th:text="#{title.app}"> ahihi</a>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

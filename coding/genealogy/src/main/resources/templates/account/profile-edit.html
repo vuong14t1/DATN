@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/user :: head"> </head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/user :: header"> </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/user :: aside_menu"> </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1><span th:text="#{profile.header}"></span></h1>
+            <ol class="breadcrumb">
+                <li class="active"  ><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title" ></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form id="editProfileForm" class="form-horizontal"  th:object="${user}" method="post" action="/profile/edit">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="inputId" class="col-sm-2 control-label">Id</label>
+                                <div class="col-sm-10">
+                                    <input name="id"  class="form-control" id="inputId" placeholder="Id" th:value="*{getId()}" disabled="disabled"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <img src="" class="img-circle userImgAvatarMenu center-block" alt="User Image" id="inputImgView" width="250px" height="250px"/>
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                    </div>
+                                    <div class="col-lg-6 align-self-center">
+                                        <input name="img" type="file" class="form-control" id="inputImg" onchange="readURLEditProfile(this);"/>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputFirstName" class="col-sm-2 control-label" th:text="#{first.name}"></label>
+                                <div class="col-sm-10">
+                                    <input name="firstName" type="email" class="form-control" id="inputFirstName" placeholder="Id" th:value="*{getFirstName()}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputLastName" class="col-sm-2 control-label" th:text="#{last.name}"></label>
+                                <div class="col-sm-10">
+                                    <input name="lastName" type="email" class="form-control" id="inputLastName" placeholder="Id" th:value="*{getLastName()}"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputName" class="col-sm-2 control-label" th:text="#{name}"></label>
+                                <div class="col-sm-10">
+                                    <input name="name" type="email" class="form-control" id="inputName" placeholder="Id" th:value="*{getName()}"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPhone" class="col-sm-2 control-label" th:text="#{phone}"></label>
+                                <div class="col-sm-10">
+                                    <input name="phone" type="text" class="form-control" id="inputPhone" th:placeholder="#{phone}" th:value="*{getPhone()}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail" class="col-sm-2 control-label" th:text="#{email}"></label>
+                                <div class="col-sm-10">
+                                    <input name="email" type="email" class="form-control" id="inputEmail" th:placeholder="#{email}" th:value="*{getEmail()}"  disabled="disabled"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputAddress" class="col-sm-2 control-label" th:text="#{address}"></label>
+                                <div class="col-sm-10">
+                                    <input name="address" type="email" class="form-control" id="inputAddress" th:placeholder="#{address}" th:value="*{getAddress()}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="datepicker" class="col-sm-2 control-label" >Ngày sinh</label>
+                                <div class="col-sm-10">
+                                    <input name="birthday" type="text" class="form-control pull-right" id="datepicker" th:value="*{getBirthdayString()}"/>
+                                </div>
+                            </div>
+                           <!-- <div class="form-group">
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        Ngày sinh
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="datepicker" th:value="*{getBirthday()}"/>
+                                </div>
+                            </div>
+-->
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <a href="/profile" class="btn btn-success pull-right">Cancel</a>
+                            <button id="btnSubmitEditProfile" type="submit" class="btn btn-info pull-right">Save</button>
+                        </div>
+                        <!-- /.box-footer -->
+                    </form>
+                </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/user :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/user :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/user :: js"/>
+
+<!--   <select name="pais">
+        <option th:each="pais : ${ls}"
+                th:value="${pais.id}"
+                th:selected="${pais.id == selecionado.id}"
+                th:text="${pais.nome}" />
+    </select>-->
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var readURLEditProfile = function (input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#inputImgView')
+                    .attr('src', e.target.result)
+                    .width(250)
+                    .height(250);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    $("#btnSubmitEditProfile").click(function (event) {
+        //stop submit the form, we will post it manually.
+        event.preventDefault();
+        editProfile();
+    });
+    var editProfile = function () {
+        // Get form
+        var form = $('#editProfileForm')[0];
+        var data = new FormData(form);
+        $("#btnSubmitEditProfile").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            enctype: 'application/x-www-form-urlencoded',
+            url: "/profile/edit",
+            data: data,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (errorCode) {
+                window.location = "/profile";
+            },
+            error: function (e) {
+                toastr["error"]("Cập nhật không thành công.", "Thông báo")
+                $("#btnAddChildSubmit").prop("disabled", false);
+            }
+        });
+    };
+
+    /*]]>*/
+</script>
+</body>
+</html>

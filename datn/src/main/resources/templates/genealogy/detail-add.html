@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/user :: head"> </head>
+
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/user :: header"> </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/user :: aside_menu"> </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 th:utext="#{general.add.header}">
+            </h1>
+            <ol class="breadcrumb">
+                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span th:text="${id}"></span></a>
+                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/tree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Cây Pha Giả</span></a>
+                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/list'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Danh sách</span></a>
+                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/edit'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Sửa</span></a>
+                <li>
+                    <a href="/genealogy">
+                        <i class="fa fa-dashboard"></i>
+                        <span th:utext="#{genealogy}"></span>
+                    </a>
+                </li>
+                <li class="active">detail</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <form class="form" th:object="${genealogy}" method="post" action="/genealogy/add">
+                <input type="hidden" class="form-control" id="inputId" placeholder="Email" th:value="*{getId()}"/>
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="inputName" class="col-sm-2 control-label">Tên dòng họ</label>
+                        <div class="col-sm-10">
+                            <input type="text" th:field="*{name}" class="form-control" id="inputName" placeholder="Email" th:value="*{getName()}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputHistory" class="col-sm-2 control-label">Lịch sử</label>
+                        <div class="col-sm-10">
+                            <textarea id="inputHistory" th:field="*{history}" name="inputHistory" rows="10" cols="80" style="visibility: hidden; display: none;" th:text="*{getHistory()}" ></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputThuyTo" class="col-sm-2 control-label">Thủy tổ dòng họ</label>
+                        <div class="col-sm-10">
+                            <textarea id="inputThuyTo" th:field="*{thuyTo}" name="inputThuyTo" rows="10" cols="80" style="visibility: hidden; display: none;" th:text="*{getThuyTo()}" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button id="btnSubmit" type="submit" class="btn btn-info pull-right">SAVE</button>
+                    <a th:href="'/genealogy/'+ ${genealogy.getId()} " type="button" class="btn btn-default pull-right">Cancel</a>
+                </div>
+                <!-- /.box-footer -->
+                <!--<p>-->
+                    <!--<input onclick="createEditor();" type="button" value="Create Editor"/>-->
+                    <!--<input onclick="removeEditor();" type="button" value="Remove Editor"/>-->
+                <!--</p>-->
+                <!--<div id="editor"></div>-->
+
+
+            </form>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/user :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/user :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/user :: js"/>
+<!-- CK Editor -->
+<script type="text/javascript" th:src="@{/plugins/ckeditor/ckeditor.js}"></script>
+<script type="text/javascript" th:src="@{/js/myckeditor.js}"></script>
+<script th:unless="${#locale.toString().equals('en')}" type="text/javascript">
+    CKEDITOR.config.language = "vi";
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // $("#btnSubmit").click(function (event) {
+        //     //stop submit the form, we will post it manually.
+        //     event.preventDefault();
+        //     fire_ajax_submit();
+        // });
+    });
+
+    function fire_ajax_submit() {
+        // Get form
+        var form = $('#fileUploadForm')[0];
+        var data = new FormData(form);
+        data.append("CustomField", "This is some extra data, testing");
+        $("#btnSubmit").prop("disabled", true);
+        console.log(JSON.stringify(data));
+        $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        //Do something with upload progress here
+                        console.log("percent" + percentComplete);
+                        var bar = document.getElementById('bar');
+                        bar.style.width = percentComplete*100 + '%';
+                        bar.innerHTML = percentComplete + ' % complete';
+                    }
+                }, false);
+                xhr.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        //Do something with download progress
+                        console.log("percentComplete : progress :" + percentComplete);
+
+                    }
+                }, false);
+                return xhr;
+            },
+            type: "POST",
+            // enctype: 'multipart/form-data',
+            enctype: 'application/x-www-form-urlencoded',
+            url: "/genealogy/add",
+            data: data,
+            //http://api.jquery.com/jQuery.ajax/
+            //https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+
+                $("#result").text(data);
+                console.log("SUCCESS : ", data);
+                $("#btnSubmit").prop("disabled", false);
+
+            },
+            error: function (e) {
+
+                $("#result").text(e.responseText);
+                console.log("ERROR : ", e);
+                $("#btnSubmit").prop("disabled", false);
+
+            }
+        });
+
+    }
+</script>
+
+</body>
+</html>

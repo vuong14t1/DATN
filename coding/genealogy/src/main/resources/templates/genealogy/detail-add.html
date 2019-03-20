@@ -20,10 +20,10 @@
             <h1 th:utext="#{general.add.header}">
             </h1>
             <ol class="breadcrumb">
-                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span th:text="${id}"></span></a>
-                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/tree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Cây Pha Giả</span></a>
-                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/list'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Danh sách</span></a>
-                <a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/edit'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Sửa</span></a>
+                <!--<a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span th:text="${id}"></span></a>-->
+                <!--<a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/tree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Cây Pha Giả</span></a>-->
+                <!--<a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/list'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Danh sách</span></a>-->
+                <!--<a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/edit'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Sửa</span></a>-->
                 <li>
                     <a href="/genealogy">
                         <i class="fa fa-dashboard"></i>
@@ -37,31 +37,31 @@
         <!-- Main content -->
         <section class="content">
             <form class="form" th:object="${genealogy}" method="post" action="/genealogy/add">
-                <input type="hidden" class="form-control" id="inputId" placeholder="Email" th:value="*{getId()}"/>
+                <!--<input type="hidden" class="form-control" id="inputId" placeholder="Email" th:value="*{getId()}"/>-->
                 <div class="box-body">
                     <div class="form-group">
                         <label for="inputName" class="col-sm-2 control-label">Tên dòng họ</label>
                         <div class="col-sm-10">
-                            <input type="text" th:field="*{name}" class="form-control" id="inputName" placeholder="Email" th:value="*{getName()}"/>
+                            <input type="text"  name="name" class="form-control" id="inputName" placeholder="Input name" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputHistory" class="col-sm-2 control-label">Lịch sử</label>
                         <div class="col-sm-10">
-                            <textarea id="inputHistory" th:field="*{history}" name="inputHistory" rows="10" cols="80" style="visibility: hidden; display: none;" th:text="*{getHistory()}" ></textarea>
+                            <textarea id="inputHistory"  name="history" rows="10" cols="80"   ></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputThuyTo" class="col-sm-2 control-label">Thủy tổ dòng họ</label>
                         <div class="col-sm-10">
-                            <textarea id="inputThuyTo" th:field="*{thuyTo}" name="inputThuyTo" rows="10" cols="80" style="visibility: hidden; display: none;" th:text="*{getThuyTo()}" ></textarea>
+                            <textarea id="inputThuyTo"  name="thuyTo" rows="10" cols="80" ></textarea>
                         </div>
                     </div>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button id="btnSubmit" type="submit" class="btn btn-info pull-right">SAVE</button>
-                    <a th:href="'/genealogy/'+ ${genealogy.getId()} " type="button" class="btn btn-default pull-right">Cancel</a>
+                    <a th:href="'/genealogy/'" type="button" class="btn btn-default pull-right">Cancel</a>
                 </div>
                 <!-- /.box-footer -->
                 <!--<p>-->
@@ -98,14 +98,14 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-
-        // $("#btnSubmit").click(function (event) {
-        //     //stop submit the form, we will post it manually.
-        //     event.preventDefault();
-        //     fire_ajax_submit();
-        // });
-    });
+    // $(document).ready(function () {
+    //
+    //     $("#btnSubmit").click(function (event) {
+    //         //stop submit the form, we will post it manually.
+    //         event.preventDefault();
+    //         fire_ajax_submit();
+    //     });
+    // });
 
     function fire_ajax_submit() {
         // Get form

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/user :: head"> </head>
+
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/user :: header"> </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/user :: aside_menu"> </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1 th:text="#{genealogy.header}">
+            </h1>
+            <ol class="breadcrumb">
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Dòng tộc</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Thành Viên</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/people-list'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Danh sách Người trong phả hệ</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/people-tree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Cây phả hệ</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/detail'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Quay lại Phả hệ</span></a>
+
+                <li class="active"  ><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Your Page Content Here -->
+
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <a th:href="'/files/Import_Pedigree_Example.xlsx'" class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus"></span><span >Tải mẫu</span></a>
+                </div>
+                <form id="fileUploadForm" class="form" method="post" th:action="'/genealogy/'+${idGenealogy}+'/pedigree/'+${idPedigree}+'/import'">
+                    <input type="hidden" class="form-control" id="inputIdGenealogy" placeholder="Email" th:value="${idGenealogy}"/>
+                    <input type="hidden" class="form-control" id="inputIdPedigree" placeholder="Email" th:value="${idPedigree}"/>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="inputFile" class="col-sm-2 control-label">File ... </label>
+                            <div class="col-sm-10">
+                                <input type="file" name="files" class="form-control" id="inputFile"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button id="btnSubmit" type="submit" class="btn btn-info pull-right">UPLOAD</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+                <div id='progressBar' style='height: 20px; border: 2px solid green; margin-bottom: 20px'>
+                    <div id='bar' style='height: 100%; background: #33dd33; width: 0%'>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-info" id="nodeTableResultImport">
+                <table id="table">
+                    <thead>
+                    <tr>
+                        <th data-field="id" data-width="5%" data-sortable="true" th:text="Id"></th>
+                        <th data-field="idParent" data-width="5%" data-sortable="true" > Id Cha</th>
+                        <th data-field="idMother" data-width="5%" data-sortable="true" > Id Mẹ </th>
+                        <th data-field="relation" data-width="5%" data-sortable="true" data-formatter="relationFormat" > Quan hệ </th>
+                        <th data-field="lifeIndex" data-width="5%" data-sortable="true" > Đời </th>
+                        <th data-field="name" data-width="20%" data-sortable="true" th:text="Ten"></th>
+                        <th data-field="nickName" data-width="20%" data-sortable="true" th:text="NickName"></th>
+                        <th data-field="birthday" data-width="20%" data-sortable="true" th:text="Ngaysinh" data-formatter="dateFormat"></th>
+                        <th data-field="deadDay" data-width="20%" data-sortable="true" th:text="#{genealogy.find.table.name}" data-formatter="dateFormat"></th>
+                        <th data-field="gender" data-width="5%" data-sortable="true" data-formatter="genderFormat">Giới tính</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/user :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/user :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/user :: js"/>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var idGenealogy = [[${idGenealogy}]];
+    var idPedigree = [[${idPedigree}]];
+    $(document).ready(function () {
+        $('#nodeTableResultImport').hide();
+        $("#btnSubmit").click(function (event) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            fire_ajax_submit();
+        });
+    });
+
+    function fire_ajax_submit() {
+        // Get form
+        var form = $('#fileUploadForm')[0];
+        var data = new FormData(form);
+        data.append("idGenealogy", idGenealogy);
+        data.append("idPedigree", idPedigree);
+
+        $("#btnSubmit").prop("disabled", true);
+        $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        //Do something with upload progress here
+                        console.log("percent" + percentComplete);
+                        var bar = document.getElementById('bar');
+                        bar.style.width = percentComplete*100 + '%';
+                        bar.innerHTML = percentComplete + ' % complete';
+                    }
+                }, false);
+                xhr.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        //Do something with download progress
+                        console.log("percentComplete : progress :" + percentComplete);
+                    }
+                }, false);
+                return xhr;
+            },
+            type: "POST",
+            enctype: 'multipart/form-data',
+            // enctype: 'application/x-www-form-urlencoded',
+            url: "/genealogy/"+idGenealogy+"/pedigree/"+idPedigree+"/import",
+            data: data,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                $("#result").text(data);
+                $('#table').bootstrapTable({
+                    search: true,
+                    pagination: true,
+                    // url: "https://"+ document.location.host  +'/rest/pedigree/list/' + idGenealogy,
+                    data: data
+                });
+                $('#nodeTableResultImport').show();
+
+                console.log("SUCCESS : ", data);
+                $('#inputFile').val('');
+                $("#btnSubmit").prop("disabled", false);
+            },
+            error: function (e) {
+                $("#result").text(e.responseText);
+                console.log("ERROR : ", e);
+                $("#btnSubmit").prop("disabled", false);
+            }
+        });
+    }
+
+
+    /*]]>*/
+</script>
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

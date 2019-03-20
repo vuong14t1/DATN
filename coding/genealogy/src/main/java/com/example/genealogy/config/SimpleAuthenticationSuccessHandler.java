@@ -22,9 +22,9 @@ public class SimpleAuthenticationSuccessHandler implements AuthenticationSuccess
             throws IOException, ServletException {
         authentication.getAuthorities().forEach(authority->{
             System.out.println("authen " + authority.getAuthority());
-            if(authority.getAuthority().equals("ROLE_MEMBER") || authority.getAuthority().equals("ROLE_USER_FB")){
+            if(authority.getAuthority().equals("ROLE_MEMBER")){
                 try {
-                    redirectStrategy.sendRedirect(arg0, arg1, "/genealogy/user");
+                    redirectStrategy.sendRedirect(arg0, arg1, "/genealogy");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

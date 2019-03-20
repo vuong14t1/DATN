@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/admin :: head"> </head>
+
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header th:replace="/fragments/admin :: header"> </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside th:replace="/fragments/admin :: aside_menu"> </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1> THỐNG KÊ
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active"  ><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Your Page Content Here -->
+
+            <div class="box box-info">
+                <div class="box-header with-border">
+                </div>
+                <!-- /.box-header -->
+                <table id="table">
+                    <thead>
+                    <tr>
+                        <th data-width="25%" data-sortable="true" data-field="countGenealogy" th:text="'Tổng số Dòng tộc'"></th>
+                        <th data-width="25%" data-sortable="true" data-field="countPedigree" th:text="'Tổng số Phả hệ'"></th>
+                        <th data-width="25%" data-sortable="true" data-field="countPeople" th:text="'Tổng số People'"></th>
+                        <th data-width="25%" data-sortable="true" data-field="countUser" th:text="'Tổng số Tài khoản'"></th>
+                     </tr>
+                    </thead>
+                    <!--<tbody>
+                        <tr>
+                            <th th:text="${countGenealogy}"/>
+                            <th th:text="${countPedigree}"/>
+                            <th th:text="${countPeople}"/>
+                            <th th:text="${countUser}"/>
+                        </tr>
+                    </tbody>-->
+                </table>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer th:replace="/fragments/admin :: footer"/>
+
+    <!-- Control Sidebar -->
+    <aside th:replace="/fragments/admin :: aside"/>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+         immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+<div th:replace="/fragments/admin :: js"/>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var countGenealogy  = [[${countGenealogy}]];
+    var countPedigree = [[${countPedigree}]];
+    var countPeople = [[${countPeople}]];
+    var countUser = [[${countUser}]];
+
+    var data = [{
+        "countPedigree": countPedigree,
+        "countGenealogy": countGenealogy,
+        "countPeople": countPeople,
+        "countUser": countUser
+        }
+    ];
+
+    $(function () {
+        $('#table').bootstrapTable({
+            data: data
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

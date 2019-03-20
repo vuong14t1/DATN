@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title>Spring Security Example </title>
+    <meta charset="UTF-8"/>
+    <div th:replace="/fragments/header/common :: header-css"></div>
+</head>
+<body>
+
+<div th:replace="/fragments/header/common :: header"></div>
+
+<div class="container">
+    <!--
+        <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form th:action="@{/registration}" method="post" th:object="${user}" >
+                    <fieldset>
+                        <h1 th:text="#{register.label}" ></h1>
+
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger" th:text="#{register.invalid}"></div>
+                        </div>
+                        <div th:if="${param.logout}">
+                            <div class="alert alert-info">
+                                You have been logged out.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" name="username" id="username" class="form-control input-lg"
+                                   th:field="*{email}" th:placeholder="#{register.user}" required="true" autofocus="true"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control input-lg"
+                                   th:field="*{password}" th:placeholder="#{register.pass}" required="true"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password2" id="repassword2" class="form-control input-lg"
+                                    th:placeholder="#{register.repass}" required="true"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="submit" class="btn btn-lg btn-primary btn-block" th:value="#{register.submit}"/>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <button href="/login?facebook" type="button" class="btn btn-block btn-social btn-lg btn-facebook"><i
+                                        class="fa fa-facebook pr-1"></i>
+                                    <p th:text="#{register.fb}"></p></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <a href="/login" th:text="#{register.login}"></a>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form autocomplete="off" th:action="@{/registration}" th:object="${user}" method="post" class="form-horizontal" name="form">
+                    <h2>Registration Form</h2>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="validation-message"></label>
+                            <input type="text" th:field="*{name}" placeholder="Name" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message"></label>
+                            <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{email}" placeholder="Email" class="form-control"/>
+                            <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="password" th:field="*{password}" placeholder="Password" class="form-control"/>
+                            <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <button type="submit" class="btn btn-primary btn-block">Register User</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <a class="btn btn-lg btn-primary btn-block" th:text="'Đăng nhập'" href="/login"></a>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <a id="loginFacebook" href="#" type="button" class="btn btn-block btn-social btn-lg btn-facebook">
+                                <i class="fa fa-facebook pr-1"></i>
+                                <p th:text="#{register.fb}"></p>
+                            </a>
+                        </div>
+                    </div>
+                    <span th:utext="${successMessage}"></span>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script  type="text/javascript"  th:src="@{/js/facebook.js}"></script>
+<div th:replace="/fragments/footer/common :: footer"/>
+
+</body>
+</html>

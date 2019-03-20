@@ -31,7 +31,7 @@
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form id="editProfileForm" class="form-horizontal"  th:object="${user}" method="post" action="/profile/edit">
+                    <form id="editProfileForm" class="form-horizontal"  th:object="${user}" method="post" action="/account/profile/edit">
                         <div class="box-body">
                             <div class="form-group">
                                 <label for="inputId" class="col-sm-2 control-label">Id</label>
@@ -51,22 +51,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputFirstName" class="col-sm-2 control-label" th:text="#{first.name}"></label>
-                                <div class="col-sm-10">
-                                    <input name="firstName" type="email" class="form-control" id="inputFirstName" placeholder="Id" th:value="*{getFirstName()}"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputLastName" class="col-sm-2 control-label" th:text="#{last.name}"></label>
-                                <div class="col-sm-10">
-                                    <input name="lastName" type="email" class="form-control" id="inputLastName" placeholder="Id" th:value="*{getLastName()}"/>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <label for="inputName" class="col-sm-2 control-label" th:text="#{name}"></label>
                                 <div class="col-sm-10">
-                                    <input name="name" type="email" class="form-control" id="inputName" placeholder="Id" th:value="*{getName()}"/>
+                                    <input name="name" type="text" class="form-control" id="inputName" placeholder="Id" th:value="*{getName()}"/>
                                 </div>
                             </div>
 
@@ -86,7 +73,7 @@
                             <div class="form-group">
                                 <label for="inputAddress" class="col-sm-2 control-label" th:text="#{address}"></label>
                                 <div class="col-sm-10">
-                                    <input name="address" type="email" class="form-control" id="inputAddress" th:placeholder="#{address}" th:value="*{getAddress()}"/>
+                                    <input name="address" type="text" class="form-control" id="inputAddress" th:placeholder="#{address}" th:value="*{getAddress()}"/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -95,19 +82,10 @@
                                     <input name="birthday" type="text" class="form-control pull-right" id="datepicker" th:value="*{getBirthdayString()}"/>
                                 </div>
                             </div>
-                           <!-- <div class="form-group">
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        Ngày sinh
-                                    </div>
-                                    <input type="text" class="form-control pull-right" id="datepicker" th:value="*{getBirthday()}"/>
-                                </div>
-                            </div>
--->
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <a href="/profile" class="btn btn-success pull-right">Cancel</a>
+                            <a href="/account/profile" class="btn btn-success pull-right">Cancel</a>
                             <button id="btnSubmitEditProfile" type="submit" class="btn btn-info pull-right">Save</button>
                         </div>
                         <!-- /.box-footer -->
@@ -171,14 +149,14 @@
         $.ajax({
             type: "POST",
             enctype: 'application/x-www-form-urlencoded',
-            url: "/profile/edit",
+            url: "/account/profile/edit",
             data: data,
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             contentType: false,
             cache: false,
             timeout: 600000,
             success: function (errorCode) {
-                window.location = "/profile";
+                window.location = "/account/profile";
             },
             error: function (e) {
                 toastr["error"]("Cập nhật không thành công.", "Thông báo")

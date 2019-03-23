@@ -3,6 +3,7 @@ package com.vuongpq2.datn.rest;
 import com.vuongpq2.datn.data.Enum.Permission;
 import com.vuongpq2.datn.data.model.DGenealogyModel;
 import com.vuongpq2.datn.model.GenealogyModel;
+import com.vuongpq2.datn.model.PedigreeModel;
 import com.vuongpq2.datn.model.UserModel;
 import com.vuongpq2.datn.model.UserPermissionModel;
 import com.vuongpq2.datn.repository.PedigreeRepository;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
-import javax.jws.WebParam;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,7 +101,8 @@ public class GenealogyRestController {
         }
         return result;
     }
-    public int getPermission(String email, int idGenealogy) {
+
+    public  int getPermission(String email, int idGenealogy) {
         UserModel userModel = userRepository.findByEmail(email);
         UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);
         if(userPermissionModel != null) {
@@ -109,4 +110,6 @@ public class GenealogyRestController {
         }
         return -1;
     }
+
+
 }

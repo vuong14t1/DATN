@@ -18,6 +18,6 @@ public interface PedigreeRepository extends JpaRepository<PedigreeModel, Integer
 
     List<PedigreeModel> findAll();
 
-//    List<PedigreeModel> findAllByGenealogy_Id(Integer id);
+    List<PedigreeModel> findAllByGenealogyModel_Id(Integer id);
     void deleteAllByGenealogyModel(GenealogyModel genealogyModel);
 }

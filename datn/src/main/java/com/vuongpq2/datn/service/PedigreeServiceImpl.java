@@ -22,10 +22,10 @@ public class PedigreeServiceImpl implements PedigreeService {
         return pedigreeRepository.findAll();
     }
 
-    /*@Override
+    @Override
     public List<PedigreeModel> findAllByGenealogyId(Integer genealogyId) {
-        return pedigreeRepository.findAllByGenealogy_Id(genealogyId);
-    }*/
+        return pedigreeRepository.findAllByGenealogyModel_Id(genealogyId);
+    }
 
     @Override
     public Optional<PedigreeModel> findById(Integer id) {

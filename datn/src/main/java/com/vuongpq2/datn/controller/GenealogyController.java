@@ -156,24 +156,5 @@ public class GenealogyController {
         }
     }
 
-    @GetMapping(value = "/genealogy/{idGenealogy}/pedigree")
-    public ModelAndView getListPedigreeByGenealogyId(Principal principal, @PathVariable(value = "idGenealogy", required = false) int idGenealogy) {
-        UserModel userModel = userRepository.findByEmail(principal.getName());
-        if(userModel == null) {
-            return new ModelAndView("/genealogy");
-        }
-        UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);
-        if(userPermissionModel != null) {
-            Permission permission = Permission.byCode(userPermissionModel.getPermission().getCode());
-            if(PermissionUtils.isCanViewPedigree(permission)) {
-                ModelAndView mv = new ModelAndView("/genealogy/pedigree");
-                mv.addObject("genealogy", userPermissionModel.getGenealogyModel());
-                mv.addObject("idGenealogy", idGenealogy);
-                mv.addObject("idPermission", permission.getCode());
-                return mv;
-            }else{
-                return new ModelAndView("/genealogy");
-            }
-        }
-    }
+
 }

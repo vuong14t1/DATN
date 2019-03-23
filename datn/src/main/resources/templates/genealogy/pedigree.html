@@ -21,10 +21,16 @@
                 <!--<h1 th:text="#{genealogy.header}">-->
             </h1>
             <ol class="breadcrumb">
-                <a th:href="'/genealogy/'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Tất cả Dòng tộc</span></a>
-                <a th:href="'/genealogy/'+ ${idGenealogy} +'/'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Quay lại Dòng tộc</span></a>
-                <a th:href="'/genealogy/'+ ${idGenealogy} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Thành Viên trong dòng tộc</span></a>
-                <li class="active"><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>
+                <a th:href="'/genealogy/'" type="button" class="view btn btn-default btn-xs"><span
+                        class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Tất cả Dòng tộc</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/'" type="button" class="view btn btn-default btn-xs"><span
+                        class="glyphicon glyphicon-eye-open"
+                        aria-hidden="true"></span><span>Quay lại Dòng tộc</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/member'" type="button" class="view btn btn-default btn-xs"><span
+                        class="glyphicon glyphicon-eye-open"
+                        aria-hidden="true"></span><span>Thành Viên trong dòng tộc</span></a>
+                <li class="active"><a href="/genealogy"><i class="fa fa-dashboard"></i><span
+                        th:text="#{genealogy}"></span></a></li>
             </ol>
         </section>
 
@@ -34,16 +40,20 @@
 
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <a th:href="'/genealogy/'+${idGenealogy}+'/pedigree/add'" class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus"></span><span th:text="#{add}"></span></a>
-                    <button th:if="${idPermission == 1}" id="btnGopPhaHe" class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus"></span><span> Gộp phả hệ</span></button>
+                    <a th:href="'/genealogy/'+${idGenealogy}+'/pedigree/add'" class="btn btn-success"
+                       type="button"><span class="glyphicon glyphicon-plus"></span><span th:text="#{add}"></span></a>
+                    <button th:if="${idPermission == 1}" id="btnGopPhaHe" class="btn btn-success" type="button"><span
+                            class="glyphicon glyphicon-plus"></span><span> Gộp phả hệ</span></button>
                 </div>
                 <!-- /.box-header -->
                 <table id="table">
                     <thead>
                     <tr>
-                        <th data-width="20%" data-sortable="true" data-field="name" th:text="#{genealogy.find.table.name}"></th>
+                        <th data-width="20%" data-sortable="true" data-field="name"
+                            th:text="#{genealogy.find.table.name}"></th>
                         <th data-width="70%" data-field="history" th:text="#{genealogy.find.table.description}"></th>
-                        <th data-width="150px" data-formatter="actionFormatter" data-events="actionEvents" data-field="action" th:text="#{genealogy.find.table.action}"></th>
+                        <th data-width="150px" data-formatter="actionFormatter" data-events="actionEvents"
+                            data-field="action" th:text="#{genealogy.find.table.action}"></th>
                     </tr>
                     </thead>
                 </table>
@@ -111,7 +121,9 @@
                                 </div>
                             </div>
                         </div>
-                        <button id="btnSubmitGopPhaHe" type="submit" class="btn btn-warning" data-dismiss="modal">Xác Nhận Gộp</button>
+                        <button id="btnSubmitGopPhaHe" type="submit" class="btn btn-warning" data-dismiss="modal">Xác
+                            Nhận Gộp
+                        </button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                     </form>
                 </div>
@@ -133,7 +145,7 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var idGenealogy  = [[${idGenealogy}]];
+    var idGenealogy = [[${idGenealogy}]];
     var idPermission = [[${idPermission}]];
 
     function actionFormatter(value, row, index) {
@@ -154,15 +166,15 @@
     }
 
     window.actionEvents = {
-        'click .view'  : function (e, value, row, index) {
+        'click .view': function (e, value, row, index) {
             window.location.href = ('/genealogy/' + idGenealogy + '/pedigree/' + row["id"] + "/detail");
         },
-        'click .edit'  : function (e, value, row, index) {
+        'click .edit': function (e, value, row, index) {
             window.location.href = ('/genealogy/' + idGenealogy + '/pedigree/' + row["id"] + "/edit");
         },
         'click .remove': function (e, value, row, index) {
             bootbox.confirm({
-                message: "Bạn muốn xóa phả hệ '"  + row.name+"'?",
+                message: "Bạn muốn xóa phả hệ '" + row.name + "'?",
                 backdrop: true,//click ra ngoai huy
                 className: 'bb-alternate-modal',// giật giật
                 buttons: {
@@ -176,16 +188,17 @@
                     }
                 },
                 callback: function (result) {
-                    if(result == true){
-                        $.post( "/rest/genealogy/"+idGenealogy+"/pedigree/"+row.id+"/delete")
-                            .done(function( data,action ) {
-                                if(action == "success"){
+                    if (result == true) {
+                        $.post("/rest/genealogy/" + idGenealogy + "/pedigree/" + row.id + "/delete")
+                            .done(function (data, action) {
+                                if (action == "success") {
                                     row.action = 3;
-                                    $('#table').bootstrapTable("remove",{field:"id",values:[row.id]});
+                                    $('#table').bootstrapTable("remove", {field: "id", values: [row.id]});
                                     $('#table').bootstrapTable("refresh");
 
                                 }
-
+                                $('#table').bootstrapTable("remove", {field: "id", values: [row.id]});
+                                $('#table').bootstrapTable("refresh");
                                 // alert( "Data Loaded: " + data  +"|" + action);
                             });
                     }
@@ -197,38 +210,43 @@
 
     $(function () {
         $('#table').bootstrapTable({
-                search    : true,
-                pagination: true,
-                url       : "https://" + document.location.host + '/rest/pedigree/list/' + idGenealogy,
-                // data: data
-            });
+            search: true,
+            pagination: true,
+            url: "http://" + document.location.host + '/rest/pedigree/list/' + idGenealogy,
+            // data: data
+        });
         $("#btnGopPhaHe").click(function (event) {
-                loadFormGopPhaHe();
-                $("#modalGopPhaHe")
-                    .modal();
-            });
+            loadFormGopPhaHe();
+            $("#modalGopPhaHe")
+                .modal();
+        });
         $("#inputIndexChild").html('');
         $("#inputIndexChild").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {$("#inputIndexChild").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+        for (var i = 2; i < 100; i++) {
+            $("#inputIndexChild").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+        }
 
     });
     $("#btnSubmitGopPhaHe").click(function (event) {
-            //stop submit the form, we will post it manually.
-            event.preventDefault();
-            //hiện xác nhân
-            bootbox.confirm({
-                message: "Tất cả các con của Phả hệ hiện tại sẽ được chuyển vào phả hệ vói, bạn chắc chắn",
-                backdrop: true,//click ra ngoai huy
-                className: 'bb-alternate-modal',// giật giật
-                buttons: {confirm: {label: 'Đồng ý', className: 'btn-success'}, cancel: {label: 'Hủy', className: 'btn-danger'}},
-                callback: function (result) {
-                    if(result){
-                        actionGopPhaHe();
-                    }
+        //stop submit the form, we will post it manually.
+        event.preventDefault();
+        //hiện xác nhân
+        bootbox.confirm({
+            message: "Tất cả các con của Phả hệ hiện tại sẽ được chuyển vào phả hệ vói, bạn chắc chắn",
+            backdrop: true,//click ra ngoai huy
+            className: 'bb-alternate-modal',// giật giật
+            buttons: {
+                confirm: {label: 'Đồng ý', className: 'btn-success'},
+                cancel: {label: 'Hủy', className: 'btn-danger'}
+            },
+            callback: function (result) {
+                if (result) {
+                    actionGopPhaHe();
                 }
-            });
+            }
         });
-    $('#inputPedigreeTo').on('change', function() {
+    });
+    $('#inputPedigreeTo').on('change', function () {
         var id = $(this).find(":selected").val();
         var idPedigree = $('#inputPedigreeTo').find(":selected").val();
         //hien thị danh sach people trong phả hệ
@@ -236,7 +254,7 @@
         $.ajax({
             type: "GET",
             // https://localhost:89991/pedigree/1/people/3/get-info-add
-            url: " /rest/genealogy/"+idGenealogy+"/pedigree/"+idPedigree+"/all-people-name-node-parent",
+            url: " /rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/all-people-name-node-parent",
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
@@ -255,31 +273,31 @@
                 for (var i in data) {
                     var id = data[i].id;
                     var name = data[i].name;
-                    $("#inputParent").append('<option value="'+id+'">'+name+'</option>');
+                    $("#inputParent").append('<option value="' + id + '">' + name + '</option>');
                 }
-                if(data.length == 0){
+                if (data.length == 0) {
                     $("#inputParent").append('<option value="-1">GỐC</option>');
                     $("#inputParent").val("-1").attr("selected", "selected");
                     // $("#inputParent").val("-1").change();
-                    $("#inputParent").val('disabled',true);
-                }else{
+                    $("#inputParent").val('disabled', true);
+                } else {
                     $("#inputParent").val(id).attr("selected", true);
                     $("#inputParent").removeAttr('disabled');
                 }
             },
             error: function (e) {
-                $("#inputParent").attr('disabled','disabled');
+                $("#inputParent").attr('disabled', 'disabled');
             }
         });
     });
-    $('#inputParent').on('change', function() {
+    $('#inputParent').on('change', function () {
         var idParent = $(this).find(":selected").val();
         var idPedigree = $('#inputPedigreeTo').find(":selected").val();
         //hien thị danh sach mother trong phả hệ
         $('#inputMother').html("");
         $.ajax({
             type: "GET",
-            url: " /rest/genealogy/"+idGenealogy+"/pedigree/"+idPedigree+"/people/"+idParent+"/get-info-add",
+            url: " /rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/people/" + idParent + "/get-info-add",
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
@@ -289,14 +307,14 @@
                 for (var i in data.findHusbandWifes) {
                     var id = data.findHusbandWifes[i].id;
                     var name = data.findHusbandWifes[i].name;
-                    $("#inputMother").append('<option value="'+id+'">'+name+'</option>');
+                    $("#inputMother").append('<option value="' + id + '">' + name + '</option>');
                 }
                 $("#inputMother").val(id).attr("selected", true);
                 $("#inputMother").removeAttr('disabled');
 
             },
             error: function (e) {
-                $("#inputMother").attr('disabled','disabled');
+                $("#inputMother").attr('disabled', 'disabled');
             }
         });
     });
@@ -307,7 +325,7 @@
         $.ajax({
             type: "GET",
             // https://localhost:89991/pedigree/1/people/3/get-info-add
-            url: "/rest/pedigree/list/"+idGenealogy,
+            url: "/rest/pedigree/list/" + idGenealogy,
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
@@ -329,8 +347,8 @@
                 for (var i in data) {
                     var id = data[i].id;
                     var name = data[i].name;
-                    $("#inputSelectPedigree").append('<option value="'+id+'">'+name+'</option>');
-                    $("#inputPedigreeTo").append('<option value="'+id+'">'+name+'</option>');
+                    $("#inputSelectPedigree").append('<option value="' + id + '">' + name + '</option>');
+                    $("#inputPedigreeTo").append('<option value="' + id + '">' + name + '</option>');
                 }
                 $("#inputPedigreeTo").removeAttr('disabled');
                 $("#inputSelectPedigree").removeAttr('disabled');
@@ -345,17 +363,17 @@
             },
             error: function (e) {
 
-                $("#inputPedigreeTo").attr('disabled','disabled');
-                $("#inputSelectPedigree").attr('disabled','disabled');
-                $("#inputIndexChild").attr('disabled','disabled');
-                $("#btnSubmitGopPhaHe").attr('disabled','disabled');
+                $("#inputPedigreeTo").attr('disabled', 'disabled');
+                $("#inputSelectPedigree").attr('disabled', 'disabled');
+                $("#inputIndexChild").attr('disabled', 'disabled');
+                $("#btnSubmitGopPhaHe").attr('disabled', 'disabled');
             }
         });
     };
     var actionGopPhaHe = function () {
         var form = $('#formGopPhaHe')[0];
         var data = new FormData(form);
-        data.append("idGenealogy",idGenealogy + '');
+        data.append("idGenealogy", idGenealogy + '');
         console.log(data);
         $("#btnSubmitGopPhaHe").prop("disabled", true);
         $.ajax({
@@ -369,9 +387,9 @@
             timeout: 600000,
             success: function (errorCode) {
                 console.log("SUCCESS : ", errorCode);
-                if(errorCode == '1'){
+                if (errorCode == '1') {
                     toastr["success"]("Đã gộp thành công", "Thông báo")
-                }else{
+                } else {
                     toastr["error"]("Không thể Gộp, vui lòng thử lại", "Lỗi")
                 }
                 $("#btnSubmitGopPhaHe").prop("disabled", false);

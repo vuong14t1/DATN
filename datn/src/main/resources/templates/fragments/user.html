@@ -16,7 +16,6 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap-table.min.css}"/>
 
 
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -29,20 +28,22 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <style>
-        .people_chart_node:hover .people_chart_node_edit{
+        .people_chart_node:hover .people_chart_node_edit {
             display: block;
         }
 
-        .people_chart_node_edit{
+        .people_chart_node_edit {
             display: none;
             position: absolute;
             right: 0;
             top: 0;
         }
+
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Roboto', sans-serif;
             font-weight: 700;
         }
+
         h2, h3, h4, h5, h6 {
             margin-top: 50px;
         }
@@ -50,17 +51,21 @@
         h1, h2 {
             font-size: 24px;
         }
+
         h3 {
             font-size: 20px;
         }
+
         h4 {
             font-size: 16px;
         }
+
         p > img {
             display: block;
             margin-left: auto;
             margin-right: auto
         }
+
         h1, h2, h3, h4, h5, h6, p, li {
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
@@ -77,9 +82,9 @@
     <!-- Logo -->
     <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>LM</b></span>
+        <span class="logo-mini"><b>PQV</b></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>L</b>ee<b>M</b>in</span>
+        <span class="logo-lg">PHAN QUANG VUONG</span>
     </a>
 
     <!-- Header Navbar -->
@@ -89,7 +94,7 @@
             <span class="sr-only">Toggle navigation</span>
         </a>
         <div class="navbar-header">
-            <a href="/" class="navbar-brand">Xây dựng cây phả hệ của các dòng tộc</a>
+            <a href="/" class="navbar-brand">Xây dựng hệ thống cây phả hệ của các dòng tộc</a>
         </div>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
@@ -154,8 +159,7 @@
                         <!-- The user image in the navbar-->
                         <img src="" class="user-image userImgAvatarMenu" alt="User Image"/>
                         <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <!--<span class="hidden-xs" th:text="${#authentication.
-                        ().getUsername()}"></span>-->
+                        <!--<span class="hidden-xs" th:text="${#authentication.getPrincipal().getUsername()}"></span>-->
 
                     </a>
                     <!--<ul class="dropdown-menu">
@@ -196,7 +200,7 @@
                 </li>
                 <!-- Control Sidebar Toggle Button -->
                 <li>
-                    <a href="#"  onclick="comingSoon()"> <!--data-toggle="control-sidebar"--><i class="fa fa-gears"></i></a>
+                    <a href="#" onclick="comingSoon()"> <!--data-toggle="control-sidebar"--><i class="fa fa-gears"></i></a>
                 </li>
             </ul>
         </div>
@@ -210,12 +214,13 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img  src=""  class="img-circle userImgAvatarMenu" width="50" height="50" alt="User Image"/>
+                <img src="" class="img-circle userImgAvatarMenu" width="50" height="50" alt="User Image"/>
             </div>
             <div class="pull-left info">
                 <!--<p th:text="${#authentication.getPrincipal().getUsername()}">Username here</p>-->
                 <!-- Status -->
-                <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-circle text-success"></i><span th:text="#{sidebar.menu.profile.edit}"></span></a>
+                <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-circle text-success"></i><span
+                        th:text="#{sidebar.menu.profile.edit}"></span></a>
             </div>
         </div>
 
@@ -235,9 +240,12 @@
         <ul class="sidebar-menu">
             <li class="header" th:text="#{sidebar.menu.main}"></li>
             <!-- Optionally, you can add icons to the links -->
-            <li class=""><a href="/"><i class="fa fa-dashboard"></i><span th:text="#{sidebar.menu.home}"></span></a></li>
-            <li><a href="/genealogy/find"><i class="fa fa-search"></i> <span th:text="#{sidebar.menu.genealogy.find}"></span></a></li>
-            <li><a href="/genealogy"><i class="fa fa-search"></i> <span th:text="#{sidebar.menu.my.genealogy}"></span></a></li>
+            <li class=""><a href="/"><i class="fa fa-dashboard"></i><span th:text="#{sidebar.menu.home}"></span></a>
+            </li>
+            <li><a href="/genealogy/find"><i class="fa fa-search"></i> <span
+                    th:text="#{sidebar.menu.genealogy.find}"></span></a></li>
+            <li><a href="/genealogy"><i class="fa fa-search"></i> <span
+                    th:text="#{sidebar.menu.my.genealogy}"></span></a></li>
             <li class="treeview">
                 <a href=""><i class="fa fa-link"></i> <span th:text="#{sidebar.menu.my.genealogy.detail}"></span>
                     <span class="pull-right-container">
@@ -262,8 +270,10 @@
             </li>
             <li class="header" th:text="#{sidebar.menu.sub.main}"></li>
             <li><a href="/profile"><i class="fa fa-group"></i> <span th:text="#{sidebar.menu.profile}"></span></a></li>
-            <li><a  onclick="comingSoon()"><i class="fa fa-gears"></i> <span th:text="#{sidebar.menu.setting}"></span></a></li> <!--data-toggle="modal" href="#modalSetting"-->
-            <li><a href="/facebook/logout"><i class="fa fa fa-odnoklassniki"></i> <span th:text="#{sidebar.menu.exit}"></span></a></li>
+            <li><a onclick="comingSoon()"><i class="fa fa-gears"></i> <span
+                    th:text="#{sidebar.menu.setting}"></span></a></li> <!--data-toggle="modal" href="#modalSetting"-->
+            <li><a href="/facebook/logout"><i class="fa fa fa-odnoklassniki"></i> <span
+                    th:text="#{sidebar.menu.exit}"></span></a></li>
         </ul>
 
         <!-- /.sidebar-menu -->
@@ -275,7 +285,7 @@
 <footer class="main-footer" th:fragment="footer">
     <!-- To the right -->
     <!-- Default to the left -->
-    <strong> ® 2018 Lee Min™</strong>
+    <strong> ® 2019 PQV™</strong>
 </footer>
 <aside class="control-sidebar control-sidebar-dark" th:fragment="aside">
     <!-- Create the tabs -->
@@ -361,21 +371,21 @@
     <script>
         //http://codeseven.github.io/toastr/demo.html
         toastr.options = {
-            "closeButton"      : true,
-            "debug"            : false,
-            "newestOnTop"      : false,
-            "progressBar"      : true,
-            "positionClass"    : "toast-bottom-right",
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
             "preventDuplicates": false,
-            "onclick"          : null,
-            "showDuration"     : "300",
-            "hideDuration"     : "1000",
-            "timeOut"          : "5000",
-            "extendedTimeOut"  : "1000",
-            "showEasing"       : "swing",
-            "hideEasing"       : "linear",
-            "showMethod"       : "fadeIn",
-            "hideMethod"       : "fadeOut"
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
         }
     </script>
     <!--end toast-->
@@ -395,40 +405,40 @@
          fixed layout. -->
 
     <script type="text/javascript">
-        var detectActiveMenu = function (ul,currentPath,ilParent) {
-            if(ul) {
+        var detectActiveMenu = function (ul, currentPath, ilParent) {
+            if (ul) {
                 ul.find("li")
-                  .each(function () { //check what 'this' object is giving.
-                      var il = $(this);
-                      if (_.includes(il.attr("class"), "treeview")) {
-                          detectActiveMenu(il
-                              .find(".treeview-menu"),currentPath,il);
-                      }else{
-                          $(this).find("a").each(function () {
-                              var href =$(this).attr("href");
-                              if(currentPath == (href)){
-                                  if(!_.includes(il.attr("class"),"active")){
-                                      il.attr("class" ,(il.attr("class")===undefined? "":il.attr("class"))+ " active");
-                                      if(ilParent != null){
-                                          ilParent.attr("class" ,(ilParent.attr("class")===undefined? "":ilParent.attr("class"))+ " active");
-                                      }
-                                      return true;
-                                  }
-                              }
-                          });
-                      }
-                  });
+                    .each(function () { //check what 'this' object is giving.
+                        var il = $(this);
+                        if (_.includes(il.attr("class"), "treeview")) {
+                            detectActiveMenu(il
+                                .find(".treeview-menu"), currentPath, il);
+                        } else {
+                            $(this).find("a").each(function () {
+                                var href = $(this).attr("href");
+                                if (currentPath == (href)) {
+                                    if (!_.includes(il.attr("class"), "active")) {
+                                        il.attr("class", (il.attr("class") === undefined ? "" : il.attr("class")) + " active");
+                                        if (ilParent != null) {
+                                            ilParent.attr("class", (ilParent.attr("class") === undefined ? "" : ilParent.attr("class")) + " active");
+                                        }
+                                        return true;
+                                    }
+                                }
+                            });
+                        }
+                    });
 
             }
             return false;
         };
-        $(function(){
-            var currentPath =  window.location.pathname;
+        $(function () {
+            var currentPath = window.location.pathname;
             var length = currentPath.indexOf("?");
-            if(length == -1) length = currentPath.length;
-            currentPath = currentPath.substr(0,length);
-            $(".sidebar-menu").each(function() {
-                detectActiveMenu($(this) ,currentPath);
+            if (length == -1) length = currentPath.length;
+            currentPath = currentPath.substr(0, length);
+            $(".sidebar-menu").each(function () {
+                detectActiveMenu($(this), currentPath);
                 // $(this).find("li").each(function() { //check what 'this' object is giving.
                 //     var il = $(this);
                 //     $(this).find("a").each(function () {
@@ -463,7 +473,7 @@
                         <a href="?lang=vi" type="button" class="btn btn-default" th:text="#{text.vietnamese}"></a>
                     </div>
                     <!-- ELSE -->
-                    <div th:unless="${#locale.toString().equals('en')}" >
+                    <div th:unless="${#locale.toString().equals('en')}">
                         <p th:text="#{text.current.language} +  'Tiếng việt'"></p>
                         <!--<p th:text="${#strings.replace(#{text.current.language},'@lang','Tiếng việt')}"></p>-->
                         <a href="?lang=en" type="button" class="btn btn-default" th:text="#{text.english}"></a>
@@ -477,13 +487,15 @@
         </div>
     </div>
     <script type="text/javascript" th:src="@{/js/moment.min.js}"></script>
-    <script th:unless="${#locale.toString().equals('en')}" type="text/javascript" th:src="@{/js/moment-with-locales.js}"></script>
+    <script th:unless="${#locale.toString().equals('en')}" type="text/javascript"
+            th:src="@{/js/moment-with-locales.js}"></script>
     <script th:unless="${#locale.toString().equals('en')}" type="text/javascript">
         moment.updateLocale('vi', null);
     </script>
 
     <script type="text/javascript" th:src="@{/dist/datepicker/bootstrap-datepicker.js}"></script>
-    <script th:unless="${#locale.toString().equals('en')}" type="text/javascript" th:src="@{/dist/datepicker/locales/bootstrap-datepicker.vi.js}"></script>
+    <script th:unless="${#locale.toString().equals('en')}" type="text/javascript"
+            th:src="@{/dist/datepicker/locales/bootstrap-datepicker.vi.js}"></script>
     <script th:unless="${#locale.toString().equals('en')}" type="text/javascript">
         $('#datepicker').datepicker({
             language: 'vi'
@@ -498,14 +510,14 @@
 
 
         function dateFormat(value, row, index) {
-            if(value == null){
+            if (value == null) {
                 return "";
             }
             return moment(value).format('DD/MM/YYYY');
         }
 
         function relationFormat(value, row, index) {
-            switch (value){
+            switch (value) {
                 case 0:
                     return "Cha";
                 case 1:
@@ -517,8 +529,9 @@
             }
             return "";
         }
+
         function genderFormat(value, row, index) {
-            switch (value){
+            switch (value) {
                 case 0:
                     return "Nam";
                 case 1:
@@ -529,9 +542,11 @@
             }
             return "?"
         }
-        function comingSoon(){
+
+        function comingSoon() {
             toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
         }
+
         $(document).ready(function () {
             $.ajax({
                 type: "GET",
@@ -540,7 +555,7 @@
                 timeout: 600000,
                 success: function (data) {
                     console.log(data);
-                    $(".userImgAvatarMenu").attr("src",data);
+                    $(".userImgAvatarMenu").attr("src", data);
                 },
                 error: function (e) {
                     console.log("ERROR : ", e);

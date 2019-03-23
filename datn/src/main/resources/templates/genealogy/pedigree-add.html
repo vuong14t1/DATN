@@ -39,13 +39,13 @@
                     <div class="form-group">
                         <label for="inputName" class="col-sm-2 control-label">Tên dòng họ</label>
                         <div class="col-sm-10">
-                            <input type="text" th:field="*{name}" class="form-control" id="inputName" placeholder="Email" th:value="*{getName()}"/>
+                            <input type="text" th:field="*{name}" class="form-control" id="inputName" placeholder="Tên dòng họ" th:value="*{getName()}"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputHistory" class="col-sm-2 control-label">Lịch sử</label>
                         <div class="col-sm-10">
-                            <textarea id="inputHistory" th:field="*{history}" name="inputHistory" rows="10" cols="80" style="visibility: hidden; display: none;" th:text="*{getHistory()}" ></textarea>
+                            <textarea id="inputHistory" th:field="*{history}" name="inputHistory" placeholder="Lịch sử dòng họ" rows="10" cols="80" style="visibility: hidden; display: none;" th:text="*{getHistory()}" ></textarea>
                         </div>
                     </div>
                 </div>

@@ -98,7 +98,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                    "/fonts/**",
                    "/libs/**",
                    "/js/**",
-                   "/dist/**",
+                   "/static/dist/**",
                    "/img/**",
                    "/plugins/**",
                    "/treant/**",

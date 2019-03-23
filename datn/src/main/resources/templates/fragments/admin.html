@@ -9,10 +9,10 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"/>
-    <link rel="stylesheet" th:href="@{/dist/css/AdminLTE.css}"/>
-    <link rel="stylesheet" th:href="@{/dist/css/skins/skin-blue.min.css}"/>
+    <link rel="stylesheet" th:href="@{/static/dist/css/AdminLTE.css}"/>
+    <link rel="stylesheet" th:href="@{/static/dist/css/skins/skin-blue.min.css}"/>
     <!-- bootstrap datepicker -->
-    <link rel="stylesheet" th:href="@{/dist/datepicker/datepicker3.css}"/>
+    <link rel="stylesheet" th:href="@{/static/dist/datepicker/datepicker3.css}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap-table.min.css}"/>
 
 
@@ -349,7 +349,7 @@
     <!-- Bootstrap 3.3.6 -->
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <!-- AdminLTE App -->
-    <script th:src="@{/dist/js/app.min.js}"></script>
+    <script th:src="@{/static/dist/js/app.min.js}"></script>
     <!--http://bootstrap-table.wenzhixin.net.cn/examples/-->
     <!--Toast message-->
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -477,8 +477,8 @@
         moment.updateLocale('vi', null);
     </script>
 
-    <script type="text/javascript" th:src="@{/dist/datepicker/bootstrap-datepicker.js}"></script>
-    <script th:unless="${#locale.toString().equals('en')}" type="text/javascript" th:src="@{/dist/datepicker/locales/bootstrap-datepicker.vi.js}"></script>
+    <script type="text/javascript" th:src="@{/static/dist/datepicker/bootstrap-datepicker.js}"></script>
+    <script th:unless="${#locale.toString().equals('en')}" type="text/javascript" th:src="@{/static/dist/datepicker/locales/bootstrap-datepicker.vi.js}"></script>
     <script th:unless="${#locale.toString().equals('en')}" type="text/javascript">
         $('#datepicker').datepicker({
             language: 'vi'

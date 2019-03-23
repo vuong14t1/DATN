@@ -7,6 +7,7 @@ import com.vuongpq2.datn.model.UserPermissionModel;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
 import com.vuongpq2.datn.service.GenealogyService;
+import com.vuongpq2.datn.utils.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -131,5 +132,48 @@ public class GenealogyController {
         mv = new ModelAndView();
         mv.setViewName("redirect:/genealogy");
         return mv;
+    }
+
+    @GetMapping(value = "/genealogy/find")
+    public ModelAndView getFindGenealogy(Principal principal) {
+        if(principal == null) {
+            return new ModelAndView("/genealogy");
+        }
+        return new ModelAndView("/genealogy/find");
+    }
+
+    @RequestMapping(value = "/genealogy/detail", method = RequestMethod.GET)
+    public ModelAndView detail(
+            Principal principal,
+            HttpServletRequest request) {
+        ModelAndView mv;
+        if (principal == null) {
+            mv = new ModelAndView("/account/login");
+            return mv;
+        } else {
+            mv = new ModelAndView("/genealogy/home");
+            return mv;
+        }
+    }
+
+    @GetMapping(value = "/genealogy/{idGenealogy}/pedigree")
+    public ModelAndView getListPedigreeByGenealogyId(Principal principal, @PathVariable(value = "idGenealogy", required = false) int idGenealogy) {
+        UserModel userModel = userRepository.findByEmail(principal.getName());
+        if(userModel == null) {
+            return new ModelAndView("/genealogy");
+        }
+        UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);
+        if(userPermissionModel != null) {
+            Permission permission = Permission.byCode(userPermissionModel.getPermission().getCode());
+            if(PermissionUtils.isCanViewPedigree(permission)) {
+                ModelAndView mv = new ModelAndView("/genealogy/pedigree");
+                mv.addObject("genealogy", userPermissionModel.getGenealogyModel());
+                mv.addObject("idGenealogy", idGenealogy);
+                mv.addObject("idPermission", permission.getCode());
+                return mv;
+            }else{
+                return new ModelAndView("/genealogy");
+            }
+        }
     }
 }

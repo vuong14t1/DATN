@@ -80,6 +80,27 @@ public class GenealogyRestController {
         return new ResponseEntity<>("success" , HttpStatus.OK);
     }
 
+    @PostMapping(value = "/rest/genealogy/find", produces = "application/json")
+    public Collection<DGenealogyModel> findGenealogy(Principal principal, @RequestParam(value = "textSearch", required = false, defaultValue = "") String strSearch) {
+        UserModel userModel = userRepository.findByEmail(principal.getName());
+        List<GenealogyModel> genealogyModels = genealogyService.findAllByLike("%" + strSearch + "%");
+        List<DGenealogyModel> result = new ArrayList<>(1);
+        for(GenealogyModel g: genealogyModels) {
+            DGenealogyModel dGenealogyModel = new DGenealogyModel();
+            dGenealogyModel.setId(g.getId());
+            String his = g.getHistory();
+            int length = Math.min(his.length(), 50);
+            his = his.substring(0, length);
+            dGenealogyModel.setHistory(HtmlUtils.htmlEscape(his));
+            dGenealogyModel.setName(g.getName());
+            UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, g.getId());
+            if(userPermissionModel != null) {
+                dGenealogyModel.setPermission(userPermissionModel.getPermission().getCode());
+            }
+            result.add(dGenealogyModel);
+        }
+        return result;
+    }
     public int getPermission(String email, int idGenealogy) {
         UserModel userModel = userRepository.findByEmail(email);
         UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);

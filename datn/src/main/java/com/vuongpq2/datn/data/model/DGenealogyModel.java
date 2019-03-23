@@ -1,5 +1,7 @@
 package com.vuongpq2.datn.data.model;
 
+import com.vuongpq2.datn.data.Enum.Permission;
+
 public class DGenealogyModel {
     private int id;
     private String name;
@@ -7,7 +9,7 @@ public class DGenealogyModel {
     private int permission;
 
     public DGenealogyModel() {
-        permission = 0;
+        permission = Permission.NO_REGISTER.getCode();
     }
 
     public int getId() {

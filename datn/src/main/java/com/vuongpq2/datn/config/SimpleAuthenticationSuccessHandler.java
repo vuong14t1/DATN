@@ -22,29 +22,17 @@ public class SimpleAuthenticationSuccessHandler implements AuthenticationSuccess
         final String[] result = {"/account/login"};
         authentication.getAuthorities().forEach(authority->{
             System.out.println("role" + authority.getAuthority());
-            if(authority.getAuthority().equals("ROLE_USER") || authority.getAuthority().equals("ROLE_USER_FB")){
-                result[0] = "/genealogy";
-//                try {
-////                    redirectStrategy.sendRedirect(arg0, arg1, "");
-//                    System.out.println("vao day user");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-            }else if(authority.getAuthority().equals("ROLE_ADMIN")) {
-//                try {
-//                    redirectStrategy.sendRedirect(arg0, arg1, "/admin");
-//                    System.out.println("vao day admin");
-//                } catch (Exception e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
+            if(authority.getAuthority().equals("ROLE_ADMIN")){
                 result[0] = "/admin";
+
+            }else if(authority.getAuthority().equals("ROLE_USER") || authority.getAuthority().equals("ROLE_USER_FB")) {
+                if(!result[0].equals("/admin")) {
+                    result[0] = "/genealogy";
+                }
             } else {
                 throw new IllegalStateException();
             }
         });
-        System.out.println("vao day login " + result[0]);
         redirectStrategy.sendRedirect(arg0, arg1, result[0]);
     }
 

@@ -38,7 +38,7 @@
                     <tr>
                         <th data-width="20%" data-sortable="true" data-field="name" th:text="#{genealogy.find.table.name}"></th>
                         <th data-width="40%" data-field="history" th:text="#{genealogy.find.table.description}"></th>
-                        <th data-width="20%" data-field="action" th:text="#{genealogy.find.table.action}"  data-formatter="actionFormatStatus"></th>
+                        <th data-width="20%" data-field="permission" th:text="#{genealogy.find.table.permission}"  data-formatter="actionFormatStatus"></th>
                         <th data-width="20%" data-formatter="actionFormatter" data-events="actionEvents" data-field="action" th:text="#{genealogy.find.table.action}"></th>
                     </tr>
                     </thead>
@@ -68,7 +68,7 @@
         console.log("value "  + JSON.stringify(value));
         console.log("row "  + JSON.stringify(row));
         console.log("index "  + JSON.stringify(index));
-        var action = row.action;
+        var action = row.permission;
         var listBtn = [];
         listBtn.push('<button type="button" class="view btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>');
         switch  (action){
@@ -111,10 +111,10 @@
     }
     window.actionEvents = {
         'click .view': function (e, value, row, index) {
-            window.location = "https://"+ document.location.host  +'/genealogy/' + row.id;
+            window.location = "http://"+ document.location.host  +'/genealogy/' + row.id;
         },
         'click .edit': function (e, value, row, index) {
-            window.location = "https://"+ document.location.host  +'/genealogy/' + row.id+'/edit';
+            window.location = "http://"+ document.location.host  +'/genealogy/' + row.id+'/edit';
         },
         'click .remove': function (e, value, row, index) {
             bootbox.confirm({
@@ -178,7 +178,7 @@
         $('#table').bootstrapTable({
             search: true,
             pagination: true,
-            url: "https://"+ document.location.host  +'/rest/genealogy/list',
+            url: "http://"+ document.location.host  +'/rest/genealogy/list',
             // data: data
         });
     });

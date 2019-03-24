@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -50,7 +52,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(user.getPassword());
         user.setActive(UserStatus.ACTIVE.getCode());
         RoleModel roleByName = roleRepository.findByName(NameRole.USER);
-//        user.setRoles(new HashSet<RoleModel>(Arrays.asList(roleByName)));
+        user.setRoles(new HashSet<RoleModel>(Arrays.asList(roleByName)));
         userRepository.save(user);
     }
 
@@ -60,7 +62,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(user.getPassword());
         user.setActive(UserStatus.ACTIVE.getCode());
         RoleModel roleByName = roleRepository.findByName(nameRole);
-//        user.setRoles(new HashSet<RoleModel>(Arrays.asList(roleByName)));
+        user.setRoles(new HashSet<RoleModel>(Arrays.asList(roleByName)));
         userRepository.save(user);
     }
 

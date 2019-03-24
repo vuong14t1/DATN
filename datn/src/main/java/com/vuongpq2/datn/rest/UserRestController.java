@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.security.Principal;
 
 @Controller
-public class UserResetController {
+public class UserRestController {
 
     @Autowired
     UserRepository userRepository;

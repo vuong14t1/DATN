@@ -45,22 +45,6 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-2">
-                                                <p>Họ:</p>
-                                            </div>
-                                            <div class="col-sm-10">
-                                                <p th:text="*{getFirstName()}"/>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-2">
-                                                <p>Tên:</p>
-                                            </div>
-                                            <div class="col-sm-10">
-                                                <p th:text="*{getLastName()}"/>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-2">
                                                 <p>Tên đầy đủ:</p>
                                             </div>
                                             <div class="col-sm-10">
@@ -219,9 +203,9 @@
                     $("#newPass").val("");
                     $("#renewPass").val("");
                     $("#modalChangePass").modal('hide');
-                }else if(errorCode == -1){
+                }else if(errorCode == 2){
                     toastr["error"]("Mật khẩu không giống nhau.", "Thông báo")
-                }else if(errorCode == -1){
+                }else if(errorCode == 3){
                     toastr["error"]("Mật khẩu cũ không đúng.", "Thông báo")
                 }
                 $("#btnSubmitChangePass").prop("disabled", false);

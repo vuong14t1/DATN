@@ -151,29 +151,35 @@
                 }
             });
         },
-        // 'click .register': function (e, value, row, index) {
-        //     var data= {idGenealogy:row.id};
-        //     $.post( "/rest/genealogy/register", data)
-        //      .done(function( data,action ) {
-        //          if(action == "success"){
-        //              row.action = 3;
-        //              $('#table').bootstrapTable("updateRow",{index:index,row:row});
-        //          }
-        //
-        //          // alert( "Data Loaded: " + data  +"|" + action);
-        //      });
-        // },
+        'click .register': function (e, value, row, index) {
+            var data= {idGenealogy:row.id};
+            $.post( "/rest/genealogy/register", data)
+             .done(function( data,action ) {
+                 if(action == "success"){
+                     row.permission = 3;
+                     $('#table').bootstrapTable("updateRow",{index:index,row:row});
+                 }
+
+                 // alert( "Data Loaded: " + data  +"|" + action);
+             });
+            //TODO hardcode
+            row.permission = 3;
+            $('#table').bootstrapTable("updateRow",{index:index,row:row});
+        },
         'click .unregister': function (e, value, row, index) {
             var data= {idGenealogy:row.id};
             $.post( "/rest/genealogy/unregister", data)
              .done(function( data,action ) {
                  if(action == "success"){
-                     row.action = 0;
+                     row.permission = 0;
                      $('#table').bootstrapTable("updateRow",{index:index,row:row});
                      $('#table').bootstrapTable("refresh");
                  }
              });
-
+            //TODO hardcode
+            row.permission = 0;
+            $('#table').bootstrapTable("updateRow",{index:index,row:row});
+            $('#table').bootstrapTable("refresh");
         }
     };
 

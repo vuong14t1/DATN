@@ -51,7 +51,7 @@
                     <tr>
                         <th data-width="20%" data-sortable="true" data-field="name" th:text="#{genealogy.find.table.name}"></th>
                         <th data-width="40%" data-field="history" th:text="#{genealogy.find.table.description}"></th>
-                        <th data-width="20%" data-field="action" th:text="#{genealogy.find.table.action}"  data-formatter="actionFormatStatus"></th>
+                        <th data-width="20%" data-field="permission" th:text="#{genealogy.find.table.permission}"  data-formatter="actionFormatStatus"></th>
                         <th data-width="150px" data-formatter="actionFormatter" data-events="actionEvents" data-field="action" th:text="#{genealogy.find.table.action}"></th>
                     </tr>
                 </thead>
@@ -80,7 +80,7 @@
         console.log("value "  + JSON.stringify(value));
         console.log("row "  + JSON.stringify(row));
         console.log("index "  + JSON.stringify(index));
-        var action = row.action;
+        var action = row.permission;
         var listBtn = [];
         listBtn.push('<button type="button" class="view btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>');
         switch  (action){
@@ -88,11 +88,11 @@
                 listBtn.push('<button type="button" class="register btn btn-success"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></button>');
                 break;
             case 1:
-                // listBtn.push('<button type="button" class="edit btn btn-warning"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>');
-                // listBtn.push('<button type="button" class="remove btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>');
+                listBtn.push('<button type="button" class="edit btn btn-warning"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>');
+                listBtn.push('<button type="button" class="remove btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>');
                 break;
             case 2:
-                // listBtn.push('<button type="button" class="edit btn btn-warning"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>');
+                listBtn.push('<button type="button" class="edit btn btn-warning"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>');
                 break;
             case 3:
                 listBtn.push('<button type="button" class="unregister btn btn-warning"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></button>');
@@ -153,40 +153,28 @@
             $.post( "/rest/genealogy/register", data)
              .done(function( data,action ) {
                  if(action == "success"){
-                     row.action = 3;
+                     row.permission = 3;
                      $('#table').bootstrapTable("updateRow",{index:index,row:row});
                  }
+                 row.permission = 3;
+                 $('#table').bootstrapTable("updateRow",{index:index,row:row});
 
-                 // alert( "Data Loaded: " + data  +"|" + action);
+                 alert( "Data Loaded: " + data  +"|" + action);
              });
-            // $.ajax({
-            //     type: "POST",
-            //     url: "/rest/genealogy/register",
-            //     data: data,
-            //     processData: false, //prevent jQuery from automatically transforming the data into a query string
-            //     contentType: false,
-            //     cache: false,
-            //     timeout: 600000,
-            //     success: function (data) {
-            //         row.action = 3;
-            //         $('#table').bootstrapTable("updateRow",{index:index,row:row});
-            //     },
-            //     error: function (e) {
-            //         console.log("ERROR : ", e);
-            //         $("#btnSearch").prop("disabled", false);
-            //     }
-            // });
-            // alert('You click register icon, row: ' + JSON.stringify(row));
+            row.permission = 3;
+            $('#table').bootstrapTable("updateRow",{index:index,row:row});
         },
         'click .unregister': function (e, value, row, index) {
             var data= {idGenealogy:row.id};
             $.post( "/rest/genealogy/unregister", data)
              .done(function( data,action ) {
                  if(action == "success"){
-                     row.action = 0;
+                     row.permission = 0;
                      $('#table').bootstrapTable("updateRow",{index:index,row:row});
                  }
              });
+            row.permission = 0;
+            $('#table').bootstrapTable("updateRow",{index:index,row:row});
             // $.ajax({
             //     type: "POST",
             //     url: "/rest/genealogy/unregister",

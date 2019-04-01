@@ -46,6 +46,7 @@ public class AccountSeeder implements ApplicationListener<ContextRefreshedEvent>
             admin.setActive(1);
             admin.setName("PQV_admin");
             admin.setEmail("vuongadmin@gmail.com");
+            admin.setAddress("sdfsfa");
             admin.setPassword(passwordEncoder.encode("123456"));
             HashSet<RoleModel> roles = new HashSet<>();
             roles.add(roleRepository.findByName("ADMIN"));
@@ -55,10 +56,20 @@ public class AccountSeeder implements ApplicationListener<ContextRefreshedEvent>
         }
 
         // Member account
-        if (userRepository.findByEmail("vuonguser@gmail.com") == null) {
+        if (userRepository.findByEmail("vuong1@gmail.com") == null) {
             UserModel user = new UserModel();
             user.setName("PQV_user");
-            user.setEmail("vuonguser@gmail.com");
+            user.setEmail("vuong1@gmail.com");
+            user.setPassword(passwordEncoder.encode("123456"));
+            HashSet<RoleModel> roles = new HashSet<>();
+            roles.add(roleRepository.findByName("USER"));
+            user.setRoles(roles);
+            userRepository.save(user);
+        }
+        if (userRepository.findByEmail("vuong2@gmail.com") == null) {
+            UserModel user = new UserModel();
+            user.setName("PQV_user");
+            user.setEmail("vuong2@gmail.com");
             user.setPassword(passwordEncoder.encode("123456"));
             HashSet<RoleModel> roles = new HashSet<>();
             roles.add(roleRepository.findByName("USER"));

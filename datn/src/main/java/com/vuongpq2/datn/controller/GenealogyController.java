@@ -76,7 +76,7 @@ public class GenealogyController {
             UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, id);
             if (userPermissionModel != null) {
                 Permission permission = Permission.byCode(userPermissionModel.getPermission().getCode());
-                if (permission == Permission.ADMIN || permission == Permission.MEMBER || permission == Permission.MOD) {
+                if (permission == Permission.ADMIN || permission == Permission.MEMBER || permission == Permission.MOD || permission == Permission.REGISTERED) {
                     mv = new ModelAndView("/genealogy/detail");
                     mv.addObject("idPermission", permission.getCode());
                     mv.addObject("genealogy", userPermissionModel.getGenealogyModel());

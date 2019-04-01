@@ -8,6 +8,7 @@ import com.vuongpq2.datn.repository.RoleRepository;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserPermissionRepository userPermissionRepository;
 
-//    @Autowired
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public List<UserModel> findAll() {
@@ -49,17 +50,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(UserModel user) {
         //encode
-        user.setPassword(user.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(UserStatus.ACTIVE.getCode());
         RoleModel roleByName = roleRepository.findByName(NameRole.USER);
-        user.setRoles(new HashSet<RoleModel>(Arrays.asList(roleByName)));
+        user.setRoles(new HashSet<>(Arrays.asList(roleByName)));
         userRepository.save(user);
     }
 
     @Override
     public void saveUser(UserModel user, String nameRole) {
         //encode
-        user.setPassword(user.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setActive(UserStatus.ACTIVE.getCode());
         RoleModel roleByName = roleRepository.findByName(nameRole);
         user.setRoles(new HashSet<RoleModel>(Arrays.asList(roleByName)));

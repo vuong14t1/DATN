@@ -20,8 +20,8 @@
             <h1 th:text="'Thành viên trong dòng tộc'">
             </h1>
             <ol class="breadcrumb">
-                <a th:href="'/genealogy/'+ ${genealogy.getId()} +'/'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Dòng tộc</span></a>
-                <a th:href="'/genealogy/'+ ${genealogy.getId()} +'/pedigree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Dannh sách phả hệ</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Dòng tộc</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Dannh sách phả hệ</span></a>
                 <li class="active"  ><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>
             </ol>
         </section>
@@ -35,10 +35,11 @@
                 <table id="table">
                     <thead>
                     <tr>
-                        <th data-width="30%" data-sortable="true" data-field="name"> Tên</th>
-                        <th data-width="30%" data-field="email" >Email</th>
-                        <th data-width="20%" data-field="status" th:text="#{genealogy.find.table.action}"  data-formatter="actionFormatStatus"></th>
-                        <th data-width="150px" data-formatter="actionFormatter" data-events="actionEvents" data-field="action" th:text="#{genealogy.find.table.action}"></th>
+                        <th data-width="10%" data-sortable="true" data-field="idUser">ID</th>
+                        <th data-width="20%" data-sortable="true" data-field="name"> Tên</th>
+                        <th data-width="20%" data-field="email" >Email</th>
+                        <th data-width="20%" data-field="permission" th:text="#{genealogy.find.table.permission}"  data-formatter="actionFormatStatus"></th>
+                        <th data-width="30%" data-formatter="actionFormatter" data-events="actionEvents" data-field="action" th:text="#{genealogy.find.table.action}"></th>
                     </tr>
                     </thead>
                 </table>
@@ -71,11 +72,11 @@
         // console.log("value "  + JSON.stringify(value));
         // console.log("row "  + JSON.stringify(row));
         // console.log("index "  + JSON.stringify(index));
-        var action = row.action;
+        var permission = row.permission;
         var listBtn = [];
-        if(idUser != row.idUser && idPermission != 3 &&  idPermission <= action){
-            switch  (action){
-                case 0:
+        //permission khong phai la register hoac unregister,
+        if(idUser != row.idUser && idPermission != 3 &&  idPermission <= permission && idPermission != 0){
+            switch  (permission){
                 case 1:
                 case 2:
                 case 4:
@@ -83,6 +84,7 @@
                     listBtn.push('<button type="button" class="remove btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>');
                     break;
                 case 3:
+                    //neu minh la admin thi co the deny khong cho dang ki
                     switch (idPermission){
                         case 1:
                             listBtn.push('<button type="button" class="accept btn btn-success"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>');
@@ -116,7 +118,7 @@
     }
     window.actionEvents = {
         'click .view': function (e, value, row, index) {
-            window.location = "https://"+ document.location.host  +'/genealogy/' + row.id;
+            window.location = "http://"+ document.location.host  +'/genealogy/' + row.id;
         },
         'click .edit': function (e, value, row, index) {
             var inputOptions = [];
@@ -135,17 +137,19 @@
                 inputOptions: inputOptions,
                 callback: function (result) {
                     if(result != ''){
-                        var data= {idUserGenealogy:row.id,idPermission:result};
-                        $.post( "/rest/genealogy/member/update", data)
+                        var data= {idUserPermisson:row.id,idPermission:result};
+                        $.post( "/rest/genealogy/member-user/update", data)
                          .done(function( data,action ) {
                              if(action == "success"){
-                                 row.action = result;
+                                 row.permission = result;
                                  $('#table').bootstrapTable("updateRow",{index:index,row:row});
                                  $('#table').bootstrapTable("refresh");
-
                              }
                              console.log("change permission" + data + action +"|"+ result);
                          });
+                        row.permission = result;
+                        $('#table').bootstrapTable("updateRow",{index:index,row:row});
+                        $('#table').bootstrapTable("refresh");
                     }
                 }
             });
@@ -168,37 +172,43 @@
                 },
                 callback: function (result) {
                     if(result == true){
-                        var data= {idUserGenealogy:row.id,idPermission:0};
-                        $.post( "/rest/genealogy/member/update", data)
+                        var data= {idUserPermisson:row.id,idPermission:0};
+                        $.post( "/rest/genealogy/member-user/update", data)
                          .done(function( data,action ) {
                              if(action == "success"){
-                                 row.action = 4;
+                                 row.permission = 0;
                                  $('#table').bootstrapTable("remove",{field:"id",values:[row.id]});
                              }
                          });
+                        row.permission = 0;
+                        $('#table').bootstrapTable("remove",{field:"id",values:[row.id]});
                     }
                 }
             });
         },
         'click .accept': function (e, value, row, index) {
-            var data= {idUserGenealogy:row.id,idPermission:4};
-            $.post( "/rest/genealogy/member/update", data)
+            var data= {idUserPermisson:row.id,idPermission:4};
+            $.post( "/rest/genealogy/member-user/update", data)
              .done(function( data,action ) {
                  if(action == "success"){
-                     row.action = 4;
+                     row.permission = 4;
                      $('#table').bootstrapTable("updateRow",{index:index,row:row});
                  }
              });
+            row.permission = 4;
+            $('#table').bootstrapTable("updateRow",{index:index,row:row});
         },
         'click .deny': function (e, value, row, index) {
-            var data= {idUserGenealogy:row.id,idPermission:0};
-            $.post( "/rest/genealogy/member/update", data)
+            var data= {idUserPermisson:row.id,idPermission:0};
+            $.post( "/rest/genealogy/member-user/update", data)
              .done(function( data,action ) {
                  if(action == "success"){
-                     row.action = 4;
+                     row.action = 0;
                      $('#table').bootstrapTable("remove",{field:"id",values:[row.id]});
                  }
              });
+            row.action = 0;
+            $('#table').bootstrapTable("remove",{field:"id",values:[row.id]});
         }
     };
 
@@ -208,7 +218,7 @@
         $('#table').bootstrapTable({
             search: true,
             pagination: true,
-            url: "https://"+ document.location.host  +'/rest/genealogy/'+idGenealogy+'/member'
+            url: "http://"+ document.location.host  +'/rest/genealogy/'+idGenealogy+'/member-user'
         });
     });
     /*]]>*/

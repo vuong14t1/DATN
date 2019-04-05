@@ -7,12 +7,12 @@ public enum Relation {
     CHA(3),
     ME(4);
 
-    byte code;
+    int code;
     Relation(int i) {
-        this.code = (byte)i;
+        this.code = i;
     }
 
-    public byte getCode(){
+    public int getCode(){
         return this.code;
     }
 

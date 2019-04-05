@@ -12,7 +12,7 @@ import java.util.List;
 public interface NodeMemberRepository extends JpaRepository<NodeMemberModel, Integer> {
     List<NodeMemberModel> findAllByPedigreeAndPatchKeyStartsWith(PedigreeModel pedigreeModel, String patchKeyStartsKey);
 
-    List<NodeMemberModel> findAllByPedigreeAndPatchKeyStartsWithOrderByPatchKeyAscMotherIdAscRelationAsc(PedigreeModel pedigreeModel, String patchKeyStartsKey);
+    List<NodeMemberModel> findAllByPedigreeAndPatchKeyStartsWithOrderByPatchKeyAscMotherFatherIdAscRelationAsc(PedigreeModel pedigreeModel, String patchKeyStartsKey);
 
     List<NodeMemberModel> findAllByPedigreeAndPatchKey(PedigreeModel pedigreeModel, String patchKeyStartsKey);
 

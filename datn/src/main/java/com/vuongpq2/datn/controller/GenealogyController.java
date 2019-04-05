@@ -2,12 +2,12 @@ package com.vuongpq2.datn.controller;
 
 import com.vuongpq2.datn.data.Enum.Permission;
 import com.vuongpq2.datn.model.GenealogyModel;
+import com.vuongpq2.datn.model.PermissionModel;
 import com.vuongpq2.datn.model.UserModel;
 import com.vuongpq2.datn.model.UserPermissionModel;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
 import com.vuongpq2.datn.service.GenealogyService;
-import com.vuongpq2.datn.utils.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -154,6 +154,18 @@ public class GenealogyController {
             mv = new ModelAndView("/genealogy/home");
             return mv;
         }
+    }
+
+    @GetMapping(value = "/genealogy/{idGenealogy}/member-user")
+    public ModelAndView getViewMemberInGenealogy (Principal principal, @PathVariable(value = "idGenealogy") int idGenealogy) {
+        UserModel userModel = userRepository.findByEmail(principal.getName());
+        UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);
+        PermissionModel permissionModel = userPermissionModel.getPermission();
+        ModelAndView mv = new ModelAndView("/genealogy/member-user");
+        mv.addObject("idGenealogy", idGenealogy);
+        mv.addObject("idPermission", permissionModel.getCode());
+        mv.addObject("idUser", userModel.getId());
+        return mv;
     }
 
 

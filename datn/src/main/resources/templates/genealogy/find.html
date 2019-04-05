@@ -123,10 +123,10 @@
     }
     window.actionEvents = {
         'click .view': function (e, value, row, index) {
-            window.location = "https://"+ document.location.host  +'/genealogy/' + row.id;
+            window.location = "http://"+ document.location.host  +'/genealogy/' + row.id;
         },
         'click .edit': function (e, value, row, index) {
-            window.location = "https://"+ document.location.host  +'/genealogy/' + row.id+'/edit';
+            window.location = "http://"+ document.location.host  +'/genealogy/' + row.id+'/edit';
         },
         'click .remove': function (e, value, row, index) {
             bootbox.confirm({
@@ -175,64 +175,8 @@
              });
             row.permission = 0;
             $('#table').bootstrapTable("updateRow",{index:index,row:row});
-            // $.ajax({
-            //     type: "POST",
-            //     url: "/rest/genealogy/unregister",
-            //     data: data,
-            //     processData: false, //prevent jQuery from automatically transforming the data into a query string
-            //     contentType: false,
-            //     cache: false,
-            //     timeout: 600000,
-            //     success: function (data) {
-            //         row.action = 0;
-            //         $('#table').bootstrapTable("updateRow",{index:index,row:row});
-            //     },
-            //     error: function (e) {
-            //         console.log("ERROR : ", e);
-            //         $("#btnSearch").prop("disabled", false);
-            //     }
-            // });
-            // alert('You click unregister icon, row: ' + JSON.stringify(row));
         }
     };
-
-    // var data = [
-    //     {
-    //         "name": "bootstrap-table",
-    //         "action":"đã đăng ký",
-    //         "description": "An extended Bootstrap table with radio, checkbox, sort, pagination, and other added features. (supports twitter bootstrap v2 and v3) "
-    //     },
-    //     {
-    //         "name": "multiple-select",
-    //         "action":"đã đăng ký",
-    //         "description": "A jQuery plugin to select multiple elements with checkboxes :)"
-    //     },
-    //     {
-    //         "name": "bootstrap-show-password",
-    //         "action":"chưa gia nhập",
-    //         "description": "Show/hide password plugin for twitter bootstrap."
-    //     },
-    //     {
-    //         "name": "blog",
-    //         "action":"đã gia nhâp",
-    //         "description": "my blog"
-    //     },
-    //     {
-    //         "name": "scutech-redmine",
-    //         "stargazers_count": "6",
-    //         "forks_count": "3",
-    //         "description": "Redmine notification tools for chrome extension."
-    //     }
-    // ];
-    //
-    // $(function () {
-    //     $('#table').bootstrapTable({
-    //         search: true,
-    //         pagination: true,
-    //
-    //         data: data
-    //     });
-    // });
 </script>
 
 

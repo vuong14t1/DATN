@@ -46,7 +46,7 @@ public class NodeMemberServiceImpl implements NodeMemberService {
 
     @Override
     public List<NodeMemberModel> findAllByPedigreeAndPatchKeyStartsWith(PedigreeModel pedigreeModel, String patchKey) {
-        return nodeMemberRepository.findAllByPedigreeAndPatchKeyStartsWithOrderByPatchKeyAscMotherIdAscRelationAsc(pedigreeModel,patchKey);
+        return nodeMemberRepository.findAllByPedigreeAndPatchKeyStartsWithOrderByPatchKeyAscMotherFatherIdAscRelationAsc(pedigreeModel,patchKey);
     }
 
     @Override

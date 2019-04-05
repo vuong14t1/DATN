@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UserPermissionRepository extends JpaRepository<UserPermissionModel, Long> {
+public interface UserPermissionRepository extends JpaRepository<UserPermissionModel, Integer> {
     List<UserPermissionModel> findAll(Sort sort);
     Page<UserPermissionModel> findAll(Pageable pageable);
 

@@ -20,26 +20,31 @@
         <section class="content-header">
             <h1 th:text="#{genealogy.header}">
             </h1>
-           <ol class="breadcrumb">
-               <a th:href="'/genealogy/'+ ${idGenealogy} +'/'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Dòng tộc</span></a>
-               <a th:href="'/genealogy/'+ ${idGenealogy} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Thành Viên</span></a>
-               <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/people-list'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Danh sách Người trong phả hệ</span></a>
-               <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/detail'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Quay lại Phả hệ</span></a>
+            <ol class="breadcrumb">
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/'" type="button" class="view btn btn-default btn-xs"><span
+                        class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Dòng tộc</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/member'" type="button" class="view btn btn-default btn-xs"><span
+                        class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Thành Viên</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/people-list'" type="button"
+                   class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"
+                                                             aria-hidden="true"></span><span>Danh sách Người trong phả hệ</span></a>
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/detail'" type="button"
+                   class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Quay lại Phả hệ</span></a>
 
-               <li>
-                   <a href="/genealogy">
-                       <i class="fa fa-dashboard"></i>
-                       <span th:text="#{genealogy}"></span>
-                   </a>
-               </li>
-               <li>
-                   <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/detail'">
-                       <span>Phả hệ</span>
-                   </a>
-               </li>
-               <li class="active"> Cây Phả hệ</li>
+                <li>
+                    <a href="/genealogy">
+                        <i class="fa fa-dashboard"></i>
+                        <span th:text="#{genealogy}"></span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/detail'">
+                        <span>Phả hệ</span>
+                    </a>
+                </li>
+                <li class="active"> Cây Phả hệ</li>
 
-               <!--<li class="active"><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>-->
+                <!--<li class="active"><a href="/genealogy"><i class="fa fa-dashboard"></i><span th:text="#{genealogy}"></span></a></li>-->
             </ol>
         </section>
 
@@ -50,7 +55,7 @@
             <div class="box box-info" id="nodeXemQuanHe">
                 <div class="box-header with-border">
                     <div class="col-lg-9">
-                        Xem cách gọi tên
+                        Xem mối quan hệ giữa 2 người
                     </div>
                     <div class="col-lg-3 ">
                         <button class="btn btn-danger pull-right" id="btnCloseNodeXemQuanHe"><span> X </span></button>
@@ -58,7 +63,8 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
-                        <img src="/static/dist/img/default-avatar.png" class="img-circle center-block" alt="User Image" id="imgPeopleRelation1" width="100px" height="100px"/>
+                        <img src="/img/avatar-default-unknown.png" class="img-circle center-block" alt="User Image"
+                             id="imgPeopleRelation1" width="100px" height="100px"/>
                         <p class="text-center" id="imgPeopleRelationName1"> Người thứ nhất </p>
                     </div>
                     <div class="col-lg-4 ">
@@ -67,13 +73,14 @@
                             <button class="btn btn-warning" id="btnResetXemQuanHe"><span> Chọn Lại </span></button>
                         </p>
                         <div id="resultXemQuanHe">
-                            <p>Nguyễn Văn A gọi Nguyễn Văn B là Cậu</p>
-                            <p class="pull-right">Nguyễn Văn B gọi Nguyễn Văn A là Cháu</p>
+                            <p></p>
+                            <p class="pull-right"></p>
                         </div>
 
                     </div>
                     <div class="col-lg-4">
-                        <img src="/static/dist/img/default-avatar.png" class="img-circle center-block" alt="User Image" id="imgPeopleRelation2" width="100px" height="100px"/>
+                        <img src="/img/avatar-default-unknown.png" class="img-circle center-block" alt="User Image"
+                             id="imgPeopleRelation2" width="100px" height="100px"/>
                         <p class="text-center" id="imgPeopleRelationName2">Người thứ hai</p>
                     </div>
                 </div>
@@ -88,7 +95,8 @@
                 </div>
                 <!-- /.box-header -->
                 <p class="text-center">
-                    <a th:href="'/genealogy/'+${idGenealogy}+'/pedigree/'+${idPedigree}+'/import'" class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus"></span><span>Import danh sách từ file</span></a>
+                    <a th:href="'/genealogy/'+${idGenealogy}+'/pedigree/'+${idPedigree}+'/import'"
+                       class="btn btn-success" type="button"><span class="glyphicon glyphicon-plus"></span><span>Import danh sách từ file</span></a>
                     <button class="btn btn-success" id="btnCreateRoot"><span> Tạo Người Đầu tiên </span></button>
                 </p>
 
@@ -107,7 +115,7 @@
     <!-- Add the sidebar's background. This div must be placed
          immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
-    
+
     <!-- Modal add child -->
     <div class="modal fade" id="modalAddChild" name="dialog">
         <div class="modal-dialog">
@@ -123,33 +131,41 @@
                         <input type="hidden" class="form-control" id="addChildIdParent" name="addChildIdParent"/>
                         <div class="row">
                             <div class="col-lg-6">
-                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image" id="addChildImgPeople" width="250px" height="250px"/>
+                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image"
+                                     id="addChildImgPeople" width="250px" height="250px"/>
                                 <div class="form-group row">
                                     <div class="custom-file col-lg-12 center-block">
-                                        <input type="file" class="form-control" name="addChildInputFileImg" id="addChildInputFileImg" onchange="readURLAddChild(this);"/>
+                                        <input type="file" class="form-control" name="addChildInputFileImg"
+                                               id="addChildInputFileImg" onchange="readURLAddChild(this);"/>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group row">
-                                    <label for="addChildInputIdMother" class="col-sm-6 col-form-label">Quan hệ với gốc</label>
+                                    <label for="addChildInputRelation" class="col-sm-6 col-form-label">Quan hệ với
+                                        gốc</label>
                                     <div class="col-sm-6">
-                                        <select name="addChildInputRelation" class="form-control" id="addChildInputRelation">
+                                        <select name="addChildInputRelation" class="form-control"
+                                                id="addChildInputRelation">
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="addChildInputIdMother" class="col-sm-3 col-form-label">Cha/Mẹ(nếu có)</label>
+                                    <label for="addChildInputIdMotherFather" class="col-sm-3 col-form-label">Cha/Mẹ(nếu
+                                        có)</label>
                                     <div class="col-sm-9">
-                                        <select name="addChildInputIdMother" class="form-control" id="addChildInputIdMother">
+                                        <select name="addChildInputIdMother" class="form-control"
+                                                id="addChildInputIdMotherFather">
                                         </select>
                                     </div>
                                 </div>
+
                                 <div class="form-group row">
                                     <label for="addChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
                                     <div class="col-sm-6">
-                                        <select name="addChildInputConThu" class="form-control" id="addChildInputConThu">
+                                        <select name="addChildInputConThu" class="form-control"
+                                                id="addChildInputConThu">
                                         </select>
                                     </div>
                                 </div>
@@ -157,19 +173,23 @@
                                 <div class="form-group row">
                                     <label for="addChildInputName" class="col-sm-3 col-form-label">Họ tên</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control"  name="addChildInputName" id="addChildInputName" placeholder="Nguyễn Văn X"/>
+                                        <input type="text" class="form-control" name="addChildInputName"
+                                               id="addChildInputName" placeholder="Nhập họ tên..."/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="addChildInputNickName" class="col-sm-3 col-form-label">Thường gọi</label>
+                                    <label for="addChildInputNickName" class="col-sm-3 col-form-label">Thường
+                                        gọi</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="addChildInputNickName"  id="addChildInputNickName" placeholder="X Nguyễn"/>
+                                        <input type="text" class="form-control" name="addChildInputNickName"
+                                               id="addChildInputNickName" placeholder="Nhập nickname..."/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="addChildInputGender" class="col-sm-3 col-form-label">Giới tính</label>
                                     <div class="col-sm-9">
-                                        <select class="form-control"  name="addChildInputGender" id="addChildInputGender">
+                                        <select class="form-control" name="addChildInputGender"
+                                                id="addChildInputGender">
                                             <option value="1" selected="true"> Nam</option>
                                             <option value="0"> Nữ</option>
                                         </select>
@@ -192,33 +212,40 @@
                             </div>-->
                             <div class="form-group col-md-12">
                                 <label for="addChildInputAddress">Địa chỉ</label>
-                                <input type="text" class="form-control"  name="addChildInputAddress" id="addChildInputAddress" placeholder="phường/xã, quận/huyện, tỉnh/thành phố"/>
+                                <input type="text" class="form-control" name="addChildInputAddress"
+                                       id="addChildInputAddress" placeholder="phường/xã, quận/huyện, tỉnh/thành phố"/>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="addChildInputBirthday">Ngày sinh</label>
-                                <input type="text" class="form-control"  name="addChildInputBirthday"  id="addChildInputBirthday" placeholder="mm/dd/yyyy"/>
+                                <input type="text" class="form-control" name="addChildInputBirthday"
+                                       id="addChildInputBirthday" placeholder="mm/dd/yyyy"/>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="addChildInputDeadDay">Ngày mất</label>
-                                <input type="text" class="form-control"  name="addChildInputDeadDay"  id="addChildInputDeadDay" placeholder="mm/dd/yyyy"/>
+                                <input type="text" class="form-control" name="addChildInputDeadDay"
+                                       id="addChildInputDeadDay" placeholder="mm/dd/yyyy"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="addChildInputDegree">Trình độ</label>
-                            <textarea class="form-control"  name="addChildInputDegree"   id="addChildInputDegree" rows="3"></textarea>
+                            <textarea class="form-control" name="addChildInputDegree" id="addChildInputDegree"
+                                      rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="addChildInputDes">Câu nói, lý lich</label>
-                            <textarea class="form-control"  name="addChildInputDes"  id="addChildInputDes" rows="3"></textarea>
+                            <textarea class="form-control" name="addChildInputDes" id="addChildInputDes"
+                                      rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="addChildInputDataExtra">Mô tả thêm</label>
-                            <textarea class="form-control"  name="addChildInputDataExtra"  id="addChildInputDataExtra" rows="3"></textarea>
+                            <textarea class="form-control" name="addChildInputDataExtra" id="addChildInputDataExtra"
+                                      rows="3"></textarea>
                         </div>
-                        <button id="" type="submit" class="btn btn-warning" data-dismiss="modal">Lưu</button>
-                        <button type="button"btnAddChildSubmit class="btn btn-default" data-dismiss="modal">Hủy</button>
+                        <button id="btnAddChildSubmit" type="submit" class="btn btn-warning" data-dismiss="modal">Lưu
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                     </form>
                 </div>
                 <!--<div class="modal-footer">-->
@@ -245,27 +272,33 @@
                         <input type="hidden" class="form-control" id="viewChildIdParent" name="viewChildIdParent"/>
                         <div class="row">
                             <div class="col-lg-6">
-                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image" id="viewChildImgPeople" width="250px" height="250px"/>
+                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image"
+                                     id="viewChildImgPeople" width="250px" height="250px"/>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group row">
-                                    <label for="viewChildInputIdMother" class="col-sm-6 col-form-label">Quan hệ với gốc</label>
+                                    <label for="viewChildInputIdMother" class="col-sm-6 col-form-label">Quan hệ với
+                                        gốc</label>
                                     <div class="col-sm-6">
-                                        <select name="viewChildInputRelation" class="form-control" id="viewChildInputRelation" readonly="true">
+                                        <select name="viewChildInputRelation" class="form-control"
+                                                id="viewChildInputRelation" readonly="true">
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="viewChildInputIdMother" class="col-sm-3 col-form-label">Cha/Mẹ(nếu có)</label>
+                                    <label for="viewChildInputIdMother" class="col-sm-3 col-form-label">Cha/Mẹ(nếu
+                                        có)</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control"  name="viewChildInputIdMother" id="viewChildInputIdMother" placeholder=""  readonly="true"/>
+                                        <input type="text" class="form-control" name="viewChildInputIdMother"
+                                               id="viewChildInputIdMother" placeholder="" readonly="true"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="viewChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
-                                     <div class="col-sm-6">
-                                        <select name="viewChildInputConThu" class="form-control" id="viewChildInputConThu"  readonly="true">
+                                    <div class="col-sm-6">
+                                        <select name="viewChildInputConThu" class="form-control"
+                                                id="viewChildInputConThu" readonly="true">
                                         </select>
                                     </div>
                                 </div>
@@ -273,19 +306,23 @@
                                 <div class="form-group row">
                                     <label for="viewChildInputName" class="col-sm-3 col-form-label">Họ tên</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control"  name="viewChildInputName" id="viewChildInputName" placeholder=""  readonly="true"/>
+                                        <input type="text" class="form-control" name="viewChildInputName"
+                                               id="viewChildInputName" placeholder="" readonly="true"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="viewChildInputNickName" class="col-sm-3 col-form-label">Thường gọi</label>
+                                    <label for="viewChildInputNickName" class="col-sm-3 col-form-label">Thường
+                                        gọi</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="viewChildInputNickName"  id="viewChildInputNickName" placeholder=""  readonly="true"/>
+                                        <input type="text" class="form-control" name="viewChildInputNickName"
+                                               id="viewChildInputNickName" placeholder="" readonly="true"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="viewChildInputGender" class="col-sm-3 col-form-label">Giới tính</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="viewChildInputGender"  id="viewChildInputGender" placeholder=""  readonly="true"/>
+                                        <input type="text" class="form-control" name="viewChildInputGender"
+                                               id="viewChildInputGender" placeholder="" readonly="true"/>
                                     </div>
                                 </div>
                             </div>
@@ -305,30 +342,36 @@
                             </div>-->
                             <div class="form-group col-md-12">
                                 <label for="viewChildInputAddress">Địa chỉ</label>
-                                <input type="text" class="form-control"  name="viewChildInputAddress" id="viewChildInputAddress" placeholder=""  readonly="true"/>
+                                <input type="text" class="form-control" name="viewChildInputAddress"
+                                       id="viewChildInputAddress" placeholder="" readonly="true"/>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="viewChildInputBirthday">Ngày sinh</label>
-                                <input type="text" class="form-control"  name="viewChildInputBirthday"  id="viewChildInputBirthday" placeholder="mm/dd/yyyy"  readonly="true"/>
+                                <input type="text" class="form-control" name="viewChildInputBirthday"
+                                       id="viewChildInputBirthday" placeholder="mm/dd/yyyy" readonly="true"/>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="viewChildInputDeadDay">Ngày mất</label>
-                                <input type="text" class="form-control"  name="viewChildInputDeadDay"  id="viewChildInputDeadDay" placeholder="mm/dd/yyyy"  readonly="true"/>
+                                <input type="text" class="form-control" name="viewChildInputDeadDay"
+                                       id="viewChildInputDeadDay" placeholder="mm/dd/yyyy" readonly="true"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="viewChildInputDegree">Trình độ</label>
-                            <textarea class="form-control"  name="viewChildInputDegree"   id="viewChildInputDegree" rows="3"  readonly="true"></textarea>
+                            <textarea class="form-control" name="viewChildInputDegree" id="viewChildInputDegree"
+                                      rows="3" readonly="true"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="viewChildInputDes">Câu nói, lý lich</label>
-                            <textarea class="form-control"  name="viewChildInputDes"  id="viewChildInputDes" rows="3"  readonly="true"></textarea>
+                            <textarea class="form-control" name="viewChildInputDes" id="viewChildInputDes" rows="3"
+                                      readonly="true"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="viewChildInputDataExtra">Mô tả thêm</label>
-                            <textarea class="form-control"  name="viewChildInputDataExtra"  id="viewChildInputDataExtra" rows="3"  readonly="true"></textarea>
+                            <textarea class="form-control" name="viewChildInputDataExtra" id="viewChildInputDataExtra"
+                                      rows="3" readonly="true"></textarea>
                         </div>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     </form>
@@ -358,33 +401,40 @@
                         <input type="hidden" class="form-control" id="editChildIdParent" name="editChildIdParent"/>
                         <div class="row">
                             <div class="col-lg-6">
-                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image" id="editChildImgPeople" width="250px" height="250px"/>
+                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image"
+                                     id="editChildImgPeople" width="250px" height="250px"/>
                                 <div class="form-group row">
                                     <div class="custom-file col-lg-12 center-block">
-                                        <input type="file" class="form-control" name="editChildInputFileImg" id="editChildInputFileImg" onchange="readURLeditChild(this);"/>
+                                        <input type="file" class="form-control" name="editChildInputFileImg"
+                                               id="editChildInputFileImg" onchange="readURLeditChild(this);"/>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group row">
-                                    <label for="editChildInputRelation" class="col-sm-6 col-form-label">Quan hệ với gốc</label>
+                                    <label for="editChildInputRelation" class="col-sm-6 col-form-label">Quan hệ với
+                                        gốc</label>
                                     <div class="col-sm-6">
-                                        <select name="editChildInputRelation" class="form-control" id="editChildInputRelation" readonly="true" disabled="true">
+                                        <select name="editChildInputRelation" class="form-control"
+                                                id="editChildInputRelation" readonly="true" disabled="true">
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="editChildInputIdMother" class="col-sm-3 col-form-label">Cha/Mẹ(nếu có)</label>
+                                    <label for="editChildInputIdMother" class="col-sm-3 col-form-label">Cha/Mẹ(nếu
+                                        có)</label>
                                     <div class="col-sm-9">
-                                        <select name="editChildInputIdMother" class="form-control" id="editChildInputIdMother" readonly="true" disabled="true">
+                                        <select name="editChildInputIdMother" class="form-control"
+                                                id="editChildInputIdMother" readonly="true" disabled="true">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="editChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
                                     <div class="col-sm-6">
-                                        <select name="editChildInputConThu" class="form-control" id="editChildInputConThu">
+                                        <select name="editChildInputConThu" class="form-control"
+                                                id="editChildInputConThu">
                                         </select>
                                     </div>
                                 </div>
@@ -392,19 +442,23 @@
                                 <div class="form-group row">
                                     <label for="editChildInputName" class="col-sm-3 col-form-label">Họ tên</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control"  name="editChildInputName" id="editChildInputName" placeholder="..."/>
+                                        <input type="text" class="form-control" name="editChildInputName"
+                                               id="editChildInputName" placeholder="..."/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="editChildInputNickName" class="col-sm-3 col-form-label">Thường gọi</label>
+                                    <label for="editChildInputNickName" class="col-sm-3 col-form-label">Thường
+                                        gọi</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="editChildInputNickName"  id="editChildInputNickName" placeholder="..."/>
+                                        <input type="text" class="form-control" name="editChildInputNickName"
+                                               id="editChildInputNickName" placeholder="..."/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="editChildInputGender" class="col-sm-3 col-form-label">Giới tính</label>
                                     <div class="col-sm-9">
-                                        <select class="form-control"  name="editChildInputGender" id="editChildInputGender">
+                                        <select class="form-control" name="editChildInputGender"
+                                                id="editChildInputGender">
                                             <option value="1" selected="true"> Nam</option>
                                             <option value="0"> Nữ</option>
                                         </select>
@@ -427,32 +481,39 @@
                             </div>-->
                             <div class="form-group col-md-12">
                                 <label for="editChildInputAddress">Địa chỉ</label>
-                                <input type="text" class="form-control"  name="editChildInputAddress" id="editChildInputAddress" placeholder="phường/xã, quận/huyện, tỉnh/thành phố"/>
+                                <input type="text" class="form-control" name="editChildInputAddress"
+                                       id="editChildInputAddress" placeholder="phường/xã, quận/huyện, tỉnh/thành phố"/>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="editChildInputBirthday">Ngày sinh</label>
-                                <input type="text" class="form-control"  name="editChildInputBirthday"  id="editChildInputBirthday" placeholder="mm/dd/yyyy"/>
+                                <input type="text" class="form-control" name="editChildInputBirthday"
+                                       id="editChildInputBirthday" placeholder="mm/dd/yyyy"/>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="editChildInputDeadDay">Ngày mất</label>
-                                <input type="text" class="form-control"  name="editChildInputDeadDay"  id="editChildInputDeadDay" placeholder="mm/dd/yyyy"/>
+                                <input type="text" class="form-control" name="editChildInputDeadDay"
+                                       id="editChildInputDeadDay" placeholder="mm/dd/yyyy"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="editChildInputDegree">Trình độ</label>
-                            <textarea class="form-control"  name="editChildInputDegree"   id="editChildInputDegree" rows="3"></textarea>
+                            <textarea class="form-control" name="editChildInputDegree" id="editChildInputDegree"
+                                      rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="editChildInputDes">Câu nói, lý lich</label>
-                            <textarea class="form-control"  name="editChildInputDes"  id="editChildInputDes" rows="3"></textarea>
+                            <textarea class="form-control" name="editChildInputDes" id="editChildInputDes"
+                                      rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="editChildInputDataExtra">Mô tả thêm</label>
-                            <textarea class="form-control"  name="editChildInputDataExtra"  id="editChildInputDataExtra" rows="3"></textarea>
+                            <textarea class="form-control" name="editChildInputDataExtra" id="editChildInputDataExtra"
+                                      rows="3"></textarea>
                         </div>
-                        <button id="btnEditChildSubmit" type="submit" class="btn btn-warning" data-dismiss="modal">Lưu</button>
+                        <button id="btnEditChildSubmit" type="submit" class="btn btn-warning" data-dismiss="modal">Lưu
+                        </button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                     </form>
                 </div>
@@ -475,8 +536,7 @@
 <script th:src="@{/treant/collapsable.js}"></script>
 
 <link th:href="@{/treant/vendor/perfect-scrollbar/perfect-scrollbar.css}" rel="stylesheet" type="text/css"/>
-<script th:src="@{/treant/vendor/jquery.easing.js}"></
-script>
+<script th:src="@{/treant/vendor/jquery.easing.js}"></script>
 <script th:src="@{/treant/vendor/jquery.mousewheel.js}"></script>
 <script th:src="@{/treant/vendor/perfect-scrollbar/perfect-scrollbar.js}"></script>
 
@@ -485,9 +545,9 @@ script>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var idGenealogy     = [[${idGenealogy}]];
-    var idPedigree      = [[${idPedigree}]];
-    var idPermission      = [[${idPermission}]];
+    var idGenealogy = [[${idGenealogy}]];
+    var idPedigree = [[${idPedigree}]];
+    var idPermission = [[${idPermission}]];
 
     var idXemQuanHe1,
         idXemQuanHe2;
@@ -523,17 +583,17 @@ script>
 
     var loadTree = function () {
         $.ajax({
-            type       : "GET",
-            url        : "/rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/list-people-tree",
+            type: "GET",
+            url: "/rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/list-member-tree",
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             contentType: false,
-            cache      : false,
-            timeout    : 600000,
-            success    : function (data) {
-                if(data.nodeStructure == null){
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                if (data.nodeStructure == null) {
                     $('#nodeCreateFirstChild').fadeIn();
                     $('#containment-wrapper').fadeOut();
-                }else{
+                } else {
                     $('#nodeCreateFirstChild').hide();
                     $('#containment-wrapper').fadeIn();
                     new Treant(data, initViewDetailNode);
@@ -543,7 +603,7 @@ script>
                 }
                 console.log("SUCCESS : ", data);
             },
-            error      : function (e) {
+            error: function (e) {
                 console.log("ERROR : ", e);
             }
         });
@@ -552,16 +612,16 @@ script>
 
     var initViewDetailNode = function () {
         console.log("init view detail node");
-        var result  =[];
+        var result = [];
         result.push(
             '<div class="people_chart_node_edit">' +
             '<a onclick="viewRelation(this)"><i class="fa fa-check-square-o fa-lg" data-toggle="tooltip" data-placement="top" title="Xem Cách gọi tên"></i></a> '
         );
-        switch (idPermission){
+        switch (idPermission) {
             case 1:
                 result.push(
-                '<a onclick="deleteInfoNode(this)"><i class="fa fa-trash fa-lg" data-toggle="tooltip" data-placement="top" title="Xóa"></i></a>  '
-            );
+                    '<a onclick="deleteInfoNode(this)"><i class="fa fa-trash fa-lg" data-toggle="tooltip" data-placement="top" title="Xóa"></i></a>  '
+                );
             case 2:
                 result.push(
                     '<a onclick="addChildNode(this)"><i class="fa fa-plus-circle fa-lg" data-toggle="tooltip" data-placement="top" title="Thêm con mới"></i></a>  ' +
@@ -578,34 +638,22 @@ script>
         result.push('<div class="people_chart_node_collapsed"><i class="fa fa-folder-open fa-2x" data-toggle="tooltip" data-placement="top" title="Click vào giữa hình để mở"></i></div>');
         $(".people_chart_node")
             .append(result.join(' '));
-        // $(".people_chart_node")
-        //     .append('' +
-        //         '<div class="people_chart_node_edit">' +
-        //         '<a onclick="viewRelation(this)"><i class="fa fa-check-square-o fa-lg" data-toggle="tooltip" data-placement="top" title="Xem Cách gọi tên"></i></a>  ' +
-        //         '<a onclick="addChildNode(this)"><i class="fa fa-plus-circle fa-lg" data-toggle="tooltip" data-placement="top" title="Thêm con mới"></i></a>  ' +
-        //         '<a onclick="editInfoNode(this)"><i class="fa fa-pencil fa-lg" data-toggle="tooltip" data-placement="top" title="Sửa thông tin"></i></a>  ' +
-        //         '<a onclick="viewInfoNode(this)"><i class="fa fa-exclamation-circle fa-lg" data-toggle="tooltip" data-placement="top" title="Xem thông tin chi tiết"></i></a>  ' +
-        //         '</div>' +
-        //         '<div class="people_chart_node_collapsed">' +
-        //         '<i class="fa fa-folder-open fa-2x" data-toggle="tooltip" data-placement="top" title="Click vào giữa hình để mở"></i>'+
-        //         '</div>'
-        //     );
     };
     var viewRelation = function (sender) {
-        var id       = $(sender)
+        var id = $(sender)
             .parent()
             .parent()
             .attr('id');
-        var srcImg   = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
+        var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
         var idPeople = sender.parentElement.parentElement.getAttribute('id');
-        var classParent  = sender.parentElement.parentElement.getAttribute('class');
-        if(classParent.includes('people_node_unknown')){
+        var classParent = sender.parentElement.parentElement.getAttribute('class');
+        if (classParent.includes('people_node_unknown')) {
             toastr["error"]("Người này không tồn tại", "Vui lòng chọn lại")
             return;
         }
-        var name     = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
-        var date     = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
-        date         = date.split(" - ");
+        var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        var date = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
+        date = date.split(" - ");
         if (idXemQuanHe1 == null) {
             idXemQuanHe1 = idPeople;
             $("#imgPeopleRelation1")
@@ -632,22 +680,20 @@ script>
         //     .modal();
     };
     var addChildNode = function (sender) {
-        var id       = $(sender)
+        var id = $(sender)
             .parent()
             .parent()
             .attr('id');
-        var srcImg   = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
-        var idPeople = sender.parentElement.parentElement.getAttribute('id');
-        var name     = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
-        var date     = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
-        date         = date.split(" - ");
-
-        console.log(srcImg);
-        console.log('addChildNode' + id);
+        var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
+        var idMemberTree = sender.parentElement.parentElement.getAttribute('id');
+        var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        var date = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
+        date = date.split(" - ");
+        $('#addChildInputNameParent').html(name + "");
         $("#addChildImgPeople")
             .attr("src", "/dist/img/default-avatar.png");
         $("#addChildIdParent")
-            .val(idPeople);
+            .val(idMemberTree);
         $("#modalAddChild")
             .modal();
 
@@ -655,7 +701,7 @@ script>
         $.ajax({
             type: "GET",
             // https://localhost:89991/pedigree/1/people/3/get-info-add
-            url: "/rest/genealogy/"+idGenealogy +'/pedigree/'  + idPedigree + '/people/'+ idPeople + '/get-info-add',
+            url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/member-tree/' + idMemberTree + '/get-info-add',
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
@@ -675,22 +721,23 @@ script>
                 for (var i in data.findHusbandWifes) {
                     var id = data.findHusbandWifes[i].id;
                     var name = data.findHusbandWifes[i].name;
-                    $("#addChildInputIdMother").append('<option value="'+id+'">'+name+'</option>');
+                    $("#addChildInputIdMother").append('<option value="' + id + '">' + name + '</option>');
                 }
                 // $("#addChildInputIdMother select").val(-1);
             },
             error: function (e) {
+                alert("Bạn không có quyền thực hiên action!");
             }
         });
 
     };
 
     var editInfoNode = function (sender) {
-        var srcImg   = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
+        var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
         var idPeople = sender.parentElement.parentElement.getAttribute('id');
-        var name     = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
-        var date     = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
-        date         = date.split(" - ");
+        var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        var date = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
+        date = date.split(" - ");
 
         console.log(srcImg);
         console.log('viewRelation' + idPeople);
@@ -704,7 +751,7 @@ script>
         $.ajax({
             type: "GET",
             // https://localhost:89991/pedigree/1/people/3/get-info-add
-            url: "/rest/genealogy/"+idGenealogy +'/pedigree/'  + idPedigree + '/people/'+ idPeople + '/get-mother',
+            url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/people/' + idPeople + '/get-mother',
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
@@ -713,7 +760,7 @@ script>
                  "name": "Võ Thị Đừng"
                  }*/
                 $('#editChildInputIdMother').html('');
-                $("#editChildInputIdMother").append('<option value="'+data.id+'">'+data.name+'</option>');
+                $("#editChildInputIdMother").append('<option value="' + data.id + '">' + data.name + '</option>');
             },
             error: function (e) {
             }
@@ -739,16 +786,16 @@ script>
                  "degree": null,
                  "dataExtra": null
                  }*/
-                if(data.nameParent)  $("#editChildNameParent").html(data.nameParent);
-                if(data.img)  $("#editChildImgPeople").attr("src",data.img);
-                if(data.name)  $("#editChildInputName").val(data.name);
-                if(data.nickName)  $("#editChildInputName").val(data.nickName);
-                if(data.nameMother)  $("#editChildInputIdMother").val(data.nameMother);
-                if(data.relation != null){
-                    $("#editChildInputRelation").val(data.relation +'').attr("selected",true);
+                if (data.nameParent) $("#editChildNameParent").html(data.nameParent);
+                if (data.img) $("#editChildImgPeople").attr("src", data.img);
+                if (data.name) $("#editChildInputName").val(data.name);
+                if (data.nickName) $("#editChildInputName").val(data.nickName);
+                if (data.nameMother) $("#editChildInputIdMother").val(data.nameMother);
+                if (data.relation != null) {
+                    $("#editChildInputRelation").val(data.relation + '').attr("selected", true);
                 }
-                $("#editChildInputGender").val(data.gender +'').attr("selected",true);
-                $("#editChildInputConThu").val(data.childIndex +'').attr("selected",true);
+                $("#editChildInputGender").val(data.gender + '').attr("selected", true);
+                $("#editChildInputConThu").val(data.childIndex + '').attr("selected", true);
                 $("#editChildInputAddress").val(data.address);
                 $("#editChildInputDes").val(data.des);
                 $("#editChildInputBirthday").val(data.birthDay);
@@ -766,8 +813,8 @@ script>
     };
     var deleteInfoNode = function (sender) {
         var idPeople = sender.parentElement.parentElement.getAttribute('id');
-        var classParent  = sender.parentElement.parentElement.getAttribute('class');
-        if(classParent.includes('people_node_unknown')){
+        var classParent = sender.parentElement.parentElement.getAttribute('class');
+        if (classParent.includes('people_node_unknown')) {
             toastr["error"]("Người này không tồn tại", "Vui lòng chọn lại")
             return;
         }
@@ -786,11 +833,11 @@ script>
                 }
             },
             callback: function (result) {
-                if(result){
+                if (result) {
                     $.ajax({
                         type: "POST",
                         // https://localhost:89991/pedigree/1/people/3/get-info-add
-                        url: "/rest/genealogy/"+idGenealogy +'/pedigree/'  + idPedigree + '/people/'+ idPeople + '/delete',
+                        url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/people/' + idPeople + '/delete',
                         processData: false, //prevent jQuery from automatically transforming the data into a query string
                         timeout: 600000,
                         success: function (data) {
@@ -809,11 +856,11 @@ script>
     };
 
     var viewInfoNode = function (sender) {
-        var srcImg   = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
+        var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
         var idPeople = sender.parentElement.parentElement.getAttribute('id');
-        var name     = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
-        var date     = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
-        date         = date.split(" - ");
+        var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        var date = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
+        date = date.split(" - ");
 
         console.log(srcImg);
         console.log('viewRelation' + idPeople);
@@ -849,16 +896,16 @@ script>
                  "degree": null,
                  "dataExtra": null
                  }*/
-                if(data.nameParent)  $("#viewChildNameParent").html(data.nameParent);
-                if(data.img)  $("#viewChildImgPeople").attr("src",data.img);
-                if(data.name)  $("#viewChildInputName").val(data.name);
-                if(data.nickName)  $("#viewChildInputName").val(data.nickName);
-                if(data.nameMother)  $("#viewChildInputIdMother").val(data.nameMother);
-                if(data.relation != null){
-                    $("#viewChildInputRelation").val(data.relation +'').attr("selected",true);
+                if (data.nameParent) $("#viewChildNameParent").html(data.nameParent);
+                if (data.img) $("#viewChildImgPeople").attr("src", data.img);
+                if (data.name) $("#viewChildInputName").val(data.name);
+                if (data.nickName) $("#viewChildInputName").val(data.nickName);
+                if (data.nameMother) $("#viewChildInputIdMother").val(data.nameMother);
+                if (data.relation != null) {
+                    $("#viewChildInputRelation").val(data.relation + '').attr("selected", true);
                 }
 
-                switch (data.gender){
+                switch (data.gender) {
                     case 0:
                         $("#viewChildInputGender").val("Nữ");
                         break;
@@ -869,7 +916,7 @@ script>
                         $("#viewChildInputGender").val("");
 
                 }
-                $("#viewChildInputConThu").val(data.childIndex +'').attr("selected",true);
+                $("#viewChildInputConThu").val(data.childIndex + '').attr("selected", true);
                 $("#viewChildInputAddress").val(data.address);
                 $("#viewChildInputDes").val(data.des);
                 $("#viewChildInputBirthday").val(data.birthDay);
@@ -887,24 +934,31 @@ script>
             .modal();
 
 
-
     };
     $(function () {
         $("#inputConThu").html('');
         $("#inputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {$("#inputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+        for (var i = 2; i < 100; i++) {
+            $("#inputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+        }
 
         $("#addChildInputConThu").html('');
         $("#addChildInputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {$("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+        for (var i = 2; i < 100; i++) {
+            $("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+        }
 
         $("#editChildInputConThu").html('');
         $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {$("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+        for (var i = 2; i < 100; i++) {
+            $("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+        }
 
         $("#viewChildInputConThu").html('');
         $("#viewChildInputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {$("#viewChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');}
+        for (var i = 2; i < 100; i++) {
+            $("#viewChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+        }
 
         $("#addChildInputRelation").html('');
         $("#addChildInputRelation").append('<option value="0">Cha</option>');
@@ -917,7 +971,7 @@ script>
         $("#editChildInputRelation").append('<option value="1">Mẹ</option>');
         $("#editChildInputRelation").append('<option value="2">Chồng</option>');
         $("#editChildInputRelation").append('<option value="3">Vợ</option>');
-        
+
         $("#viewChildInputRelation").html('');
         $("#viewChildInputRelation").append('<option value="0">Cha</option>');
         $("#viewChildInputRelation").append('<option value="1">Mẹ</option>');
@@ -932,11 +986,11 @@ script>
 
 
     $(document).ready(function () {
-            loadTree();
-            $('#containment-wrapper').hide();
-            $('#nodeCreateFirstChild').hide();
-            $('[data-toggle="tooltip"]').tooltip();
-        });
+        loadTree();
+        $('#containment-wrapper').hide();
+        $('#nodeCreateFirstChild').hide();
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 
     $('#btnCloseNodeXemQuanHe').click(function () {
         $('#nodeXemQuanHe').fadeOut();
@@ -944,8 +998,8 @@ script>
 
     $('#btnResetXemQuanHe')
         .click(function () {
-            $('#imgPeopleRelation1').attr('src', '/dist/img/default-avatar.png');
-            $('#imgPeopleRelation2').attr('src', '/dist/img/default-avatar.png');
+            $('#imgPeopleRelation1').attr('src', '/img/avatar-default-unknown.png');
+            $('#imgPeopleRelation2').attr('src', '/img/avatar-default-unknown.png');
             $('#imgPeopleRelationName1').text('Người thứ nhất');
             $('#imgPeopleRelationName2').text('Người thứ hai');
             idXemQuanHe1 = null;
@@ -954,23 +1008,23 @@ script>
 
     $('#btnXacNhanXemQuanHe')
         .click(function () {
-            if(idXemQuanHe1 == null || idXemQuanHe2 == null){
+            if (idXemQuanHe1 == null || idXemQuanHe2 == null) {
                 toastr["error"]("Chọn người muốn xem cách gọi tên ở bên dưới và thử lại", "Vui lòng chọn")
-            }else{
+            } else {
                 $("#btnXacNhanXemQuanHe").prop("disabled", true);
                 $.ajax({
                     type: "GET",
-                    url: "/rest/people/relation/"+ idXemQuanHe1+"/"+ idXemQuanHe2,
+                    url: "/rest/people/relation/" + idXemQuanHe1 + "/" + idXemQuanHe2,
                     processData: false, //prevent jQuery from automatically transforming the data into a query string
                     timeout: 600000,
                     success: function (data) {
                         console.log("SUCCESS : ", data);
-                        data  = data.split("|")
-                        var name1 =$("#imgPeopleRelationName1").text();
-                        var name2 =$("#imgPeopleRelationName2").text();
+                        data = data.split("|")
+                        var name1 = $("#imgPeopleRelationName1").text();
+                        var name2 = $("#imgPeopleRelationName2").text();
                         $("#resultXemQuanHe").html(
-                            '<p>'+name1+' gọi '+name2+' là:'+ data[0]+'</p>'+
-                                '<p class="pull-right">'+name2+' gọi '+ name1+' là: '+data[1]+ '</p>'
+                            '<p>' + name1 + ' gọi ' + name2 + ' là:' + data[0] + '</p>' +
+                            '<p class="pull-right">' + name2 + ' gọi ' + name1 + ' là: ' + data[1] + '</p>'
                         );
                         $("#btnXacNhanXemQuanHe").prop("disabled", false);
                     },
@@ -982,35 +1036,35 @@ script>
             }
         });
     $("#btnAddChildSubmit").click(function (event) {
-            //stop submit the form, we will post it manually.
-            event.preventDefault();
-            addChildPeople();
-        });
+        //stop submit the form, we will post it manually.
+        event.preventDefault();
+        addChildPeople();
+    });
     $("#btnEditChildSubmit").click(function (event) {
-            //stop submit the form, we will post it manually.
-            event.preventDefault();
-            editChildPeople();
-        });
+        //stop submit the form, we will post it manually.
+        event.preventDefault();
+        editChildPeople();
+    });
     $("#btnCreateRoot").click(function (event) {
         $('#addChildIdParent').val("-1");
-        $("#addChildInputIdMother").append('<option value="-1">...</option>');
-        $('#addChildInputIdMother').attr("readonly", true);
-        $("#addChildInputIdMother").val(-1);
+        $("#addChildInputIdMotherFather").append('<option value="-1">...</option>');
+        $('#addChildInputIdMotherFather').attr("readonly", true);
+        $("#addChildInputIdMotherFather").val(-1);
         $("#modalAddChild").modal();
-        });
+    });
     var addChildPeople = function () {
         // Get form
         var form = $('#addNewChild')[0];
         var data = new FormData(form);
-        data.append("idPedigree",idPedigree +"");
-        data.append("idGenealogy",idGenealogy + '');
+        data.append("idPedigree", idPedigree + "");
+        data.append("idGenealogy", idGenealogy + '');
         console.log(JSON.stringify(data));
         console.log(data);
         $("#btnAddChildSubmit").prop("disabled", true);
         $.ajax({
             type: "POST",
             enctype: 'application/x-www-form-urlencoded',
-            url: "/rest/people/add",
+            url: "/rest/member-tree/add",
             data: data,
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             contentType: false,
@@ -1018,9 +1072,9 @@ script>
             timeout: 600000,
             success: function (errorCode) {
                 console.log("SUCCESS : ", errorCode);
-                if(errorCode == '1'){
+                if (errorCode == '1') {
                     loadTree();
-                }else{
+                } else {
                     toastr["error"]("Không thể thêm", "Vui lòng chọn")
                 }
                 $("#btnAddChildSubmit").prop("disabled", false);
@@ -1036,8 +1090,8 @@ script>
         // Get form
         var form = $('#editChild')[0];
         var data = new FormData(form);
-        data.append("idPedigree",idPedigree +"");
-        data.append("idGenealogy",idGenealogy + '');
+        data.append("idPedigree", idPedigree + "");
+        data.append("idGenealogy", idGenealogy + '');
         console.log(JSON.stringify(data));
         console.log(data);
         $("#btnEditChildSubmit").prop("disabled", true);
@@ -1052,9 +1106,9 @@ script>
             timeout: 600000,
             success: function (errorCode) {
                 console.log("SUCCESS : ", errorCode);
-                if(errorCode == '1'){
+                if (errorCode == '1') {
                     loadTree();
-                }else{
+                } else {
                     toastr["error"]("Không thể thêm", "Vui lòng chọn")
                 }
                 $("#btnEditChildSubmit").prop("disabled", false);

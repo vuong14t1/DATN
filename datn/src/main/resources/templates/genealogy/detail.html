@@ -20,9 +20,9 @@
             <h1 th:text="${genealogy.getName()}"></h1>
             <ol class="breadcrumb">
                 <a th:href="'/genealogy/'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Tất cả Dòng tộc</span></a>
-                <a th:href="'/genealogy/'+ ${genealogy.getId()} +'/member'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Thành Viên trong dòng tộc</span></a>
+                <a th:href="'/genealogy/'+ ${genealogy.getId()} +'/member-user'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span >Thành Viên trong dòng tộc</span></a>
                 <!--<a th:href="'/genealogy/detail/'+ ${genealogy.getId()} +'/tree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Cây Pha Giả</span></a>-->
-                <a th:href="'/genealogy/'+ ${genealogy.getId()} +'/pedigree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Danh sách dòng tộc</span></a>
+                <a th:href="'/genealogy/'+ ${genealogy.getId()} +'/pedigree'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span th:text="#{breadcrumb.list_pedigree}"></span></a>
                 <a th:if="${idPermission == 1 || idPermission == 2}" th:href="'/genealogy/'+ ${genealogy.getId()} +'/edit'" type="button" class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span><span>Sửa</span></a>
                 <li>
                     <a href="/genealogy">

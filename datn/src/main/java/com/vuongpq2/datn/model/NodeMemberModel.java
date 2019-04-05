@@ -34,8 +34,8 @@ public class NodeMemberModel {
         this.descriptionMemberModel = descriptionMemberModel;
     }
 
-    @Column(name = "mother_id")
-    private Integer motherId;
+    @Column(name = "mother_father_id")
+    private Integer motherFatherId;
 
     @Column(name = "name")
     private String name;
@@ -90,12 +90,12 @@ public class NodeMemberModel {
         this.parent = parent;
     }
 
-    public Integer getMotherId() {
-        return motherId;
+    public Integer getMotherFatherId() {
+        return motherFatherId;
     }
 
-    public void setMotherId(Integer motherId) {
-        this.motherId = motherId;
+    public void setMotherFatherId(Integer motherFatherId) {
+        this.motherFatherId = motherFatherId;
     }
 
     public String getName() {
@@ -139,7 +139,7 @@ public class NodeMemberModel {
     }
 
     public String getImage() {
-        return image;
+        return "/img/avatar-default-unknown.png";
     }
 
     public void setImage(String image) {
@@ -152,5 +152,12 @@ public class NodeMemberModel {
 
     public void setRelation(int relation) {
         this.relation = relation;
+    }
+
+    public static String getPathkeyByParent(NodeMemberModel nodeMemberModel) {
+        if(nodeMemberModel == null) {
+            return "r";
+        }
+        return nodeMemberModel.getPatchKey() + nodeMemberModel.getId();
     }
 }

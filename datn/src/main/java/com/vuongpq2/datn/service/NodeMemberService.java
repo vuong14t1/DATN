@@ -21,6 +21,8 @@ public interface NodeMemberService {
 
     List<NodeMemberModel> findAllByPedigreeAndPatchKey(PedigreeModel pedigreeModel, String patchKey);
 
+    List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndRelationEquals(PedigreeModel pedigreeModel, String patchKey, int relation);
+
     void removeAllByPedigree(PedigreeModel pedigreeModel);
 
     void removeAllByGenealogy(GenealogyModel genealogyModel);

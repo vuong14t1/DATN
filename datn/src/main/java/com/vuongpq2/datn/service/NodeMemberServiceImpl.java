@@ -55,6 +55,11 @@ public class NodeMemberServiceImpl implements NodeMemberService {
     }
 
     @Override
+    public List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndRelationEquals(PedigreeModel pedigreeModel, String patchKey, int relation) {
+        return nodeMemberRepository.findAllByPedigreeAndPatchKeyAndRelationEquals(pedigreeModel, patchKey, relation);
+    }
+
+    @Override
     public void removeAllByPedigree(PedigreeModel pedigreeModel) {
         nodeMemberRepository.removeAllByPedigree(pedigreeModel);
     }

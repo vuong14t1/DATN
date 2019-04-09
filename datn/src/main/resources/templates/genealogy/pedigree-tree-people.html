@@ -715,12 +715,12 @@
                  }
                  ]
                  }*/
-                $('#addChildIdParent').val(data.idParent);
-                $('#addChildInputNameParent').html(data.nameParent);
+                $('#addChildIdParent').val(data.id);
+                $('#addChildInputNameParent').html(data.name);
                 $('#addChildInputIdMother').html('');
-                for (var i in data.findHusbandWifes) {
-                    var id = data.findHusbandWifes[i].id;
-                    var name = data.findHusbandWifes[i].name;
+                for (var i in data.husbandOrWifes) {
+                    var id = data.husbandOrWifes[i].id;
+                    var name = data.husbandOrWifes[i].name;
                     $("#addChildInputIdMother").append('<option value="' + id + '">' + name + '</option>');
                 }
                 // $("#addChildInputIdMother select").val(-1);
@@ -854,18 +854,22 @@
             }
         });
     };
-
+    var resetDataViewNode = function () {
+        $("#viewChildNameParent").html("");
+        $("#viewChildInputIdMother").val("");
+        $("#viewChildInputIdMother").val("");
+    };
     var viewInfoNode = function (sender) {
         var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
-        var idPeople = sender.parentElement.parentElement.getAttribute('id');
+        var idMemberTree = sender.parentElement.parentElement.getAttribute('id');
         var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
         var date = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
         date = date.split(" - ");
 
         console.log(srcImg);
-        console.log('viewRelation' + idPeople);
+        console.log('viewRelation' + idMemberTree);
         $("#inputId")
-            .val(idPeople);
+            .val(idMemberTree);
         $("#imgPeopleDetail")
             .attr("src", srcImg);
         $("#inputName")
@@ -877,7 +881,7 @@
 
         $.ajax({
             type: "GET",
-            url: "/rest/people/detail/" + idPeople,
+            url: "/rest/member-tree/detail/" + idMemberTree,
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
@@ -896,11 +900,22 @@
                  "degree": null,
                  "dataExtra": null
                  }*/
-                if (data.nameParent) $("#viewChildNameParent").html(data.nameParent);
+                resetDataViewNode();
+                if (data.nameParent) {
+                    if(data.relation == 3 || data.relation == 4) {
+                        $("#viewChildNameParent").html("Con của " + data.nameParent);
+                    }else if(data.relation == 1) {
+                        $("#viewChildNameParent").html("Chồng của " + data.nameParent);
+                    }else if(data.relation == 2) {
+                        $("#viewChildNameParent").html("Vợ của " + data.nameParent);
+                    }
+                }
                 if (data.img) $("#viewChildImgPeople").attr("src", data.img);
                 if (data.name) $("#viewChildInputName").val(data.name);
-                if (data.nickName) $("#viewChildInputName").val(data.nickName);
-                if (data.nameMother) $("#viewChildInputIdMother").val(data.nameMother);
+                if (data.nickname) $("#viewChildInputName").val(data.nickname);
+                if (data.nameFatherOrMother) {
+                    $("#viewChildInputIdMother").val(data.nameFatherOrMother);
+                }
                 if (data.relation != null) {
                     $("#viewChildInputRelation").val(data.relation + '').attr("selected", true);
                 }
@@ -913,7 +928,7 @@
                         $("#viewChildInputGender").val("Nam");
                         break;
                     default:
-                        $("#viewChildInputGender").val("");
+                        $("#viewChildInputGender").val("Bê đê");
 
                 }
                 $("#viewChildInputConThu").val(data.childIndex + '').attr("selected", true);
@@ -922,7 +937,7 @@
                 $("#viewChildInputBirthday").val(data.birthDay);
                 $("#viewChildInputDeadDay").val(data.deadDay);
                 $("#viewChildInputDegree").val(data.degree);
-                $("#viewChildInputDataExtra").val(data.dataExtra);
+                $("#viewChildInputDataExtra").val(data.extraData);
                 console.log("SUCCESS : ", data);
             },
             error: function (e) {
@@ -942,18 +957,6 @@
             $("#inputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
         }
 
-        $("#addChildInputConThu").html('');
-        $("#addChildInputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {
-            $("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
-        }
-
-        $("#editChildInputConThu").html('');
-        $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {
-            $("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
-        }
-
         $("#viewChildInputConThu").html('');
         $("#viewChildInputConThu").append('<option value="1">Con cả</option>\n');
         for (var i = 2; i < 100; i++) {
@@ -961,24 +964,53 @@
         }
 
         $("#addChildInputRelation").html('');
-        $("#addChildInputRelation").append('<option value="0">Cha</option>');
-        $("#addChildInputRelation").append('<option value="1">Mẹ</option>');
+        $("#addChildInputRelation").append('<option value="3">Cha</option>');
+        $("#addChildInputRelation").append('<option value="4">Mẹ</option>');
         $("#addChildInputRelation").append('<option value="2">Chồng</option>');
-        $("#addChildInputRelation").append('<option value="3">Vợ</option>');
+        $("#addChildInputRelation").append('<option value="1">Vợ</option>');
 
         $("#editChildInputRelation").html('');
-        $("#editChildInputRelation").append('<option value="0">Cha</option>');
-        $("#editChildInputRelation").append('<option value="1">Mẹ</option>');
+        $("#editChildInputRelation").append('<option value=3">Cha</option>');
+        $("#editChildInputRelation").append('<option value="4">Mẹ</option>');
         $("#editChildInputRelation").append('<option value="2">Chồng</option>');
-        $("#editChildInputRelation").append('<option value="3">Vợ</option>');
+        $("#editChildInputRelation").append('<option value="1">Vợ</option>');
 
         $("#viewChildInputRelation").html('');
-        $("#viewChildInputRelation").append('<option value="0">Cha</option>');
-        $("#viewChildInputRelation").append('<option value="1">Mẹ</option>');
+        $("#viewChildInputRelation").append('<option value="3">Cha</option>');
+        $("#viewChildInputRelation").append('<option value="4">Mẹ</option>');
         $("#viewChildInputRelation").append('<option value="2">Chồng</option>');
-        $("#viewChildInputRelation").append('<option value="3">Vợ</option>');
+        $("#viewChildInputRelation").append('<option value="1">Vợ</option>');
 
     });
+    //kiem tra neu quan he voi parent la cha hoac me thi co the chon con thu
+    $("#addChildInputRelation").change(function () {
+        var quanhe = 0;
+        $("#addChildInputRelation option:selected").each(function () {
+            quanhe = $(this).val();
+        });
+        $("#addChildInputConThu").html('');
+        if(quanhe == 3 || quanhe == 4) {
+            $("#addChildInputConThu").append('<option value="1">Con cả</option>\n');
+            for (var i = 2; i < 100; i++) {
+                $("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+            }
+        }
+    });
+    $("#editChildInputRelation").change(function () {
+        var quanhe = 0;
+        $("#editChildInputRelation option:selected").each(function () {
+            quanhe = $(this).val();
+        });
+        $("#editChildInputConThu").html('');
+        if(quanhe == 3 || quanhe == 4) {
+            $("#editChildInputConThu").html('');
+            $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
+            for (var i = 2; i < 100; i++) {
+                $("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+            }
+        }
+    });
+
     $('#addChildInputDeadDay').datepicker({autoclose: true});
     $('#addChildInputBirthday').datepicker({autoclose: true});
     $('#editChildInputDeadDay').datepicker({autoclose: true});
@@ -1050,6 +1082,7 @@
         $("#addChildInputIdMotherFather").append('<option value="-1">...</option>');
         $('#addChildInputIdMotherFather').attr("readonly", true);
         $("#addChildInputIdMotherFather").val(-1);
+        $("#addChildInputRelation").html('');
         $("#modalAddChild").modal();
     });
     var addChildPeople = function () {

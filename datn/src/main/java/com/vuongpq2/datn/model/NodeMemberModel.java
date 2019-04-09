@@ -12,7 +12,7 @@ public class NodeMemberModel {
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumns({ @JoinColumn(name="pedigree_id", referencedColumnName="pedigree_id")})
+    @JoinColumns({@JoinColumn(name = "pedigree_id", referencedColumnName = "pedigree_id")})
     private PedigreeModel pedigree;
 /*
     @OneToOne(fetch = FetchType.LAZY)
@@ -20,7 +20,7 @@ public class NodeMemberModel {
     private GenealogyModel genealogy;*/
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumns({ @JoinColumn(name="parent_id", referencedColumnName="node_member_id")})
+    @JoinColumns({@JoinColumn(name = "parent_id", referencedColumnName = "node_member_id")})
     private NodeMemberModel parent;
 
     @OneToOne(mappedBy = "nodeMemberModel")
@@ -155,9 +155,9 @@ public class NodeMemberModel {
     }
 
     public static String getPathkeyByParent(NodeMemberModel nodeMemberModel) {
-        if(nodeMemberModel == null) {
+        if (nodeMemberModel == null) {
             return "r";
         }
-        return nodeMemberModel.getPatchKey() + nodeMemberModel.getId();
+        return nodeMemberModel.getPatchKey() + "_" + nodeMemberModel.getId();
     }
 }

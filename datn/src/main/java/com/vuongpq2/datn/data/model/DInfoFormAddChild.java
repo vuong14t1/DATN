@@ -6,10 +6,10 @@ import java.util.List;
 public class DInfoFormAddChild {
     private int id;
     private String name;
-    private List<DHusbandOrWife> husbandOrWives;
+    private List<DHusbandOrWife> husbandOrWifes;
 
     public DInfoFormAddChild() {
-        husbandOrWives = new ArrayList<>();
+        husbandOrWifes = new ArrayList<>();
     }
 
     public int getId() {
@@ -28,11 +28,11 @@ public class DInfoFormAddChild {
         this.name = name;
     }
 
-    public List<DHusbandOrWife> getHusbandOrWives() {
-        return husbandOrWives;
+    public List<DHusbandOrWife> getHusbandOrWifes() {
+        return husbandOrWifes;
     }
 
-    public void setHusbandOrWives(List<DHusbandOrWife> husbandOrWives) {
-        this.husbandOrWives = husbandOrWives;
+    public void setHusbandOrWifes(List<DHusbandOrWife> husbandOrWifes) {
+        this.husbandOrWifes = husbandOrWifes;
     }
 }

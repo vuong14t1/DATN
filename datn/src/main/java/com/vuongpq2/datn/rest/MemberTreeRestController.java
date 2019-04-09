@@ -7,6 +7,7 @@ import com.vuongpq2.datn.config.tree.Text;
 import com.vuongpq2.datn.data.Enum.Permission;
 import com.vuongpq2.datn.data.Enum.Relation;
 import com.vuongpq2.datn.data.GioiTinh;
+import com.vuongpq2.datn.data.model.DDetailNodeMember;
 import com.vuongpq2.datn.data.model.DHusbandOrWife;
 import com.vuongpq2.datn.data.model.DInfoFormAddChild;
 import com.vuongpq2.datn.model.*;
@@ -61,7 +62,7 @@ public class MemberTreeRestController {
             child.setIdFather(nodeMemberModel.getParent() == null ? - 1: nodeMemberModel.getParent().getId());
             child.setIdMother(nodeMemberModel.getMotherFatherId() == null ? -1: nodeMemberModel.getMotherFatherId());
             Text text = new Text();
-            text.setTitle(ConfigFormat.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getBirthday()) + " - " + ConfigFormat.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getDeadDay()));
+            text.setTitle(MyUltils.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getDeadDay()));
             text.setName(nodeMemberModel.getName());
             child.setText(text);
             chartConfig.addChild(child);
@@ -104,11 +105,18 @@ public class MemberTreeRestController {
         if(addChildIdParent == null || addChildIdParent.equals("")) {
             addChildIdParent = "-1";
         }
+        if(addChildInputConThu.equals("")) {
+            addChildInputConThu = "-1";
+        }
+
+        if(addChildInputRelation.equals("")) {
+            addChildInputRelation = "-1";
+        }
         Optional<NodeMemberModel> parent = null;
         parent = nodeMemberService.findById(Integer.parseInt(addChildIdParent));
         if(!parent.isPresent()) {
             nodeMemberModel.setParent(null);
-            nodeMemberModel.setLifeIndex(1);
+            nodeMemberModel.setLifeIndex(0);
         }else {
             nodeMemberModel.setParent(parent.get());
             nodeMemberModel.setLifeIndex(parent.get().getLifeIndex() + 1);
@@ -167,7 +175,36 @@ public class MemberTreeRestController {
             hw.setName(nodeMemberModel.getName());
             husbandOrWifeList.add(hw);
         }
-        dInfoFormAddChild.setHusbandOrWives(husbandOrWifeList);
+        dInfoFormAddChild.setHusbandOrWifes(husbandOrWifeList);
         return new ResponseEntity<>(dInfoFormAddChild, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/rest/member-tree/detail/{idMemberTree}")
+    public ResponseEntity<?> viewNodeMember(Principal principal,
+                                            @PathVariable(value = "idMemberTree") int idMemberTree
+                                            ) {
+        Optional<NodeMemberModel> nodeMemberModel = nodeMemberService.findById(idMemberTree);
+        if(!nodeMemberModel.isPresent()) {
+            return new ResponseEntity<>(idMemberTree, HttpStatus.NOT_FOUND);
+        }
+        Optional<NodeMemberModel> nodeParent = nodeMemberService.findById(nodeMemberModel.get().getParent() != null ? nodeMemberModel.get().getParent().getId(): -1);
+        Optional<NodeMemberModel> nodeFatherOrMother = nodeMemberService.findById(nodeMemberModel.get().getMotherFatherId());
+        DescriptionMemberModel descriptionMemberModel = nodeMemberModel.get().getDescriptionMemberModel();
+        DDetailNodeMember dDetailNodeMember = new DDetailNodeMember();
+        dDetailNodeMember.setId(idMemberTree);
+        dDetailNodeMember.setImg(nodeMemberModel.get().getImage());
+        dDetailNodeMember.setChildIndex(nodeMemberModel.get().getChildIndex());
+        dDetailNodeMember.setName(nodeMemberModel.get().getName());
+        dDetailNodeMember.setNameParent(nodeParent.isPresent()? nodeParent.get().getName(): "Không rõ");
+        dDetailNodeMember.setNameFatherOrMother(nodeFatherOrMother.isPresent()? nodeFatherOrMother.get().getName(): "Không rõ");
+        dDetailNodeMember.setNickname(descriptionMemberModel.getNickName());
+        dDetailNodeMember.setAddress(descriptionMemberModel.getAddress());
+        dDetailNodeMember.setRelation(nodeMemberModel.get().getRelation());
+        dDetailNodeMember.setBirthDay(MyUltils.getStringFromDate(descriptionMemberModel.getBirthday()));
+        dDetailNodeMember.setDeadDay(MyUltils.getStringFromDate(descriptionMemberModel.getDeadDay()));
+        dDetailNodeMember.setDegree(descriptionMemberModel.getDegree());
+        dDetailNodeMember.setDes(descriptionMemberModel.getDescription());
+        dDetailNodeMember.setExtraData(descriptionMemberModel.getExtraData());
+        return new ResponseEntity<>(dDetailNodeMember, HttpStatus.OK);
     }
 }

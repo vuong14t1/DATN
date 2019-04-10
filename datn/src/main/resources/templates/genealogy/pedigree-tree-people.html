@@ -406,7 +406,7 @@
                                 <div class="form-group row">
                                     <div class="custom-file col-lg-12 center-block">
                                         <input type="file" class="form-control" name="editChildInputFileImg"
-                                               id="editChildInputFileImg" onchange="readURLeditChild(this);"/>
+                                               id="editChildInputFileImg" onchange="readURLEditChild(this);"/>
                                     </div>
                                 </div>
                             </div>
@@ -467,18 +467,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <!--<div class="form-group col-md-4">
-                                <label for="inputTinhThanhPho">Tỉnh/Thành phố</label>
-                                <select class="form-control" id="inputTinhThanhPho" readonly="true"></select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="inputQuanHuyen">Quận/Huyện</label>
-                                <select class="form-control" id="inputQuanHuyen" readonly="true"></select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="inputPhuongXa">Phường/Xã</label>
-                                <select class="form-control" id="inputPhuongXa" readonly="true"></select>
-                            </div>-->
                             <div class="form-group col-md-12">
                                 <label for="editChildInputAddress">Địa chỉ</label>
                                 <input type="text" class="form-control" name="editChildInputAddress"
@@ -572,6 +560,21 @@
 
             reader.onload = function (e) {
                 $('#addChildImgPeople')
+                    .attr('src', e.target.result)
+                    .width(250)
+                    .height(250);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    var readURLEditChild = function (input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#editChildImgPeople')
                     .attr('src', e.target.result)
                     .width(250)
                     .height(250);
@@ -679,13 +682,33 @@
         // $("#modalEditInfo")
         //     .modal();
     };
+
+    var resetAddChildNode = function() {
+        $("#addChildInputRelation").html('');
+        $("#addChildInputRelation").append('<option value="3">Cha</option>');
+        $("#addChildInputRelation").append('<option value="4">Mẹ</option>');
+        $("#addChildInputRelation").append('<option value="2">Chồng</option>');
+        $("#addChildInputRelation").append('<option value="1">Vợ</option>');
+        $("#addChildInputName").val("");
+        $("#addChildInputNickName").val("");
+        $("#addChildInputAddress").val("");
+        $("#addChildInputBirthday").val("");
+        $("#addChildInputDeadDay").val("");
+        $("#addChildInputDegree").val("");
+        $("#addChildInputDes").val("");
+        $("#addChildInputDataExtra").val("");
+    };
     var addChildNode = function (sender) {
+        resetAddChildNode();
         var id = $(sender)
             .parent()
             .parent()
             .attr('id');
         var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
         var idMemberTree = sender.parentElement.parentElement.getAttribute('id');
+        var relation = sender.parentElement.parentElement.getAttribute('relation');
+        console.log("relation " + relation);
+        console.log("add child node " + sender.parentElement.parentElement);
         var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
         var date = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
         date = date.split(" - ");
@@ -717,11 +740,12 @@
                  }*/
                 $('#addChildIdParent').val(data.id);
                 $('#addChildInputNameParent').html(data.name);
-                $('#addChildInputIdMother').html('');
+                $('#addChildInputIdMotherFather').html('');
+                console.log(JSON.stringify(data.husbandOrWifes));
                 for (var i in data.husbandOrWifes) {
                     var id = data.husbandOrWifes[i].id;
                     var name = data.husbandOrWifes[i].name;
-                    $("#addChildInputIdMother").append('<option value="' + id + '">' + name + '</option>');
+                    $("#addChildInputIdMotherFather").append('<option value="' + id + '">' + name + '</option>');
                 }
                 // $("#addChildInputIdMother select").val(-1);
             },
@@ -731,66 +755,70 @@
         });
 
     };
-
+    var resetDataEditNode = function () {
+        $("#editChildNameParent").html("");
+        $("#editChildInputIdMother").val("");
+        $("#editChildInputAddress").val("");
+        $("#editChildInputDes").val("");
+        $("#editChildInputBirthday").val("");
+        $("#editChildInputDeadDay").val("");
+        $("#editChildInputDegree").val("");
+        $("#editChildInputDataExtra").val("");
+    };
     var editInfoNode = function (sender) {
+        resetDataEditNode();
         var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
-        var idPeople = sender.parentElement.parentElement.getAttribute('id');
+        var idMemberTree = sender.parentElement.parentElement.getAttribute('id');
         var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
         var date = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
         date = date.split(" - ");
-
         console.log(srcImg);
-        console.log('viewRelation' + idPeople);
-        $("#editChildId").val(idPeople);
+        console.log('viewRelation' + idMemberTree);
+        $("#editChildId").val(idMemberTree);
         $("#editChildImgPeople").attr("src", srcImg);
         $("#editChildInputName").val(name);
         $("#editChildInputBirthday").val(date[0]);
         $("#editChildInputDeadDay").val(date[1]);
 
         //get select wife or husband
-        $.ajax({
+/*        $.ajax({
             type: "GET",
             // https://localhost:89991/pedigree/1/people/3/get-info-add
-            url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/people/' + idPeople + '/get-mother',
+            url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/people/' + idMemberTree + '/get-mother',
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
-                /*{
+                /!*{
                  "id": 3,
                  "name": "Võ Thị Đừng"
-                 }*/
+                 }*!/
                 $('#editChildInputIdMother').html('');
                 $("#editChildInputIdMother").append('<option value="' + data.id + '">' + data.name + '</option>');
             },
             error: function (e) {
             }
-        });
+        });*/
         $.ajax({
             type: "GET",
-            url: "/rest/people/detail/" + idPeople,
+            url: "/rest/member-tree/detail/" + idMemberTree,
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
-                /*{
-                 "nameParent": null,
-                 "name": "Phạm Văn Vân",
-                 "relation": 0,
-                 "nameMother": null,
-                 "lifeIndex": 0,
-                 "nickName": null,
-                 "gender": 0,
-                 "address": null,
-                 "des": null,
-                 "birthDay": "?",
-                 "deadDay": "?",
-                 "degree": null,
-                 "dataExtra": null
-                 }*/
-                if (data.nameParent) $("#editChildNameParent").html(data.nameParent);
+                if (data.nameParent) {
+                    if(data.relation == 3 || data.relation == 4) {
+                        $("#editChildNameParent").html("Con của " + data.nameParent);
+                    }else if(data.relation == 1) {
+                        $("#editChildNameParent").html("Vợ của " + data.nameParent);
+                    }else if(data.relation == 2) {
+                        $("#editChildNameParent").html("Chồng của " + data.nameParent);
+                    }
+                }
                 if (data.img) $("#editChildImgPeople").attr("src", data.img);
                 if (data.name) $("#editChildInputName").val(data.name);
-                if (data.nickName) $("#editChildInputName").val(data.nickName);
-                if (data.nameMother) $("#editChildInputIdMother").val(data.nameMother);
+                if (data.nickname) $("#editChildInputNickName").val(data.nickname);
+                if (data.nameFatherOrMother) {
+                    $("#editChildInputIdMother").val(data.nameFatherOrMother);
+                }
                 if (data.relation != null) {
                     $("#editChildInputRelation").val(data.relation + '').attr("selected", true);
                 }
@@ -801,7 +829,7 @@
                 $("#editChildInputBirthday").val(data.birthDay);
                 $("#editChildInputDeadDay").val(data.deadDay);
                 $("#editChildInputDegree").val(data.degree);
-                $("#editChildInputDataExtra").val(data.dataExtra);
+                $("#editChildInputDataExtra").val(data.extraData);
                 console.log("SUCCESS : ", data);
             },
             error: function (e) {
@@ -858,8 +886,15 @@
         $("#viewChildNameParent").html("");
         $("#viewChildInputIdMother").val("");
         $("#viewChildInputIdMother").val("");
+        $("#viewChildInputAddress").val("");
+        $("#viewChildInputDes").val("");
+        $("#viewChildInputBirthday").val("");
+        $("#viewChildInputDeadDay").val("");
+        $("#viewChildInputDegree").val("");
+        $("#viewChildInputDataExtra").val("");
     };
     var viewInfoNode = function (sender) {
+        resetDataViewNode();
         var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
         var idMemberTree = sender.parentElement.parentElement.getAttribute('id');
         var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
@@ -885,29 +920,13 @@
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
-                /*{
-                 "nameParent": null,
-                 "name": "Phạm Văn Vân",
-                 "relation": 0,
-                 "nameMother": null,
-                 "lifeIndex": 0,
-                 "nickName": null,
-                 "gender": 0,
-                 "address": null,
-                 "des": null,
-                 "birthDay": "?",
-                 "deadDay": "?",
-                 "degree": null,
-                 "dataExtra": null
-                 }*/
-                resetDataViewNode();
                 if (data.nameParent) {
                     if(data.relation == 3 || data.relation == 4) {
                         $("#viewChildNameParent").html("Con của " + data.nameParent);
                     }else if(data.relation == 1) {
-                        $("#viewChildNameParent").html("Chồng của " + data.nameParent);
-                    }else if(data.relation == 2) {
                         $("#viewChildNameParent").html("Vợ của " + data.nameParent);
+                    }else if(data.relation == 2) {
+                        $("#viewChildNameParent").html("Chồng của " + data.nameParent);
                     }
                 }
                 if (data.img) $("#viewChildImgPeople").attr("src", data.img);
@@ -962,12 +981,6 @@
         for (var i = 2; i < 100; i++) {
             $("#viewChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
         }
-
-        $("#addChildInputRelation").html('');
-        $("#addChildInputRelation").append('<option value="3">Cha</option>');
-        $("#addChildInputRelation").append('<option value="4">Mẹ</option>');
-        $("#addChildInputRelation").append('<option value="2">Chồng</option>');
-        $("#addChildInputRelation").append('<option value="1">Vợ</option>');
 
         $("#editChildInputRelation").html('');
         $("#editChildInputRelation").append('<option value=3">Cha</option>');
@@ -1051,7 +1064,7 @@
                     timeout: 600000,
                     success: function (data) {
                         console.log("SUCCESS : ", data);
-                        data = data.split("|")
+                        data = data.split("|");
                         var name1 = $("#imgPeopleRelationName1").text();
                         var name2 = $("#imgPeopleRelationName2").text();
                         $("#resultXemQuanHe").html(
@@ -1131,7 +1144,7 @@
         $.ajax({
             type: "POST",
             enctype: 'application/x-www-form-urlencoded',
-            url: "/rest/people/edit",
+            url: "/rest/member-tree/edit",
             data: data,
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             contentType: false,

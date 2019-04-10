@@ -129,10 +129,8 @@ public class ChartConfig {
                 case ME:
                     child.addHTMLclass(GioiTinh.values()[child.getGender()]== GioiTinh.NAM ? ClassColor.people_node_son:ClassColor.people_node_daughter);
                     int idMother = child.getIdMother();
-                    int idParent = child.getIdFather();
 
-                    if(idMother == -1 || idParent == -1) {
-
+                    if(idMother == -1) {
                         Child childUnknown = parent.getChildrenUnknown();
                         childUnknown.setHTMLid(parent.getHTMLid());
                         if (relation == Relation.ME) {
@@ -146,34 +144,41 @@ public class ChartConfig {
                     }else {
 
                         Child node = null;
-                        if (relation == Relation.ME) {
-                            //neu moi quan he la me thi tim node gan nhat la cha
-                            node = findNodeByIdParent(parent, child.getIdFather());
-                        }else {
-                            //neu moi quan he la cha thi tim node gan nhat la me
-                            node = findNodeByIdMother(parent, child.getIdMother());
-                        }
+//                        if (relation == Relation.ME) {
+//                            //neu moi quan he la me thi tim node gan nhat la cha
+//                            node = findNodeByIdParent(parent, child.getIdFather());
+//                        }else {
+//                            //neu moi quan he la cha thi tim node gan nhat la me
+//                        }
+                        node = findNodeByIdMother(parent, child.getIdMother());
+//                        node = parent;
                         if (parent != nodeStructure) { parent.setCollapsed(true); }
-                        if (node != null) {
-                            childs = node.getChildren();
-                            if(childs == null) {
-                                childs= new ArrayList<>();
-                            }
-                            childs.add(child);
-                            node.setChildren(childs);
-                        }else {
-                            //TH khong tim thay cha hoac me thi tu dong tao node unknown
-//                            System.out.println("unknow" + parent.toString() + "| child " + child);
-                            Child childUnknown = parent.getChildrenUnknown();
-                            if (relation == Relation.ME) {
-                                childUnknown.setRelation(Relation.CHONG.getCode());
-                            }else {
-                                childUnknown.setRelation(Relation.VO.getCode());
-                            }
-                            childUnknown.setChildrenDropLevel(child.getChildrenDropLevel());
-                            childUnknown.getChildren().add(child);
-
+                        childs = node.getChildren();
+                        if(childs == null) {
+                            childs= new ArrayList<>();
                         }
+                        childs.add(child);
+                        node.setChildren(childs);
+//                        if (node != null) {
+//                            childs = node.getChildren();
+//                            if(childs == null) {
+//                                childs= new ArrayList<>();
+//                            }
+//                            childs.add(child);
+//                            node.setChildren(childs);
+//                        }else {
+//                            //TH khong tim thay cha hoac me thi tu dong tao node unknown
+////                            System.out.println("unknow" + parent.toString() + "| child " + child);
+//                            Child childUnknown = parent.getChildrenUnknown();
+//                            if (relation == Relation.ME) {
+//                                childUnknown.setRelation(Relation.CHONG.getCode());
+//                            }else {
+//                                childUnknown.setRelation(Relation.VO.getCode());
+//                            }
+//                            childUnknown.setChildrenDropLevel(child.getChildrenDropLevel());
+//                            childUnknown.getChildren().add(child);
+//
+//                        }
                     }
 
                     break;

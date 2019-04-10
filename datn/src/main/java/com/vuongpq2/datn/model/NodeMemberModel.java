@@ -1,5 +1,7 @@
 package com.vuongpq2.datn.model;
 
+import org.thymeleaf.util.ArrayUtils;
+
 import javax.persistence.*;
 
 @Entity
@@ -159,5 +161,22 @@ public class NodeMemberModel {
             return "r";
         }
         return nodeMemberModel.getPatchKey() + "_" + nodeMemberModel.getId();
+    }
+
+    public static String getPathKeyByChild (NodeMemberModel nodeMemberModel) {
+        if (nodeMemberModel == null) {
+            return "-1";
+        }
+        String[] arrKey = nodeMemberModel.getPatchKey().split("_");
+        String key = "";
+        for (int i = 0; i < arrKey.length - 1; i++) {
+            if(!key.equals("")) {
+                key = String.join("_", key, arrKey[i]);
+            }else {
+                key = arrKey[i];
+            }
+        }
+        System.out.println("key by child " + key);
+        return key;
     }
 }

@@ -92,7 +92,7 @@ public class MemberTreeRestController {
         UserModel userModel = userRepository.findByEmail(principal.getName());
         UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);
         if(userPermissionModel == null || !PermissionUtils.isCanAddMemberTree(Permission.byCode(userPermissionModel.getPermission().getCode()))) {
-            return null;
+            return new ResponseEntity<>("-1", HttpStatus.NOT_FOUND);
         }
 
         Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
@@ -138,7 +138,7 @@ public class MemberTreeRestController {
         descriptionMemberModel.setDescription(addChildInputDes);
         descriptionMemberModel.setExtraData(addChildInputDataExtra);
         nodeMemberService.add(nodeMemberModel, descriptionMemberModel);
-        return ResponseEntity.ok("success");
+        return new ResponseEntity<>("1", HttpStatus.OK);
 
     }
 
@@ -198,6 +198,7 @@ public class MemberTreeRestController {
         dDetailNodeMember.setNameParent(nodeParent.isPresent()? nodeParent.get().getName(): "Không rõ");
         dDetailNodeMember.setNameFatherOrMother(nodeFatherOrMother.isPresent()? nodeFatherOrMother.get().getName(): "Không rõ");
         dDetailNodeMember.setNickname(descriptionMemberModel.getNickName());
+        dDetailNodeMember.setGender(nodeMemberModel.get().getGender());
         dDetailNodeMember.setAddress(descriptionMemberModel.getAddress());
         dDetailNodeMember.setRelation(nodeMemberModel.get().getRelation());
         dDetailNodeMember.setBirthDay(MyUltils.getStringFromDate(descriptionMemberModel.getBirthday()));
@@ -206,5 +207,56 @@ public class MemberTreeRestController {
         dDetailNodeMember.setDes(descriptionMemberModel.getDescription());
         dDetailNodeMember.setExtraData(descriptionMemberModel.getExtraData());
         return new ResponseEntity<>(dDetailNodeMember, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/rest/member-tree/edit", produces = "application/json")
+    public ResponseEntity<?> editNodeMemberTree(Principal principal,
+                                                @RequestParam(value = "editChildId", defaultValue = "", required = true) String editChildId,
+                                                @RequestParam(value = "editChildInputRelation", defaultValue = "", required = false) String editChildInputRelation,
+                                                @RequestParam(value = "editChildInputIdMother", defaultValue = "", required = false) String editChildInputIdMother,
+                                                @RequestParam(value = "editChildInputConThu", defaultValue = "", required = false) String editChildInputConThu,
+                                                @RequestParam(value = "editChildInputName", defaultValue = "", required = false) String editChildInputName,
+                                                @RequestParam(value = "editChildInputNickName", defaultValue = "", required = false) String editChildInputNickName,
+                                                @RequestParam(value = "editChildInputGender", defaultValue = "", required = false) String editChildInputGender,
+                                                @RequestParam(value = "editChildInputBirthday", defaultValue = "", required = false) String editChildInputBirthday,
+                                                @RequestParam(value = "editChildInputDeadDay", defaultValue = "", required = false) String editChildInputDeadDay,
+                                                @RequestParam(value = "editChildInputDegree", defaultValue = "", required = false) String editChildInputDegree,
+                                                @RequestParam(value = "editChildInputDes", defaultValue = "", required = false) String editChildInputDes,
+                                                @RequestParam(value = "editChildInputDataExtra", defaultValue = "", required = false) String editChildInputDataExtra,
+                                                @RequestParam("editChildInputFileImg") MultipartFile editChildInputFileImg
+                                                ) {
+        Optional<NodeMemberModel> nodeMemberModel = nodeMemberService.findById(Integer.parseInt(editChildId));
+        DescriptionMemberModel descriptionMemberModel =  nodeMemberModel.get().getDescriptionMemberModel();
+        if(!nodeMemberModel.isPresent()) {
+            return new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
+        }
+        if(editChildInputIdMother == null || editChildInputIdMother.equals("")) {
+            editChildInputIdMother = "-1";
+        }
+        if(editChildInputConThu.equals("")) {
+            editChildInputConThu = "-1";
+        }
+
+        if(editChildInputRelation.equals("")) {
+            editChildInputRelation = "-1";
+        }
+        if(editChildInputConThu.equals("")) {
+            editChildInputConThu = "-1";
+        }
+
+
+        nodeMemberModel.get().setName(editChildInputName);
+        nodeMemberModel.get().setRelation(Integer.parseInt(editChildInputRelation));
+        nodeMemberModel.get().setMotherFatherId(Integer.parseInt(editChildInputIdMother));
+        nodeMemberModel.get().setChildIndex(Integer.parseInt(editChildInputConThu));
+        descriptionMemberModel.setNickName(editChildInputNickName);
+        nodeMemberModel.get().setGender(Integer.parseInt(editChildInputGender));
+        descriptionMemberModel.setBirthday(MyUltils.getDate(editChildInputBirthday));
+        descriptionMemberModel.setDeadDay(MyUltils.getDate(editChildInputDeadDay));
+        descriptionMemberModel.setDegree(editChildInputDegree);
+        descriptionMemberModel.setDescription(editChildInputDes);
+        descriptionMemberModel.setExtraData(editChildInputDataExtra);
+        nodeMemberService.add(nodeMemberModel.get(), descriptionMemberModel);
+        return new ResponseEntity<>("1", HttpStatus.OK);
     }
 }

@@ -29,6 +29,8 @@ public interface NodeMemberService {
 
     void deleteByIdAndPatchKey(Integer id, String patchKey);
 
+    void deleteAllByPedigreeAndPatchKeyStartsWith (PedigreeModel pedigreeModel, String patchKey);
+
     void deleteById(Integer id);
 
     void deleteAll();

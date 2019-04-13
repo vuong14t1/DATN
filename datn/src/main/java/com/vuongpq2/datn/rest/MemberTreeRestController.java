@@ -10,6 +10,7 @@ import com.vuongpq2.datn.data.GioiTinh;
 import com.vuongpq2.datn.data.model.DDetailNodeMember;
 import com.vuongpq2.datn.data.model.DHusbandOrWife;
 import com.vuongpq2.datn.data.model.DInfoFormAddChild;
+import com.vuongpq2.datn.data.model.DMergeNodeMember;
 import com.vuongpq2.datn.model.*;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
@@ -121,12 +122,12 @@ public class MemberTreeRestController {
         } else {
             //neu truong hop them vao bang nut me hoac cha la con cua parent
             if (parent.get().getRelation() == Relation.VO.ordinal() || parent.get().getRelation() == Relation.CHONG.ordinal()) {
-               Optional<NodeMemberModel> realParent = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent.get().getPatchKey())));
+                Optional<NodeMemberModel> realParent = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent.get().getPatchKey())));
                 System.out.println("idRealParent " + MyUltils.getIdParentByPathKey(parent.get().getPatchKey()));
-               if(realParent.isPresent()) {
-                   addChildInputIdMotherFather = addChildIdParent;
-                   parent = realParent;
-               }
+                if (realParent.isPresent()) {
+                    addChildInputIdMotherFather = addChildIdParent;
+                    parent = realParent;
+                }
             }
             nodeMemberModel.setParent(parent.get());
             nodeMemberModel.setLifeIndex(parent.get().getLifeIndex() + 1);
@@ -267,5 +268,47 @@ public class MemberTreeRestController {
         descriptionMemberModel.setExtraData(editChildInputDataExtra);
         nodeMemberService.add(nodeMemberModel.get(), descriptionMemberModel);
         return new ResponseEntity<>("1", HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/people/{idMember}/delete", produces = "application/json")
+    public ResponseEntity<?> deleteMember (Principal principal,
+                                           @PathVariable(value = "idGenealogy") int idGenealogy,
+                                           @PathVariable(value = "idPedigree") int idPedigree,
+                                           @PathVariable(value = "idMember") int idMember
+                                           ) {
+        Optional<NodeMemberModel> parent = nodeMemberService.findById(idMember);
+        if(parent.isPresent()) {
+            //xoa cac key con cua no
+            String childPatchKey = NodeMemberModel.getPathkeyByParent(parent.get());
+            Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
+            //xoa chinh no
+            nodeMemberService.deleteById(parent.get().getId());
+
+            //TH co moi quan he la vo hoac chong(no co patch key giong thang con) thi chi xoa nhung thang co patch key giong no
+            if(parent.get().getRelation() == Relation.VO.ordinal() || parent.get().getRelation() == Relation.CHONG.ordinal()) {
+                childPatchKey = parent.get().getPatchKey();
+            }
+
+            nodeMemberService.deleteAllByPedigreeAndPatchKeyStartsWith(pedigreeModel.get(), childPatchKey);
+            return new ResponseEntity<>("1", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("1", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/get-all-node-parent")
+    public ResponseEntity<?> getAllNodeParent(Principal principal,
+                                              @PathVariable(value = "idGenealogy") int idGenealogy,
+                                              @PathVariable(value = "idPedigree") int idPedigree
+                                              ){
+        List<DMergeNodeMember> dMergeNodeMembers = new ArrayList<>();
+        Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
+        List<NodeMemberModel> nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKeyStartsWith(pedigreeModel.get(), "r");
+        for (NodeMemberModel nodeMemberModel: nodeMemberModels) {
+            DMergeNodeMember dMergeNodeMember = new DMergeNodeMember();
+            dMergeNodeMember.setId(nodeMemberModel.getId());
+            dMergeNodeMember.setName(nodeMemberModel.getName());
+            dMergeNodeMembers.add(dMergeNodeMember);
+        }
+        return new ResponseEntity<>(dMergeNodeMembers, HttpStatus.OK);
     }
 }

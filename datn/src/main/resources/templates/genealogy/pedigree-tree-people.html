@@ -651,7 +651,7 @@
         var idPeople = sender.parentElement.parentElement.getAttribute('id');
         var classParent = sender.parentElement.parentElement.getAttribute('class');
         if (classParent.includes('people_node_unknown')) {
-            toastr["error"]("Người này không tồn tại", "Vui lòng chọn lại")
+            toastr["error"]("Người này không tồn tại", "Vui lòng chọn lại");
             return;
         }
         var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
@@ -723,21 +723,10 @@
         //get select wife or husband
         $.ajax({
             type: "GET",
-            // https://localhost:89991/pedigree/1/people/3/get-info-add
             url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/member-tree/' + idMemberTree + '/get-info-add',
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
-                /*{
-                 "idParent": 2,
-                 "nameParent": "Phạm Văn Vân",
-                 "findHusbandWifes": [
-                 {
-                 "id": 3,
-                 "name": "Võ Thị Đừng"
-                 }
-                 ]
-                 }*/
                 $('#addChildIdParent').val(data.id);
                 $('#addChildInputNameParent').html(data.name);
                 $('#addChildInputIdMotherFather').html('');
@@ -747,7 +736,6 @@
                     var name = data.husbandOrWifes[i].name;
                     $("#addChildInputIdMotherFather").append('<option value="' + id + '">' + name + '</option>');
                 }
-                // $("#addChildInputIdMother select").val(-1);
             },
             error: function (e) {
                 alert("Bạn không có quyền thực hiên action!");
@@ -840,7 +828,7 @@
             .modal();
     };
     var deleteInfoNode = function (sender) {
-        var idPeople = sender.parentElement.parentElement.getAttribute('id');
+        var idMember = sender.parentElement.parentElement.getAttribute('id');
         var classParent = sender.parentElement.parentElement.getAttribute('class');
         if (classParent.includes('people_node_unknown')) {
             toastr["error"]("Người này không tồn tại", "Vui lòng chọn lại")
@@ -865,7 +853,7 @@
                     $.ajax({
                         type: "POST",
                         // https://localhost:89991/pedigree/1/people/3/get-info-add
-                        url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/people/' + idPeople + '/delete',
+                        url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/people/' + idMember + '/delete',
                         processData: false, //prevent jQuery from automatically transforming the data into a query string
                         timeout: 600000,
                         success: function (data) {

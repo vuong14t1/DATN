@@ -76,7 +76,12 @@ public class NodeMemberServiceImpl implements NodeMemberService {
 
     @Override
     public void deleteById(Integer id) {
+        nodeMemberRepository.deleteById(id);
+    }
 
+    @Override
+    public void deleteAllByPedigreeAndPatchKeyStartsWith(PedigreeModel pedigreeModel, String patchKey) {
+        nodeMemberRepository.deleteAllByPedigreeAndPatchKeyStartsWith(pedigreeModel, patchKey);
     }
 
     @Override

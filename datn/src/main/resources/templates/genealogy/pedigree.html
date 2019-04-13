@@ -212,7 +212,7 @@
         $('#table').bootstrapTable({
             search: true,
             pagination: true,
-            url: "http://" + document.location.host + '/rest/pedigree/list/' + idGenealogy,
+            url: "http://" + document.location.host + '/rest/pedigree/list/' + idGenealogy
             // data: data
         });
         $("#btnGopPhaHe").click(function (event) {
@@ -246,6 +246,46 @@
             }
         });
     });
+
+    //TODO gop pha he
+    var actionGopPhaHe = function () {
+        var form = $('#formGopPhaHe')[0];
+        var data = new FormData(form);
+        data.append("idGenealogy", idGenealogy + '');
+        console.log(data);
+        $("#btnSubmitGopPhaHe").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            enctype: 'application/x-www-form-urlencoded',
+            url: "/rest/pedigree/merge-pedigree",
+            data: data,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (errorCode) {
+                console.log("SUCCESS : ", errorCode);
+                if (errorCode == '1') {
+                    toastr["success"]("Đã gộp thành công", "Thông báo");
+                    $('#table').bootstrapTable({
+                        search: true,
+                        pagination: true,
+                        url: "http://" + document.location.host + '/rest/pedigree/list/' + idGenealogy
+                        // data: data
+                    });
+                } else {
+                    toastr["error"]("Không thể Gộp, vui lòng thử lại", "Lỗi");
+                }
+                $("#btnSubmitGopPhaHe").prop("disabled", false);
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+                $("#btnSubmitGopPhaHe").prop("disabled", false);
+            }
+        });
+    };
+
+    //TODO lay danh sach nguoi de chon node cha can gop
     $('#inputPedigreeTo').on('change', function () {
         var id = $(this).find(":selected").val();
         var idPedigree = $('#inputPedigreeTo').find(":selected").val();
@@ -253,8 +293,7 @@
         $('#inputParent').html("");
         $.ajax({
             type: "GET",
-            // https://localhost:89991/pedigree/1/people/3/get-info-add
-            url: " /rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/all-people-name-node-parent",
+            url: " /rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/get-all-node-parent",
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
@@ -291,22 +330,22 @@
         });
     });
     $('#inputParent').on('change', function () {
-        var idParent = $(this).find(":selected").val();
+        var idMemberTree = $(this).find(":selected").val();
         var idPedigree = $('#inputPedigreeTo').find(":selected").val();
         //hien thị danh sach mother trong phả hệ
         $('#inputMother').html("");
         $.ajax({
             type: "GET",
-            url: " /rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/people/" + idParent + "/get-info-add",
+            url: " /rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/member-tree/" + idMemberTree + "/get-info-add",
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
                 /*{"idParent":62,"nameParent":"Phạm Văn Vân","findHusbandWifes":[{"id":-1,"name":"Không rõ"},{"id":63,"name":"Võ Thị Đừng"}]}*/
                 console.log("inputParent");
                 console.log(data);
-                for (var i in data.findHusbandWifes) {
-                    var id = data.findHusbandWifes[i].id;
-                    var name = data.findHusbandWifes[i].name;
+                for (var i in data.husbandOrWifes) {
+                    var id = data.husbandOrWifes[i].id;
+                    var name = data.husbandOrWifes[i].name;
                     $("#inputMother").append('<option value="' + id + '">' + name + '</option>');
                 }
                 $("#inputMother").val(id).attr("selected", true);
@@ -370,36 +409,7 @@
             }
         });
     };
-    var actionGopPhaHe = function () {
-        var form = $('#formGopPhaHe')[0];
-        var data = new FormData(form);
-        data.append("idGenealogy", idGenealogy + '');
-        console.log(data);
-        $("#btnSubmitGopPhaHe").prop("disabled", true);
-        $.ajax({
-            type: "POST",
-            enctype: 'application/x-www-form-urlencoded',
-            url: "/rest/pedigree/gop-pha-he",
-            data: data,
-            processData: false, //prevent jQuery from automatically transforming the data into a query string
-            contentType: false,
-            cache: false,
-            timeout: 600000,
-            success: function (errorCode) {
-                console.log("SUCCESS : ", errorCode);
-                if (errorCode == '1') {
-                    toastr["success"]("Đã gộp thành công", "Thông báo")
-                } else {
-                    toastr["error"]("Không thể Gộp, vui lòng thử lại", "Lỗi")
-                }
-                $("#btnSubmitGopPhaHe").prop("disabled", false);
-            },
-            error: function (e) {
-                console.log("ERROR : ", e);
-                $("#btnSubmitGopPhaHe").prop("disabled", false);
-            }
-        });
-    }
+
     /*]]>*/
 </script>
 </body>

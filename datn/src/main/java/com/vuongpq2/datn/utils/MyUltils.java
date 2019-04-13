@@ -35,4 +35,9 @@ public class MyUltils {
         }
         return result;
     }
+
+    public static String getIdParentByPathKey (String patchKey) {
+        String[] arrId = patchKey.split("_");
+        return arrId[arrId.length - 1];
+    }
 }

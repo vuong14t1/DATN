@@ -28,6 +28,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 @Transactional
 public class MemberTreeRestController {
@@ -48,7 +49,7 @@ public class MemberTreeRestController {
         Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
         List<NodeMemberModel> nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKeyStartsWith(pedigreeModel.get(), "r");
         ChartConfig chartConfig = new ChartConfig();
-        for(int i = 0; i < nodeMemberModels.size(); i++) {
+        for (int i = 0; i < nodeMemberModels.size(); i++) {
             NodeMemberModel nodeMemberModel = nodeMemberModels.get(i);
             Child child = new Child();
             child.setHTMLid(nodeMemberModel.getId() + "");
@@ -59,8 +60,8 @@ public class MemberTreeRestController {
             child.setImage(nodeMemberModel.getImage());
             child.setHTMLclass("people_chart_node");
             child.setPatchKey(nodeMemberModel.getPatchKey());
-            child.setIdFather(nodeMemberModel.getParent() == null ? - 1: nodeMemberModel.getParent().getId());
-            child.setIdMother(nodeMemberModel.getMotherFatherId() == null ? -1: nodeMemberModel.getMotherFatherId());
+            child.setIdFather(nodeMemberModel.getParent() == null ? -1 : nodeMemberModel.getParent().getId());
+            child.setIdMother(nodeMemberModel.getMotherFatherId() == null ? -1 : nodeMemberModel.getMotherFatherId());
             Text text = new Text();
             text.setTitle(MyUltils.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getDeadDay()));
             text.setName(nodeMemberModel.getName());
@@ -88,10 +89,10 @@ public class MemberTreeRestController {
                                            @RequestParam(value = "addChildInputDes", required = false, defaultValue = "") String addChildInputDes,
                                            @RequestParam(value = "addChildInputDataExtra", required = false, defaultValue = "") String addChildInputDataExtra,
                                            @RequestParam("addChildInputFileImg") MultipartFile addChildInputFileImg
-                                           ) {
+    ) {
         UserModel userModel = userRepository.findByEmail(principal.getName());
         UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);
-        if(userPermissionModel == null || !PermissionUtils.isCanAddMemberTree(Permission.byCode(userPermissionModel.getPermission().getCode()))) {
+        if (userPermissionModel == null || !PermissionUtils.isCanAddMemberTree(Permission.byCode(userPermissionModel.getPermission().getCode()))) {
             return new ResponseEntity<>("-1", HttpStatus.NOT_FOUND);
         }
 
@@ -99,37 +100,46 @@ public class MemberTreeRestController {
         NodeMemberModel nodeMemberModel = new NodeMemberModel();
         DescriptionMemberModel descriptionMemberModel = new DescriptionMemberModel();
 
-        if(addChildInputIdMotherFather == null || addChildInputIdMotherFather.equals("")) {
+        if (addChildInputIdMotherFather == null || addChildInputIdMotherFather.equals("")) {
             addChildInputIdMotherFather = "-1";
         }
-        if(addChildIdParent == null || addChildIdParent.equals("")) {
+        if (addChildIdParent == null || addChildIdParent.equals("")) {
             addChildIdParent = "-1";
         }
-        if(addChildInputConThu.equals("")) {
+        if (addChildInputConThu.equals("")) {
             addChildInputConThu = "-1";
         }
 
-        if(addChildInputRelation.equals("")) {
+        if (addChildInputRelation.equals("")) {
             addChildInputRelation = "-1";
         }
         Optional<NodeMemberModel> parent = null;
         parent = nodeMemberService.findById(Integer.parseInt(addChildIdParent));
-        if(!parent.isPresent()) {
+        if (!parent.isPresent()) {
             nodeMemberModel.setParent(null);
             nodeMemberModel.setLifeIndex(0);
-        }else {
+        } else {
+            //neu truong hop them vao bang nut me hoac cha la con cua parent
+            if (parent.get().getRelation() == Relation.VO.ordinal() || parent.get().getRelation() == Relation.CHONG.ordinal()) {
+               Optional<NodeMemberModel> realParent = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent.get().getPatchKey())));
+                System.out.println("idRealParent " + MyUltils.getIdParentByPathKey(parent.get().getPatchKey()));
+               if(realParent.isPresent()) {
+                   addChildInputIdMotherFather = addChildIdParent;
+                   parent = realParent;
+               }
+            }
             nodeMemberModel.setParent(parent.get());
             nodeMemberModel.setLifeIndex(parent.get().getLifeIndex() + 1);
+            System.out.println("id parent " + parent.get().getId());
         }
-
-
+        System.out.println("id mother or father " + addChildInputIdMotherFather);
         nodeMemberModel.setMotherFatherId(Integer.parseInt(addChildInputIdMotherFather));
         nodeMemberModel.setRelation(Integer.parseInt(addChildInputRelation));
         nodeMemberModel.setChildIndex(Integer.parseInt(addChildInputConThu));
         nodeMemberModel.setGender(Integer.parseInt(addChildInputGender));
         nodeMemberModel.setName(addChildInputName);
         nodeMemberModel.setPedigree(pedigreeModel.get());
-        nodeMemberModel.setPatchKey(NodeMemberModel.getPathkeyByParent(parent.isPresent()? parent.get(): null));
+        nodeMemberModel.setPatchKey(NodeMemberModel.getPathkeyByParent(parent.isPresent() ? parent.get() : null));
         descriptionMemberModel.setNickName(addChildInputNickName);
         descriptionMemberModel.setAddress(addChildInputAddress);
         descriptionMemberModel.setBirthday(MyUltils.getDate(addChildInputBirthday));
@@ -143,24 +153,24 @@ public class MemberTreeRestController {
     }
 
     @GetMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/member-tree/{idMemberTree}/get-info-add")
-    public ResponseEntity<?> getInfoFormAddChild (Principal principal,
-                                                  @PathVariable(value = "idGenealogy") int idGenealogy,
-                                                  @PathVariable(value = "idPedigree") int idPedigree,
-                                                  @PathVariable(value = "idMemberTree") int idMemberTree
-                                                  ) {
+    public ResponseEntity<?> getInfoFormAddChild(Principal principal,
+                                                 @PathVariable(value = "idGenealogy") int idGenealogy,
+                                                 @PathVariable(value = "idPedigree") int idPedigree,
+                                                 @PathVariable(value = "idMemberTree") int idMemberTree
+    ) {
         UserModel userModel = userRepository.findByEmail(principal.getName());
         UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);
-        if(!PermissionUtils.isCanAddMemberTree(Permission.byCode(userPermissionModel.getPermission().getCode()))) {
+        if (!PermissionUtils.isCanAddMemberTree(Permission.byCode(userPermissionModel.getPermission().getCode()))) {
             return new ResponseEntity<>("", HttpStatus.EXPECTATION_FAILED);
         }
         Optional<NodeMemberModel> parent = nodeMemberService.findById(idMemberTree);
-        if(!parent.isPresent()) {
+        if (!parent.isPresent()) {
             return new ResponseEntity<>(idMemberTree, HttpStatus.NOT_FOUND);
         }
         DInfoFormAddChild dInfoFormAddChild = new DInfoFormAddChild();
         dInfoFormAddChild.setId(parent.get().getId());
         dInfoFormAddChild.setName(parent.get().getName());
-        int relationNeedFind = parent.get().getGender() == GioiTinh.NAM.ordinal() ? Relation.VO.ordinal(): Relation.CHONG.ordinal();
+        int relationNeedFind = parent.get().getGender() == GioiTinh.NAM.ordinal() ? Relation.VO.ordinal() : Relation.CHONG.ordinal();
         Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
         List<NodeMemberModel> listHusbandWifes = nodeMemberService.findAllByPedigreeAndPatchKeyAndRelationEquals(pedigreeModel.get(), NodeMemberModel.getPathkeyByParent(parent.get()), relationNeedFind);
 
@@ -169,7 +179,7 @@ public class MemberTreeRestController {
         unknown.setName("Không rõ");
         unknown.setId(-1);
         husbandOrWifeList.add(unknown);
-        for(NodeMemberModel nodeMemberModel: listHusbandWifes) {
+        for (NodeMemberModel nodeMemberModel : listHusbandWifes) {
             DHusbandOrWife hw = new DHusbandOrWife();
             hw.setId(nodeMemberModel.getId());
             hw.setName(nodeMemberModel.getName());
@@ -182,12 +192,12 @@ public class MemberTreeRestController {
     @GetMapping(value = "/rest/member-tree/detail/{idMemberTree}")
     public ResponseEntity<?> viewNodeMember(Principal principal,
                                             @PathVariable(value = "idMemberTree") int idMemberTree
-                                            ) {
+    ) {
         Optional<NodeMemberModel> nodeMemberModel = nodeMemberService.findById(idMemberTree);
-        if(!nodeMemberModel.isPresent()) {
+        if (!nodeMemberModel.isPresent()) {
             return new ResponseEntity<>(idMemberTree, HttpStatus.NOT_FOUND);
         }
-        Optional<NodeMemberModel> nodeParent = nodeMemberService.findById(nodeMemberModel.get().getParent() != null ? nodeMemberModel.get().getParent().getId(): -1);
+        Optional<NodeMemberModel> nodeParent = nodeMemberService.findById(nodeMemberModel.get().getParent() != null ? nodeMemberModel.get().getParent().getId() : -1);
         Optional<NodeMemberModel> nodeFatherOrMother = nodeMemberService.findById(nodeMemberModel.get().getMotherFatherId());
         DescriptionMemberModel descriptionMemberModel = nodeMemberModel.get().getDescriptionMemberModel();
         DDetailNodeMember dDetailNodeMember = new DDetailNodeMember();
@@ -195,8 +205,8 @@ public class MemberTreeRestController {
         dDetailNodeMember.setImg(nodeMemberModel.get().getImage());
         dDetailNodeMember.setChildIndex(nodeMemberModel.get().getChildIndex());
         dDetailNodeMember.setName(nodeMemberModel.get().getName());
-        dDetailNodeMember.setNameParent(nodeParent.isPresent()? nodeParent.get().getName(): "Không rõ");
-        dDetailNodeMember.setNameFatherOrMother(nodeFatherOrMother.isPresent()? nodeFatherOrMother.get().getName(): "Không rõ");
+        dDetailNodeMember.setNameParent(nodeParent.isPresent() ? nodeParent.get().getName() : "Không rõ");
+        dDetailNodeMember.setNameFatherOrMother(nodeFatherOrMother.isPresent() ? nodeFatherOrMother.get().getName() : "Không rõ");
         dDetailNodeMember.setNickname(descriptionMemberModel.getNickName());
         dDetailNodeMember.setGender(nodeMemberModel.get().getGender());
         dDetailNodeMember.setAddress(descriptionMemberModel.getAddress());
@@ -224,26 +234,25 @@ public class MemberTreeRestController {
                                                 @RequestParam(value = "editChildInputDes", defaultValue = "", required = false) String editChildInputDes,
                                                 @RequestParam(value = "editChildInputDataExtra", defaultValue = "", required = false) String editChildInputDataExtra,
                                                 @RequestParam("editChildInputFileImg") MultipartFile editChildInputFileImg
-                                                ) {
+    ) {
         Optional<NodeMemberModel> nodeMemberModel = nodeMemberService.findById(Integer.parseInt(editChildId));
-        DescriptionMemberModel descriptionMemberModel =  nodeMemberModel.get().getDescriptionMemberModel();
-        if(!nodeMemberModel.isPresent()) {
+        DescriptionMemberModel descriptionMemberModel = nodeMemberModel.get().getDescriptionMemberModel();
+        if (!nodeMemberModel.isPresent()) {
             return new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
         }
-        if(editChildInputIdMother == null || editChildInputIdMother.equals("")) {
+        if (editChildInputIdMother == null || editChildInputIdMother.equals("")) {
             editChildInputIdMother = "-1";
         }
-        if(editChildInputConThu.equals("")) {
+        if (editChildInputConThu.equals("")) {
             editChildInputConThu = "-1";
         }
 
-        if(editChildInputRelation.equals("")) {
+        if (editChildInputRelation.equals("")) {
             editChildInputRelation = "-1";
         }
-        if(editChildInputConThu.equals("")) {
+        if (editChildInputConThu.equals("")) {
             editChildInputConThu = "-1";
         }
-
 
         nodeMemberModel.get().setName(editChildInputName);
         nodeMemberModel.get().setRelation(Integer.parseInt(editChildInputRelation));

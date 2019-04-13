@@ -1,2 +1,2 @@
 # Đồ án tốt nghiệp củ chuối
-Đồ án hệ thống phả hệ
+Tên đề tài: Xây dựng website quản lí cây phả hệ các dòng họ

@@ -21,6 +21,8 @@ public interface UserPermissionRepository extends JpaRepository<UserPermissionMo
 
     List<UserPermissionModel> findByGenealogy_Id(Integer genealogyId);
 
+    List<UserPermissionModel> findByGenealogy_IdAndPedigree_Id(Integer genealogyId, Integer pedigreeId);
+
     UserPermissionModel findTopByUserAndGenealogy_Id(UserModel user, Integer genealogyId);
 
     void deleteAllByGenealogyId(Integer id);

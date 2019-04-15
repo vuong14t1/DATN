@@ -91,7 +91,7 @@ public class NodeMemberServiceImpl implements NodeMemberService {
 
     @Override
     public void updatePatchKey(String oldPatch, String newPatch) {
-
+        nodeMemberRepository.updatePatchKey(oldPatch, newPatch);
     }
 
     @Override

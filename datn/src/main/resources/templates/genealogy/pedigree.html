@@ -40,7 +40,7 @@
 
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <a th:href="'/genealogy/'+${idGenealogy}+'/pedigree/add'" class="btn btn-success"
+                    <a th:if="${idPermission == 1} || ${idPermission == 2}" th:href="'/genealogy/'+${idGenealogy}+'/pedigree/add'" class="btn btn-success"
                        type="button"><span class="glyphicon glyphicon-plus"></span><span th:text="#{add}"></span></a>
                     <button th:if="${idPermission == 1}" id="btnGopPhaHe" class="btn btn-success" type="button"><span
                             class="glyphicon glyphicon-plus"></span><span> Gộp phả hệ</span></button>
@@ -100,16 +100,16 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputParent" class="col-sm-6 col-form-label">Chọn node Cha</label>
+                                <label for="inputParent" class="col-sm-6 col-form-label">Chọn node Cha cần gộp vào</label>
                                 <div class="col-sm-6">
                                     <select name="inputParent" class="form-control" id="inputParent">
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputMother" class="col-sm-6 col-form-label">Chọn node Mẹ</label>
+                                <label for="inputMotherOrFather" class="col-sm-6 col-form-label">Chọn Mẹ hoặc Cha</label>
                                 <div class="col-sm-6">
-                                    <select name="inputMother" class="form-control" id="inputMother">
+                                    <select name="inputMotherOrFather" class="form-control" id="inputMotherOrFather">
                                     </select>
                                 </div>
                             </div>
@@ -259,7 +259,7 @@
             enctype: 'application/x-www-form-urlencoded',
             url: "/rest/pedigree/merge-pedigree",
             data: data,
-            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            processData: false, //prevent jQuery from automatictoastr.optionsally transforming the data into a query string
             contentType: false,
             cache: false,
             timeout: 600000,
@@ -333,7 +333,7 @@
         var idMemberTree = $(this).find(":selected").val();
         var idPedigree = $('#inputPedigreeTo').find(":selected").val();
         //hien thị danh sach mother trong phả hệ
-        $('#inputMother').html("");
+        $('#inputMotherOrFather').html("");
         $.ajax({
             type: "GET",
             url: " /rest/genealogy/" + idGenealogy + "/pedigree/" + idPedigree + "/member-tree/" + idMemberTree + "/get-info-add",
@@ -346,14 +346,14 @@
                 for (var i in data.husbandOrWifes) {
                     var id = data.husbandOrWifes[i].id;
                     var name = data.husbandOrWifes[i].name;
-                    $("#inputMother").append('<option value="' + id + '">' + name + '</option>');
+                    $("#inputMotherOrFather").append('<option value="' + id + '">' + name + '</option>');
                 }
-                $("#inputMother").val(id).attr("selected", true);
-                $("#inputMother").removeAttr('disabled');
+                $("#inputMotherOrFather").val(id).attr("selected", true);
+                $("#inputMotherOrFather").removeAttr('disabled');
 
             },
             error: function (e) {
-                $("#inputMother").attr('disabled', 'disabled');
+                $("#inputMotherOrFather").attr('disabled', 'disabled');
             }
         });
     });
@@ -392,7 +392,7 @@
                 $("#inputPedigreeTo").removeAttr('disabled');
                 $("#inputSelectPedigree").removeAttr('disabled');
                 $("#inputParent").removeAttr('disabled');
-                $("#inputMother").removeAttr('disabled');
+                $("#inputMotherOrFather").removeAttr('disabled');
                 $("#inputIndexChild").removeAttr('disabled');
                 $("#btnSubmitGopPhaHe").removeAttr('disabled');
 

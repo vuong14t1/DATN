@@ -1,5 +1,6 @@
 package com.vuongpq2.datn.data.cachgoiten;
 
+import com.vuongpq2.datn.data.Enum.Relation;
 import com.vuongpq2.datn.data.GioiTinh;
 
 public class TenGoi {
@@ -80,5 +81,21 @@ public class TenGoi {
 
     public static String getKey(int gioiTinh,int level,boolean isHigher,boolean outSide){
         return getKey(GioiTinh.values()[gioiTinh],level,isHigher,outSide);
+    }
+
+    public static String getKey (GioiTinh gioiTinh, int level, boolean isHigher, boolean outSide, boolean isParent, Relation relation) {
+        if(level > 5) level = 5;
+        if(relation == Relation.ME) relation = Relation.CHA;
+        if(relation == Relation.VO) relation = Relation.CHONG;
+        if(level > 0) relation = Relation.NONE;
+        return getKey(gioiTinh, level, isHigher, outSide, isParent, relation, 0);
+    }
+
+    public static String getKey (GioiTinh gioiTinh, int level, boolean isHigher, boolean outSide, boolean isParent, Relation relation, int isHigherParent) {
+        if(level > 5) level = 5;
+        if(relation == Relation.ME) relation = Relation.CHA;
+        if(relation == Relation.VO) relation = Relation.CHONG;
+        if(level > 0) relation = Relation.NONE;
+        return gioiTinh.name() + level + isHigher + outSide + isParent + relation.name() + isHigherParent;
     }
 }

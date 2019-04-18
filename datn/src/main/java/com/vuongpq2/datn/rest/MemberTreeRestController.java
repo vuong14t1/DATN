@@ -130,7 +130,11 @@ public class MemberTreeRestController {
                 }
             }
             nodeMemberModel.setParent(parent.get());
-            nodeMemberModel.setLifeIndex(parent.get().getLifeIndex() + 1);
+            if(Integer.parseInt(addChildInputRelation) == Relation.VO.ordinal() || Integer.parseInt(addChildInputRelation) == Relation.CHONG.ordinal()) {
+                nodeMemberModel.setLifeIndex(parent.get().getLifeIndex());
+            }else {
+                nodeMemberModel.setLifeIndex(parent.get().getLifeIndex() + 1);
+            }
             System.out.println("id parent " + parent.get().getId());
         }
         System.out.println("id mother or father " + addChildInputIdMotherFather);

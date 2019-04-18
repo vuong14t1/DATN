@@ -40,7 +40,7 @@
 
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <a th:if="${idPermission == 1} || ${idPermission == 2}" th:href="'/genealogy/'+${idGenealogy}+'/pedigree/add'" class="btn btn-success"
+                    <a th:if="${idPermission == 1 || idPermission == 2}" th:href="'/genealogy/'+${idGenealogy}+'/pedigree/add'" class="btn btn-success"
                        type="button"><span class="glyphicon glyphicon-plus"></span><span th:text="#{add}"></span></a>
                     <button th:if="${idPermission == 1}" id="btnGopPhaHe" class="btn btn-success" type="button"><span
                             class="glyphicon glyphicon-plus"></span><span> Gộp phả hệ</span></button>

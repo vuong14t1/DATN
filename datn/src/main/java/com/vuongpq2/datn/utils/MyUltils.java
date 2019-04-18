@@ -1,5 +1,8 @@
 package com.vuongpq2.datn.utils;
 
+import com.vuongpq2.datn.data.Enum.Relation;
+import com.vuongpq2.datn.model.NodeMemberModel;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,4 +43,8 @@ public class MyUltils {
         String[] arrId = patchKey.split("_");
         return arrId[arrId.length - 1];
     }
+
+//    public static String solveRelation (NodeMemberModel m1, NodeMemberModel m2) {
+//        int level = Math.abs(m1.getLifeIndex() - m2.getLifeIndex());
+//    }
 }

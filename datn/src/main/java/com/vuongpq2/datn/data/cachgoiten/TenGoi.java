@@ -84,10 +84,6 @@ public class TenGoi {
     }
 
     public static String getKey (GioiTinh gioiTinh, int level, boolean isHigher, boolean outSide, boolean isParent, Relation relation) {
-        if(level > 5) level = 5;
-        if(relation == Relation.ME) relation = Relation.CHA;
-        if(relation == Relation.VO) relation = Relation.CHONG;
-        if(level > 0) relation = Relation.NONE;
         return getKey(gioiTinh, level, isHigher, outSide, isParent, relation, 0);
     }
 
@@ -95,7 +91,17 @@ public class TenGoi {
         if(level > 5) level = 5;
         if(relation == Relation.ME) relation = Relation.CHA;
         if(relation == Relation.VO) relation = Relation.CHONG;
-        if(level > 0) relation = Relation.NONE;
-        return gioiTinh.name() + level + isHigher + outSide + isParent + relation.name() + isHigherParent;
+        if(level > 1) relation = Relation.NONE;
+        return getKey(gioiTinh, level, isHigher, outSide, isParent, relation, isHigherParent, Relation.NONE);
+    }
+    public static String getKey (GioiTinh gioiTinh, int level, boolean isHigher, boolean outSide, boolean isParent, Relation relation, int isHigherParent, Relation sideRelation) {
+        if(level > 5) level = 5;
+        if(relation == Relation.ME) relation = Relation.CHA;
+        if(relation == Relation.VO) relation = Relation.CHONG;
+        if(level > 1) relation = Relation.NONE;
+        if(level != 1) {
+            sideRelation = Relation.NONE;
+        }
+        return gioiTinh.name() + level + isHigher + outSide + isParent + relation.name() + isHigherParent + sideRelation.name();
     }
 }

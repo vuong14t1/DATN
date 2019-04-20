@@ -7,6 +7,7 @@ import com.vuongpq2.datn.config.tree.Text;
 import com.vuongpq2.datn.data.Enum.Permission;
 import com.vuongpq2.datn.data.Enum.Relation;
 import com.vuongpq2.datn.data.GioiTinh;
+import com.vuongpq2.datn.data.cachgoiten.CachGoiTen;
 import com.vuongpq2.datn.data.model.DDetailNodeMember;
 import com.vuongpq2.datn.data.model.DHusbandOrWife;
 import com.vuongpq2.datn.data.model.DInfoFormAddChild;
@@ -314,5 +315,94 @@ public class MemberTreeRestController {
             dMergeNodeMembers.add(dMergeNodeMember);
         }
         return new ResponseEntity<>(dMergeNodeMembers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/rest/people/relation/{idXemQuanHe1}/{idXemQuanHe2}")
+    public ResponseEntity<?> viewRelationBetweenMember (Principal principal,
+                                                        @PathVariable(value = "idXemQuanHe1") int idXemQuanHe1,
+                                                        @PathVariable(value = "idXemQuanHe2") int idXemQuanHe2
+                                                        ) {
+        Optional<NodeMemberModel> member1 = nodeMemberService.findById(idXemQuanHe1);
+        Optional<NodeMemberModel> member2 = nodeMemberService.findById(idXemQuanHe2);
+        if(!member1.isPresent() || !member2.isPresent()) {
+            return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
+        }
+        int level = Math.abs(member1.get().getLifeIndex() - member2.get().getLifeIndex());
+        boolean higher1, higher2, isParent;
+        if(member1.get().getParent() == null || member2.get().getParent() == null) {
+            isParent = false;
+        }else {
+            isParent = member1.get().getParent().getId() == member2.get().getParent().getId();
+        }
+        if(level == 0) {
+            //TH cung cha or me
+            if(isParent) {
+                higher1 = member1.get().getChildIndex() > member2.get().getChildIndex();
+                higher2 = ! higher1;
+            }else {
+                //TH khac cha hoac me thi thi so sanh  child index cua cha hoac me
+                NodeMemberModel parent1 = member1.get().getParent();
+                if(parent1.getRelation() == Relation.VO.ordinal() || parent1.getRelation() == Relation.CHONG.ordinal()) {
+                    parent1 = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent1.getPatchKey()))).get();
+                }
+
+                NodeMemberModel parent2 = member2.get().getParent();
+                if(parent2.getRelation() == Relation.VO.ordinal() || parent2.getRelation() == Relation.CHONG.ordinal()) {
+                    parent2 = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent2.getPatchKey()))).get();
+                }
+                higher1 = parent1.getChildIndex() > parent2.getChildIndex();
+                higher2 = !higher1;
+            }
+
+        }else {
+            higher1 = member1.get().getLifeIndex() < member2.get().getLifeIndex();
+            higher2 = !higher1;
+        }
+        boolean isOutSide1 = false, isOutSide2 = false;
+        if(member1.get().getRelation() == Relation.VO.ordinal() || member1.get().getRelation() == Relation.CHONG.ordinal()) {
+            isOutSide1 = true;
+        }
+
+        if(member2.get().getRelation() == Relation.VO.ordinal() || member2.get().getRelation() == Relation.CHONG.ordinal()) {
+            isOutSide2 = true;
+        }
+
+        int isHigherParent1 = 0, isHigherParent2 = 0;
+        if(higher1 && level == 1) {
+            NodeMemberModel parent22 = member2.get().getParent();
+            if(parent22.getRelation() == Relation.VO.ordinal() || parent22.getRelation() == Relation.CHONG.ordinal()) {
+                parent22 = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent22.getPatchKey()))).get();
+            }
+            NodeMemberModel parent11 = member1.get();
+            if(parent11.getRelation() == Relation.VO.ordinal() || parent11.getRelation() == Relation.CHONG.ordinal()) {
+                parent11 = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent11.getPatchKey()))).get();
+            }
+            if(parent11.getChildIndex() > parent22.getChildIndex()) {
+                isHigherParent1 = 1;
+            }else if(parent11.getChildIndex() < parent22.getChildIndex()){
+                isHigherParent1 = -1;
+            }
+        }
+
+        if(higher2 && level == 1) {
+            NodeMemberModel parent11 = member1.get().getParent();
+            if(parent11.getRelation() == Relation.VO.ordinal() || parent11.getRelation() == Relation.CHONG.ordinal()) {
+                parent11 = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent11.getPatchKey()))).get();
+            }
+            NodeMemberModel parent22 = member2.get();
+            if(parent22.getRelation() == Relation.VO.ordinal() || parent22.getRelation() == Relation.CHONG.ordinal()) {
+                parent22 = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent22.getPatchKey()))).get();
+            }
+            if(parent22.getChildIndex() > parent11.getChildIndex()) {
+                isHigherParent2 = 1;
+            }else {
+                isHigherParent2 = -1;
+            }
+        }
+//        String relation1 = CachGoiTen.getInstance().getName(member1.get().getGender(), level, higher1, isOutSide1, isParent, member1.get().getRelation(), isHigherParent1);
+//        String relation2 = CachGoiTen.getInstance().getName(member2.get().getGender(), level, higher2, isOutSide2, isParent, member2.get().getRelation(), isHigherParent2);
+//        System.out.println("member 1 goi 2 la " + relation1);
+//        System.out.println("member 2 goi 1 la " + relation2);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 }

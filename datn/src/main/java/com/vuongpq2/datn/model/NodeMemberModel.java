@@ -21,7 +21,7 @@ public class NodeMemberModel {
     @JoinColumns({ @JoinColumn(name="genealogy_id", referencedColumnName="genealogy_id")})
     private GenealogyModel genealogy;*/
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumns({@JoinColumn(name = "parent_id", referencedColumnName = "node_member_id")})
     private NodeMemberModel parent;
 

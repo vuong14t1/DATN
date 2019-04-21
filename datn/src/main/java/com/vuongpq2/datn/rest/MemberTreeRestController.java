@@ -405,7 +405,7 @@ public class MemberTreeRestController {
         int isHigherParent1 = 0, isHigherParent2 = 0;
         Relation sideRelation1 = Relation.NONE;
         Relation sideRelation2 = Relation.NONE;
-        if(higher1 && level == 1) {
+        if(higher1 && level != 0) {
             NodeMemberModel parent22 = member2.get().getParent();
             /*if(parent22.getRelation() == Relation.VO.ordinal() || parent22.getRelation() == Relation.CHONG.ordinal()) {
                 parent22 = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent22.getPatchKey()))).get();
@@ -423,7 +423,7 @@ public class MemberTreeRestController {
             sideRelation1 = parent22.getGender() == GioiTinh.NAM.ordinal() ? Relation.CHA : Relation.ME;
         }
 
-        if(higher2 && level == 1) {
+        if(higher2 && level != 0) {
             NodeMemberModel parent11 = member1.get().getParent();
             /*if(parent11.getRelation() == Relation.VO.ordinal() || parent11.getRelation() == Relation.CHONG.ordinal()) {
                 parent11 = nodeMemberService.findById(Integer.parseInt(MyUltils.getIdParentByPathKey(parent11.getPatchKey()))).get();
@@ -433,9 +433,9 @@ public class MemberTreeRestController {
                 parent22 = member2.get().getParent();
             }
             if(parent22.getChildIndex() > parent11.getChildIndex()) {
-                isHigherParent2 = 1;
-            }else if(parent22.getChildIndex() < parent11.getChildIndex()){
                 isHigherParent2 = -1;
+            }else if(parent22.getChildIndex() < parent11.getChildIndex()){
+                isHigherParent2 = 1;
             }
             sideRelation2 = parent11.getGender() == GioiTinh.NAM.ordinal() ? Relation.CHA : Relation.ME;
         }

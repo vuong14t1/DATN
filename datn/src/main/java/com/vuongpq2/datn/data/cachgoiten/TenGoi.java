@@ -99,8 +99,12 @@ public class TenGoi {
         if(relation == Relation.ME) relation = Relation.CHA;
         if(relation == Relation.VO) relation = Relation.CHONG;
         if(level > 1) relation = Relation.NONE;
-        if(level != 1) {
+        if(level == 0) {
             sideRelation = Relation.NONE;
+        }
+        if(level > 1) {
+            isHigherParent = 0;
+            outSide = false;
         }
         return gioiTinh.name() + level + isHigher + outSide + isParent + relation.name() + isHigherParent + sideRelation.name();
     }

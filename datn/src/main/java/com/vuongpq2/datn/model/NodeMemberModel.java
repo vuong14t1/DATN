@@ -1,5 +1,6 @@
 package com.vuongpq2.datn.model;
 
+import com.vuongpq2.datn.data.Enum.Relation;
 import org.thymeleaf.util.ArrayUtils;
 
 import javax.persistence.*;
@@ -149,6 +150,7 @@ public class NodeMemberModel {
     }
 
     public Integer getRelation() {
+        if(relation == null) return Relation.NONE.ordinal();
         return relation;
     }
 

@@ -1,5 +1,6 @@
 package com.vuongpq2.datn.controller;
 
+import com.vuongpq2.datn.config.ErrorKey;
 import com.vuongpq2.datn.data.Enum.Permission;
 import com.vuongpq2.datn.model.GenealogyModel;
 import com.vuongpq2.datn.model.PedigreeModel;
@@ -9,16 +10,25 @@ import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
 import com.vuongpq2.datn.service.GenealogyService;
 import com.vuongpq2.datn.service.PedigreeService;
+import com.vuongpq2.datn.service.StorageService;
+import com.vuongpq2.datn.upload.PeopleUpload;
 import com.vuongpq2.datn.utils.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
+import java.util.TreeMap;
 
 @Controller
 public class PedigreeController {
@@ -30,6 +40,8 @@ public class PedigreeController {
     UserPermissionRepository userPermissionRepository;
     @Autowired
     GenealogyService genealogyService;
+    @Autowired
+    StorageService storageService;
 
     @GetMapping(value = "/genealogy/{idGenealogy}/pedigree")
     public ModelAndView getListPedigreeByGenealogyId(Principal principal, @PathVariable(value = "idGenealogy", required = false) int idGenealogy) {
@@ -142,4 +154,50 @@ public class PedigreeController {
         }
         return new ModelAndView("/genealogy");
     }
+
+    @RequestMapping(value = "/genealogy/{idGenealogy}/pedigree/{idPedigree}/import", method = RequestMethod.GET)
+    public ModelAndView getImportNodeMember (Principal principal,
+                                            @PathVariable (value = "idGenealogy") int idGenealogy,
+                                             @PathVariable (value = "idPedigree") int idPedigree
+                                             ) {
+        ModelAndView mv = new ModelAndView("/genealogy/pedigree-import");
+        mv.addObject("idPedigree",idPedigree);
+        mv.addObject("idGenealogy",idGenealogy);
+        return mv;
+    }
+    @RequestMapping(value = "/genealogy/{idGenealogy}/pedigree/{idPedigree}/import", method = RequestMethod.POST)
+    public ResponseEntity<?> uploadListPeople(
+            @RequestParam(value = "idGenealogy",required = false,defaultValue = "") long idGenealogy,
+            @RequestParam(value = "idPedigree",required = false,defaultValue = "") long idPedigree,
+            @RequestParam("files") MultipartFile uploadfiles) {
+
+        String uploadedFileName = uploadfiles.getOriginalFilename();
+        if (StringUtils.isEmpty(uploadedFileName)) {
+            return new ResponseEntity(ErrorKey.ERROR_EMPTY, HttpStatus.OK);
+        }
+        try {
+
+            String fileName = idGenealogy + idPedigree + System.currentTimeMillis() + "update" + getExtensionsFile(uploadedFileName);
+
+            saveUploadedFiles(uploadfiles, fileName);
+//            TreeMap<Long, List<PeopleUpload>> integerSetHashMap = readExcelFile(fileName);
+//            List<PeopleUpload> result = saveData(integerSetHashMap, idPedigree);
+            return new ResponseEntity<>(1 , HttpStatus.OK);
+
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void saveUploadedFiles(MultipartFile file,String fileName) throws IOException {
+        if (file.isEmpty()) {
+            return;
+        }
+        storageService.store(file,fileName);
+    }
+
+    private String getExtensionsFile(String uploadedFileName) {
+        return uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
+    }
+
 }

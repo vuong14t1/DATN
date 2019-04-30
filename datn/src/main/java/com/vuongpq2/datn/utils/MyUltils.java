@@ -44,6 +44,10 @@ public class MyUltils {
         return arrId[arrId.length - 1];
     }
 
+    public static String getExtension (String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."));
+    }
+
 //    public static String solveRelation (NodeMemberModel m1, NodeMemberModel m2) {
 //        int level = Math.abs(m1.getLifeIndex() - m2.getLifeIndex());
 //    }

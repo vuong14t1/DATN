@@ -1,6 +1,5 @@
 package com.vuongpq2.datn.rest;
 
-import com.vuongpq2.datn.config.ConfigFormat;
 import com.vuongpq2.datn.config.tree.ChartConfig;
 import com.vuongpq2.datn.config.tree.Child;
 import com.vuongpq2.datn.config.tree.Text;
@@ -17,6 +16,7 @@ import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
 import com.vuongpq2.datn.service.NodeMemberService;
 import com.vuongpq2.datn.service.PedigreeService;
+import com.vuongpq2.datn.service.StorageService;
 import com.vuongpq2.datn.utils.MyUltils;
 import com.vuongpq2.datn.utils.PermissionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +42,8 @@ public class MemberTreeRestController {
     private UserPermissionRepository userPermissionRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private StorageService storageService;
 
     @GetMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/list-member-tree", produces = "application/json")
     public ChartConfig getListPeopleTree(Principal principal,
@@ -145,6 +147,8 @@ public class MemberTreeRestController {
         nodeMemberModel.setGender(Integer.parseInt(addChildInputGender));
         nodeMemberModel.setName(addChildInputName);
         nodeMemberModel.setPedigree(pedigreeModel.get());
+        String img = nodeMemberModel.getGender() == GioiTinh.NAM.ordinal()? "/img/avatar-default-nam.png" : "/img/avatar-default-nu.png";
+        nodeMemberModel.setImage(img);
         nodeMemberModel.setPatchKey(NodeMemberModel.getPathkeyByParent(parent.isPresent() ? parent.get() : null));
         descriptionMemberModel.setNickName(addChildInputNickName);
         descriptionMemberModel.setAddress(addChildInputAddress);
@@ -153,9 +157,16 @@ public class MemberTreeRestController {
         descriptionMemberModel.setDegree(addChildInputDegree);
         descriptionMemberModel.setDescription(addChildInputDes);
         descriptionMemberModel.setExtraData(addChildInputDataExtra);
+        //file
+        String uploadedFileName = addChildInputFileImg.getOriginalFilename();
+        if (!uploadedFileName.isEmpty()) {
+            uploadedFileName = + System.currentTimeMillis() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
+            String fileImg = "img/" + uploadedFileName;
+            nodeMemberModel.setImage("/image/" + uploadedFileName);
+            storageService.store(addChildInputFileImg, fileImg);
+        }
         nodeMemberService.add(nodeMemberModel, descriptionMemberModel);
         return new ResponseEntity<>("1", HttpStatus.OK);
-
     }
 
     @GetMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/member-tree/{idMemberTree}/get-info-add")
@@ -271,6 +282,13 @@ public class MemberTreeRestController {
         descriptionMemberModel.setDegree(editChildInputDegree);
         descriptionMemberModel.setDescription(editChildInputDes);
         descriptionMemberModel.setExtraData(editChildInputDataExtra);
+        String uploadedFileName = editChildInputFileImg.getOriginalFilename();
+        if (!uploadedFileName.isEmpty()) {
+            uploadedFileName = + System.currentTimeMillis() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
+            String fileImg = "img/" + uploadedFileName;
+            nodeMemberModel.get().setImage("/image/" + uploadedFileName);
+            storageService.store(editChildInputFileImg, fileImg);
+        }
         nodeMemberService.add(nodeMemberModel.get(), descriptionMemberModel);
         return new ResponseEntity<>("1", HttpStatus.OK);
     }
@@ -416,8 +434,17 @@ public class MemberTreeRestController {
 
         String relation1 = CachGoiTen.getInstance().getName(member1.get().getGender(), level, higher1, isOutSide1, isParent, member1.get().getRelation(), isHigherParent1, sideRelation1);
         String relation2 = CachGoiTen.getInstance().getName(member2.get().getGender(), level, higher2, isOutSide2, isParent, member2.get().getRelation(), isHigherParent2, sideRelation2);
+
+        String resultRelation;
+        if(level == 0 && higher1) {
+            resultRelation = relation1;
+        }else if(level == 0 && higher2) {
+            resultRelation = relation2;
+        }else {
+            resultRelation = relation1 + "-" + relation2;
+        }
         System.out.println("member 1 goi 2 la " + relation1);
         System.out.println("member 2 goi 1 la " + relation2);
-        return new ResponseEntity<>("", HttpStatus.OK);
+        return new ResponseEntity<>(resultRelation, HttpStatus.OK);
     }
 }

@@ -111,7 +111,7 @@ public class AccountController {
         findUser.setAddress(address);
         String uploadedFileName = img.getOriginalFilename();
         if(!uploadedFileName.isEmpty()){
-            uploadedFileName = +  findUser.getId() + "_" + System.currentTimeMillis() + uploadedFileName.substring(uploadedFileName.lastIndexOf("."));
+            uploadedFileName = System.currentTimeMillis() + MyUltils.getExtension(uploadedFileName);
             String fileImg = "img/"  + uploadedFileName;
             storageService.store(img,fileImg);
             findUser.setImage("/image/" + uploadedFileName);

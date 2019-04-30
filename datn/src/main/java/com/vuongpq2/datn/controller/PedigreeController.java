@@ -2,10 +2,7 @@ package com.vuongpq2.datn.controller;
 
 import com.vuongpq2.datn.config.ErrorKey;
 import com.vuongpq2.datn.data.Enum.Permission;
-import com.vuongpq2.datn.model.GenealogyModel;
-import com.vuongpq2.datn.model.PedigreeModel;
-import com.vuongpq2.datn.model.UserModel;
-import com.vuongpq2.datn.model.UserPermissionModel;
+import com.vuongpq2.datn.model.*;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
 import com.vuongpq2.datn.service.GenealogyService;
@@ -13,6 +10,10 @@ import com.vuongpq2.datn.service.PedigreeService;
 import com.vuongpq2.datn.service.StorageService;
 import com.vuongpq2.datn.upload.PeopleUpload;
 import com.vuongpq2.datn.utils.PermissionUtils;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -182,11 +186,31 @@ public class PedigreeController {
             saveUploadedFiles(uploadfiles, fileName);
 //            TreeMap<Long, List<PeopleUpload>> integerSetHashMap = readExcelFile(fileName);
 //            List<PeopleUpload> result = saveData(integerSetHashMap, idPedigree);
+            List<NodeMemberModel> list = readExcelFile(fileName);
             return new ResponseEntity<>(1 , HttpStatus.OK);
 
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public List <NodeMemberModel> readExcelFile (String fileName) {
+        try {
+            FileInputStream fs = new FileInputStream(fileName);
+            Workbook wb = Workbook.getWorkbook(fs);
+            Sheet sh = wb.getSheet(0);
+            int totalRows = sh.getRows();
+            int totalColumns = sh.getColumns();
+            for(int i = 1; i < totalRows; i++) {
+                String stt = sh.getCell(0, i).getContents();
+                System.out.println(stt);
+                String sttCha = sh.getCell(1, i).getContents();
+                System.out.println(sttCha);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void saveUploadedFiles(MultipartFile file,String fileName) throws IOException {

@@ -1042,7 +1042,7 @@
     $('#btnXacNhanXemQuanHe')
         .click(function () {
             if (idXemQuanHe1 == null || idXemQuanHe2 == null) {
-                toastr["error"]("Chọn người muốn xem cách gọi tên ở bên dưới và thử lại", "Vui lòng chọn")
+                toastr["error"]("Chọn người muốn xem mối quan hệ ở bên dưới và thử lại", "Vui lòng chọn")
             } else {
                 $("#btnXacNhanXemQuanHe").prop("disabled", true);
                 $.ajax({
@@ -1052,12 +1052,12 @@
                     timeout: 600000,
                     success: function (data) {
                         console.log("SUCCESS : ", data);
-                        data = data.split("|");
+                        data = data.split("-");
                         var name1 = $("#imgPeopleRelationName1").text();
                         var name2 = $("#imgPeopleRelationName2").text();
                         $("#resultXemQuanHe").html(
-                            '<p>' + name1 + ' gọi ' + name2 + ' là:' + data[0] + '</p>' +
-                            '<p class="pull-right">' + name2 + ' gọi ' + name1 + ' là: ' + data[1] + '</p>'
+                            '<p>' + name1 + ' là ' + data[0] + ' '+  name2 + '</p>' +
+                            '<p class="pull-right">' + name2 + ' là ' + data[1] + ' ' + name1 + ' </p>'
                         );
                         $("#btnXacNhanXemQuanHe").prop("disabled", false);
                     },

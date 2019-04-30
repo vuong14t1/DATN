@@ -142,7 +142,7 @@ public class NodeMemberModel {
     }
 
     public String getImage() {
-        return "/img/avatar-default-unknown.png";
+        return image;
     }
 
     public void setImage(String image) {

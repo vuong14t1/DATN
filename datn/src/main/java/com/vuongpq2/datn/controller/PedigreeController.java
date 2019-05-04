@@ -2,13 +2,18 @@ package com.vuongpq2.datn.controller;
 
 import com.vuongpq2.datn.config.ErrorKey;
 import com.vuongpq2.datn.data.Enum.Permission;
+import com.vuongpq2.datn.data.Enum.Relation;
+import com.vuongpq2.datn.data.GioiTinh;
+import com.vuongpq2.datn.data.model.DUploadMember;
 import com.vuongpq2.datn.model.*;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
 import com.vuongpq2.datn.service.GenealogyService;
+import com.vuongpq2.datn.service.NodeMemberService;
 import com.vuongpq2.datn.service.PedigreeService;
 import com.vuongpq2.datn.service.StorageService;
 import com.vuongpq2.datn.upload.PeopleUpload;
+import com.vuongpq2.datn.utils.MyUltils;
 import com.vuongpq2.datn.utils.PermissionUtils;
 import jxl.Cell;
 import jxl.Sheet;
@@ -29,10 +34,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 @Controller
 public class PedigreeController {
@@ -46,6 +50,8 @@ public class PedigreeController {
     GenealogyService genealogyService;
     @Autowired
     StorageService storageService;
+    @Autowired
+    NodeMemberService nodeMemberService;
 
     @GetMapping(value = "/genealogy/{idGenealogy}/pedigree")
     public ModelAndView getListPedigreeByGenealogyId(Principal principal, @PathVariable(value = "idGenealogy", required = false) int idGenealogy) {
@@ -171,46 +177,151 @@ public class PedigreeController {
     }
     @RequestMapping(value = "/genealogy/{idGenealogy}/pedigree/{idPedigree}/import", method = RequestMethod.POST)
     public ResponseEntity<?> uploadListPeople(
-            @RequestParam(value = "idGenealogy",required = false,defaultValue = "") long idGenealogy,
-            @RequestParam(value = "idPedigree",required = false,defaultValue = "") long idPedigree,
+            @RequestParam(value = "idGenealogy",required = false,defaultValue = "") int idGenealogy,
+            @RequestParam(value = "idPedigree",required = false,defaultValue = "") int idPedigree,
             @RequestParam("files") MultipartFile uploadfiles) {
 
         String uploadedFileName = uploadfiles.getOriginalFilename();
+        Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
         if (StringUtils.isEmpty(uploadedFileName)) {
             return new ResponseEntity(ErrorKey.ERROR_EMPTY, HttpStatus.OK);
         }
         try {
 
             String fileName = idGenealogy + idPedigree + System.currentTimeMillis() + "update" + getExtensionsFile(uploadedFileName);
-
             saveUploadedFiles(uploadfiles, fileName);
-//            TreeMap<Long, List<PeopleUpload>> integerSetHashMap = readExcelFile(fileName);
-//            List<PeopleUpload> result = saveData(integerSetHashMap, idPedigree);
-            List<NodeMemberModel> list = readExcelFile(fileName);
+            TreeMap<Integer, DUploadMember> listUploadMember = readExcel(fileName);
+            saveMemberFromReading(listUploadMember, pedigreeModel.get());
             return new ResponseEntity<>(1 , HttpStatus.OK);
 
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    public void saveMemberFromReading (TreeMap<Integer, DUploadMember> dUploadMemberTreeMap, PedigreeModel pedigreeModel) {
+        nodeMemberService.deleteAllByPedigreeAndPatchKeyStartsWith(pedigreeModel, "r");
+        Map<Integer, Integer> savedIdByKey = new HashMap<>();
+        dUploadMemberTreeMap.forEach((key, value) -> {
+            NodeMemberModel nodeMemberModel = new NodeMemberModel();
+            DescriptionMemberModel descriptionMemberModel = new DescriptionMemberModel();
+            if(value.getIdParent() == -1) {
+                nodeMemberModel.setParent(null);
+                nodeMemberModel.setPatchKey("r");
+            }else {
+                int idParent = savedIdByKey.get(value.getIdParent()) == null ? value.getId(): savedIdByKey.get(value.getIdParent());
+                Optional<NodeMemberModel> parent = nodeMemberService.findById(idParent);
+                nodeMemberModel.setParent(parent.get());
+                nodeMemberModel.setPatchKey(NodeMemberModel.getPathkeyByParent(parent.get()));
+            }
+            nodeMemberModel.setName(value.getName());
+            nodeMemberModel.setPedigree(pedigreeModel);
+            int idMotherOrFather = savedIdByKey.get(value.getIdMotherOrFather()) == null ? value.getIdMotherOrFather(): savedIdByKey.get(value.getIdMotherOrFather());
+            nodeMemberModel.setMotherFatherId(idMotherOrFather);
+            nodeMemberModel.setGender(value.getGender().ordinal());
+            nodeMemberModel.setChildIndex(value.getChildIdx());
+            nodeMemberModel.setLifeIndex(value.getLiftIdx());
+            String img = nodeMemberModel.getGender() == GioiTinh.NAM.ordinal()? "/img/avatar-default-nam.png" : "/img/avatar-default-nu.png";
+            nodeMemberModel.setImage(value.getImage().equals("") ? img: value.getImage());
+            nodeMemberModel.setRelation(value.getRelation().ordinal());
+            descriptionMemberModel.setNickName(value.getNickName());
+            descriptionMemberModel.setDegree(value.getDegree());
+            descriptionMemberModel.setDescription(value.getDes());
+            descriptionMemberModel.setExtraData(value.getExtraData());
+            descriptionMemberModel.setBirthday(value.getBirthDay());
+            descriptionMemberModel.setDeadDay(value.getDeadDay());
+            descriptionMemberModel.setAddress(value.getAddress());
+            savedIdByKey.put(value.getId(), nodeMemberService.add(nodeMemberModel, descriptionMemberModel).getId());
+        });
+    }
 
-    public List <NodeMemberModel> readExcelFile (String fileName) {
+
+    public TreeMap<Integer, DUploadMember> readExcel(String fileName) {
+        TreeMap<Integer, DUploadMember> listMember = new TreeMap<>();
         try {
-            FileInputStream fs = new FileInputStream(fileName);
+            FileInputStream fs = new FileInputStream(Paths.get("upload-dir") + "/" + fileName);
             Workbook wb = Workbook.getWorkbook(fs);
             Sheet sh = wb.getSheet(0);
             int totalRows = sh.getRows();
             int totalColumns = sh.getColumns();
-            for(int i = 1; i < totalRows; i++) {
-                String stt = sh.getCell(0, i).getContents();
-                System.out.println(stt);
-                String sttCha = sh.getCell(1, i).getContents();
-                System.out.println(sttCha);
+            for (int i = 1; i < totalRows; i++) {
+                int stt = Integer.parseInt(sh.getCell(0, i).getContents());
+                int idParent = Integer.parseInt(sh.getCell(1, i).getContents());
+                int idMotherOrFather = Integer.parseInt(sh.getCell(2, i).getContents());
+                int lifeIdx = Integer.parseInt(sh.getCell(3, i).getContents());
+                Relation relation = getRelationByString(sh.getCell(4, i).getContents());
+                String name = sh.getCell(5, i).getContents();
+                String nickName = sh.getCell(6, i).getContents();
+                GioiTinh gender = getGender(sh.getCell(7, i).getContents());
+                int childIdx = Integer.parseInt(sh.getCell(8, i).getContents());
+                Date birthDay = MyUltils.getDate(sh.getCell(9, i).getContents());
+                Date deadDay = MyUltils.getDate(sh.getCell(10, i).getContents());
+                String address = sh.getCell(11, i).getContents();
+                String degree = sh.getCell(12, i).getContents();
+                String image = sh.getCell(13, i).getContents();
+                String des = sh.getCell(14, i).getContents();
+                String extraData = sh.getCell(15, i).getContents();
+
+                DUploadMember dUploadMember = new DUploadMember();
+                dUploadMember.setId(stt);
+                dUploadMember.setIdParent(idParent);
+                dUploadMember.setIdMotherOrFather(idMotherOrFather);
+                dUploadMember.setLiftIdx(lifeIdx);
+                dUploadMember.setRelation(relation);
+                dUploadMember.setName(name);
+                dUploadMember.setNickName(nickName);
+                dUploadMember.setGender(gender);
+                dUploadMember.setChildIdx(childIdx);
+                dUploadMember.setBirthDay(birthDay);
+                dUploadMember.setDeadDay(deadDay);
+                dUploadMember.setAddress(address);
+                dUploadMember.setDegree(degree);
+                dUploadMember.setImage(image);
+                dUploadMember.setDes(des);
+                dUploadMember.setExtraData(extraData);
+                listMember.put(dUploadMember.getId(), dUploadMember);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return listMember;
+    }
+
+    public GioiTinh getGender (String gender) {
+        String gender1 = gender.toLowerCase();
+        switch (gender1) {
+            case "nam":
+                return GioiTinh.NAM;
+            case "nu":
+                return GioiTinh.NU;
+            case "nữ":
+                return GioiTinh.NU;
+        }
+        return GioiTinh.KHONG_RO;
+    }
+
+    public Relation getRelationByString(String relation) {
+        String relation1 = relation.toLowerCase();
+        Relation result;
+        switch (relation1) {
+            case "vo":
+            case "vợ":
+                result = Relation.VO;
+                break;
+            case "chong":
+            case "chồng":
+                result = Relation.CHONG;
+                break;
+            case "cha":
+                result = Relation.CHA;
+                break;
+            case "me":
+            case "mẹ":
+                result = Relation.ME;
+                break;
+            default:
+                result = Relation.NONE;
+        }
+        return result;
     }
 
     private void saveUploadedFiles(MultipartFile file,String fileName) throws IOException {

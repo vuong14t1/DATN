@@ -20,13 +20,22 @@ public class NodeMemberServiceImpl implements NodeMemberService {
     @Autowired
     private DescriptionMemberRepository descriptionMemberRepository;
 
-    @Override
+/*    @Override
     public void add(NodeMemberModel nodeMemberModel, DescriptionMemberModel descriptionMemberModel) {
         nodeMemberRepository.save(nodeMemberModel);
         descriptionMemberModel.setNodeMemberModel(nodeMemberModel);
         descriptionMemberRepository.save(descriptionMemberModel);
         nodeMemberModel.setDescriptionMemberModel(descriptionMemberModel);
         nodeMemberRepository.save(nodeMemberModel);
+    }
+    */
+    @Override
+    public NodeMemberModel add(NodeMemberModel nodeMemberModel, DescriptionMemberModel descriptionMemberModel) {
+        nodeMemberRepository.save(nodeMemberModel);
+        descriptionMemberModel.setNodeMemberModel(nodeMemberModel);
+        descriptionMemberRepository.save(descriptionMemberModel);
+        nodeMemberModel.setDescriptionMemberModel(descriptionMemberModel);
+        return nodeMemberRepository.save(nodeMemberModel);
     }
 
     @Override

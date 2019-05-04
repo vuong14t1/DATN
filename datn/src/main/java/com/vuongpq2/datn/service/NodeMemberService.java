@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NodeMemberService {
-    void add(NodeMemberModel nodeMemberModel, DescriptionMemberModel descriptionMemberModel);
+    NodeMemberModel add(NodeMemberModel nodeMemberModel, DescriptionMemberModel descriptionMemberModel);
 
     Optional<NodeMemberModel> findById(Integer id);
 

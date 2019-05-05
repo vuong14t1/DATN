@@ -520,13 +520,15 @@
         function relationFormat(value, row, index) {
             switch (value) {
                 case 0:
-                    return "Cha";
+                    return "None";
                 case 1:
-                    return "Mẹ";
+                    return "Vợ";
                 case 2:
                     return "Chồng";
                 case 3:
-                    return "Vợ";
+                    return "Cha";
+                case 4:
+                    return "Mẹ";
             }
             return "";
         }
@@ -534,9 +536,9 @@
         function genderFormat(value, row, index) {
             switch (value) {
                 case 0:
-                    return "Nam";
+                    return "Nữ";
                 case 1:
-                    return "Nũ";
+                    return "Nam";
                 case 2:
                     return "?";
 

@@ -5,6 +5,7 @@ import com.vuongpq2.datn.data.Enum.Permission;
 import com.vuongpq2.datn.data.Enum.Relation;
 import com.vuongpq2.datn.data.GioiTinh;
 import com.vuongpq2.datn.data.model.DUploadMember;
+import com.vuongpq2.datn.data.model.ResUploadMember;
 import com.vuongpq2.datn.model.*;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
@@ -191,26 +192,30 @@ public class PedigreeController {
             String fileName = idGenealogy + idPedigree + System.currentTimeMillis() + "update" + getExtensionsFile(uploadedFileName);
             saveUploadedFiles(uploadfiles, fileName);
             TreeMap<Integer, DUploadMember> listUploadMember = readExcel(fileName);
-            saveMemberFromReading(listUploadMember, pedigreeModel.get());
-            return new ResponseEntity<>(1 , HttpStatus.OK);
+            List<ResUploadMember> resUploadMembers = saveMemberFromReading(listUploadMember, pedigreeModel.get());
+            return new ResponseEntity<>(resUploadMembers , HttpStatus.OK);
 
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    public void saveMemberFromReading (TreeMap<Integer, DUploadMember> dUploadMemberTreeMap, PedigreeModel pedigreeModel) {
+    public List<ResUploadMember> saveMemberFromReading (TreeMap<Integer, DUploadMember> dUploadMemberTreeMap, PedigreeModel pedigreeModel) {
+        List<ResUploadMember> resUploadMembers = new ArrayList<>();
         nodeMemberService.deleteAllByPedigreeAndPatchKeyStartsWith(pedigreeModel, "r");
         Map<Integer, Integer> savedIdByKey = new HashMap<>();
         dUploadMemberTreeMap.forEach((key, value) -> {
+            ResUploadMember resUploadMember = new ResUploadMember();
             NodeMemberModel nodeMemberModel = new NodeMemberModel();
             DescriptionMemberModel descriptionMemberModel = new DescriptionMemberModel();
             if(value.getIdParent() == -1) {
                 nodeMemberModel.setParent(null);
+                resUploadMember.setIdParent(-1);
                 nodeMemberModel.setPatchKey("r");
             }else {
                 int idParent = savedIdByKey.get(value.getIdParent()) == null ? value.getId(): savedIdByKey.get(value.getIdParent());
                 Optional<NodeMemberModel> parent = nodeMemberService.findById(idParent);
                 nodeMemberModel.setParent(parent.get());
+                resUploadMember.setIdParent(nodeMemberModel.getParent().getId());
                 nodeMemberModel.setPatchKey(NodeMemberModel.getPathkeyByParent(parent.get()));
             }
             nodeMemberModel.setName(value.getName());
@@ -230,8 +235,20 @@ public class PedigreeController {
             descriptionMemberModel.setBirthday(value.getBirthDay());
             descriptionMemberModel.setDeadDay(value.getDeadDay());
             descriptionMemberModel.setAddress(value.getAddress());
-            savedIdByKey.put(value.getId(), nodeMemberService.add(nodeMemberModel, descriptionMemberModel).getId());
+            NodeMemberModel nodeMemberModel1 = nodeMemberService.add(nodeMemberModel, descriptionMemberModel);
+            savedIdByKey.put(value.getId(), nodeMemberModel1.getId());
+            resUploadMember.setId(nodeMemberModel.getId());
+            resUploadMember.setBirthday(MyUltils.getStringFromDate(value.getBirthDay()));
+            resUploadMember.setDeadday(MyUltils.getStringFromDate(value.getDeadDay()));
+            resUploadMember.setIdMotherOrFather(nodeMemberModel.getMotherFatherId());
+            resUploadMember.setNickName(value.getNickName());
+            resUploadMember.setName(value.getName());
+            resUploadMember.setLifeIndex(value.getLiftIdx());
+            resUploadMember.setRelation(value.getRelation().ordinal());
+            resUploadMember.setGender(value.getGender().ordinal());
+            resUploadMembers.add(resUploadMember);
         });
+        return resUploadMembers;
     }
 
 

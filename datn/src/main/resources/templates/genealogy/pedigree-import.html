@@ -22,12 +22,12 @@
             <ol class="breadcrumb">
                 <a th:href="'/genealogy/'+ ${idGenealogy} +'/'" type="button" class="view btn btn-default btn-xs"><span
                         class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Dòng tộc</span></a>
-                <a th:href="'/genealogy/'+ ${idGenealogy} +'/member'" type="button" class="view btn btn-default btn-xs"><span
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/member-user'" type="button" class="view btn btn-default btn-xs"><span
                         class="glyphicon glyphicon-eye-open" aria-hidden="true"></span><span>Thành Viên</span></a>
-                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/people-list'" type="button"
+                <!--<a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/people-list'" type="button"
                    class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"
-                                                             aria-hidden="true"></span><span>Danh sách Người trong phả hệ</span></a>
-                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/people-tree'" type="button"
+                                                             aria-hidden="true"></span><span>Danh sách Người trong phả hệ</span></a>-->
+                <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/member-tree'" type="button"
                    class="view btn btn-default btn-xs"><span class="glyphicon glyphicon-eye-open"
                                                              aria-hidden="true"></span><span>Cây phả hệ</span></a>
                 <a th:href="'/genealogy/'+ ${idGenealogy} +'/pedigree/'+${idPedigree}+'/detail'" type="button"
@@ -43,10 +43,10 @@
             <!-- Your Page Content Here -->
 
             <div class="box box-info">
-                <div class="box-header with-border">
+                <!--<div class="box-header with-border">
                     <a th:href="'/files/Import_Pedigree_Example.xlsx'" class="btn btn-success" type="button"><span
                             class="glyphicon glyphicon-plus"></span><span>Tải mẫu</span></a>
-                </div>
+                </div>-->
                 <form id="fileUploadForm" class="form" method="post"
                       th:action="'/genealogy/'+${idGenealogy}+'/pedigree/'+${idPedigree}+'/import'">
                     <input type="hidden" class="form-control" id="inputIdGenealogy" placeholder="Email"
@@ -78,8 +78,8 @@
                     <thead>
                     <tr>
                         <th data-field="id" data-width="5%" data-sortable="true" th:text="Id"></th>
-                        <th data-field="idParent" data-width="5%" data-sortable="true"> Id Cha</th>
-                        <th data-field="idMother" data-width="5%" data-sortable="true"> Id Mẹ</th>
+                        <th data-field="idParent" data-width="5%" data-sortable="true"> Id Node Parent</th>
+                        <th data-field="idMotherOrFather" data-width="5%" data-sortable="true"> Id Mẹ/Cha</th>
                         <th data-field="relation" data-width="5%" data-sortable="true" data-formatter="relationFormat">
                             Quan hệ
                         </th>
@@ -88,8 +88,8 @@
                         <th data-field="nickName" data-width="20%" data-sortable="true" >Nickname</th>
                         <th data-field="birthday" data-width="20%" data-sortable="true"
                             data-formatter="dateFormat">Ngày sinh</th>
-                        <th data-field="deadDay" data-width="20%" data-sortable="true"
-                            th:text="#{genealogy.find.table.name}" data-formatter="dateFormat"></th>
+                        <th data-field="deadday" data-width="20%" data-sortable="true"
+                            data-formatter="dateFormat">Ngày mất</th>
                         <th data-field="gender" data-width="5%" data-sortable="true" data-formatter="genderFormat">Giới
                             tính
                         </th>

@@ -59,4 +59,27 @@ public class MemberController {
         mv.setViewName("redirect:/genealogy");
         return mv;
     }
+
+    @GetMapping(value = "/genealogy/{idGenealogy}/pedigree/{idPedigree}/list-member-tree")
+    public ModelAndView getListMemberTree(Principal principal,
+                                          @PathVariable(value = "idGenealogy") int idGenealogy,
+                                          @PathVariable(value = "idPedigree") int idPedigree
+                                          ) {
+        ModelAndView mv;
+        UserModel userModel = userRepository.findByEmail(principal.getName());
+        UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, idGenealogy);
+        if(userPermissionModel != null ) {
+            PermissionModel permission = userPermissionModel.getPermission();
+            if(PermissionUtils.isCanViewPedigree(Permission.byCode(permission.getCode()))) {
+                mv = new ModelAndView("/genealogy/pedigree-list-people");
+                mv.addObject("idGenealogy", userPermissionModel.getGenealogyModel().getId());
+                mv.addObject("idPedigree", idPedigree);
+                mv.addObject("idPermission", permission.getCode());
+                return mv;
+            }
+        }
+        mv = new ModelAndView();
+        mv.setViewName("redirect:/genealogy");
+        return mv;
+    }
 }

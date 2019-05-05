@@ -13,7 +13,6 @@ import com.vuongpq2.datn.service.GenealogyService;
 import com.vuongpq2.datn.service.NodeMemberService;
 import com.vuongpq2.datn.service.PedigreeService;
 import com.vuongpq2.datn.service.StorageService;
-import com.vuongpq2.datn.upload.PeopleUpload;
 import com.vuongpq2.datn.utils.MyUltils;
 import com.vuongpq2.datn.utils.PermissionUtils;
 import jxl.Cell;
@@ -322,10 +321,12 @@ public class PedigreeController {
         switch (relation1) {
             case "vo":
             case "vợ":
+            case "vơ":
                 result = Relation.VO;
                 break;
             case "chong":
             case "chồng":
+            case "chông":
                 result = Relation.CHONG;
                 break;
             case "cha":

@@ -7,10 +7,7 @@ import com.vuongpq2.datn.data.Enum.Permission;
 import com.vuongpq2.datn.data.Enum.Relation;
 import com.vuongpq2.datn.data.GioiTinh;
 import com.vuongpq2.datn.data.cachgoiten.CachGoiTen;
-import com.vuongpq2.datn.data.model.DDetailNodeMember;
-import com.vuongpq2.datn.data.model.DHusbandOrWife;
-import com.vuongpq2.datn.data.model.DInfoFormAddChild;
-import com.vuongpq2.datn.data.model.DMergeNodeMember;
+import com.vuongpq2.datn.data.model.*;
 import com.vuongpq2.datn.model.*;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
@@ -446,5 +443,30 @@ public class MemberTreeRestController {
         System.out.println("member 1 goi 2 la " + relation1);
         System.out.println("member 2 goi 1 la " + relation2);
         return new ResponseEntity<>(resultRelation, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/list-member-tree")
+    public ResponseEntity<?> getListMemberTree (Principal principal,
+                                                @PathVariable(value = "idGenealogy") int idGenealogy,
+                                                @PathVariable(value = "idPedigree") int idPedigree
+    ) {
+        Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idGenealogy);
+        List<NodeMemberModel> nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKeyStartsWith(pedigreeModel.get(), "r");
+        List<ResUploadMember> dUploadMembers = new ArrayList<>();
+        for(NodeMemberModel nodeMemberModel: nodeMemberModels) {
+            ResUploadMember resUploadMember = new ResUploadMember();
+            resUploadMember.setId(nodeMemberModel.getId());
+            resUploadMember.setIdParent(nodeMemberModel.getParent() == null ? -1: nodeMemberModel.getParent().getId());
+            resUploadMember.setIdMotherOrFather(nodeMemberModel.getMotherFatherId());
+            resUploadMember.setRelation(nodeMemberModel.getRelation());
+            resUploadMember.setLifeIndex(nodeMemberModel.getLifeIndex());
+            resUploadMember.setName(nodeMemberModel.getName());
+            resUploadMember.setNickName(nodeMemberModel.getDescriptionMemberModel().getNickName());
+            resUploadMember.setBirthday(MyUltils.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getBirthday()));
+            resUploadMember.setDeadday(MyUltils.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getDeadDay()));
+            resUploadMember.setGender(nodeMemberModel.getGender());
+            dUploadMembers.add(resUploadMember);
+        }
+        return new ResponseEntity<>(dUploadMembers, HttpStatus.OK);
     }
 }

@@ -83,8 +83,9 @@ public class CachGoiTen {
         container.put(TenGoi.getKey(GioiTinh.NU, 1, true, true, false, Relation.VO, -1, Relation.CHA), "Thím");
         container.put(TenGoi.getKey(GioiTinh.NU, 1, false, true, false, Relation.NONE, 0, Relation.NONE), "Cháu");
 
-        // em của me mình
+        // em /anh của me mình
         container.put(TenGoi.getKey(GioiTinh.NAM, 1, true, false, false, Relation.ME, -1, Relation.ME), "Cậu");
+        container.put(TenGoi.getKey(GioiTinh.NAM, 1, true, false, false, Relation.ME, 1, Relation.ME), "Cậu");
         container.put(TenGoi.getKey(GioiTinh.NAM, 1, false, false, false, Relation.NONE, 0, Relation.NONE), "Cháu");
 
         //vợ của cậu
@@ -96,9 +97,18 @@ public class CachGoiTen {
         container.put(TenGoi.getKey(GioiTinh.NU, 1, true, false, false, Relation.ME, 1, Relation.CHA), "Cô");
         container.put(TenGoi.getKey(GioiTinh.NU, 1, false, true, false, Relation.NONE, 0, Relation.NONE), "Cháu");
 
+        //chong cua chi or e gai cua ba minh
+        container.put(TenGoi.getKey(GioiTinh.NAM, 1, true, true, false, Relation.CHONG, -1, Relation.CHA), "Chú");
+        container.put(TenGoi.getKey(GioiTinh.NAM, 1, true, true, false, Relation.CHONG, 1, Relation.CHA), "Chú");
+
         //chị hoặc e gái của mẹ mình
         container.put(TenGoi.getKey(GioiTinh.NU, 1, true, false, false, Relation.ME, -1, Relation.ME), "Gì");
         container.put(TenGoi.getKey(GioiTinh.NU, 1, true, false, false, Relation.ME, 1, Relation.ME), "Gì");
+
+        // chong cua chi , e gai cua me minh
+        container.put(TenGoi.getKey(GioiTinh.NAM, 1, true, true, false, Relation.CHONG, -1, Relation.ME), "Gì");
+        container.put(TenGoi.getKey(GioiTinh.NAM, 1, true, true, false, Relation.CHONG, 1, Relation.ME), "Gì");
+
         container.put(TenGoi.getKey(GioiTinh.NU, 1, false, false, false, Relation.NONE, 0, Relation.NONE), "Cháu");
 
         container.put(TenGoi.getKey(GioiTinh.NAM, 2, true, false, false, Relation.NONE, 0, Relation.CHA), "Ông Nội");

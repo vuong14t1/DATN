@@ -151,7 +151,11 @@ public class ChartConfig {
 //                            //neu moi quan he la cha thi tim node gan nhat la me
 //                        }
                         node = findNodeByIdMother(parent, child.getIdMother());
-//                        node = parent;
+                        //TH khong tim thay id me
+                        if(node == null) {
+                            node = parent;
+                        }
+
                         if (parent != nodeStructure) { parent.setCollapsed(true); }
                         childs = node.getChildren();
                         if(childs == null) {

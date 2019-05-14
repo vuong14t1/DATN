@@ -69,6 +69,7 @@ public class MemberTreeRestController {
             child.setText(text);
             chartConfig.addChild(child);
         }
+
         return chartConfig;
     }
 
@@ -445,7 +446,7 @@ public class MemberTreeRestController {
         return new ResponseEntity<>(resultRelation, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/list-member-tree")
+    /*@GetMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/list-member-tree")
     public ResponseEntity<?> getListMemberTree (Principal principal,
                                                 @PathVariable(value = "idGenealogy") int idGenealogy,
                                                 @PathVariable(value = "idPedigree") int idPedigree
@@ -468,5 +469,5 @@ public class MemberTreeRestController {
             dUploadMembers.add(resUploadMember);
         }
         return new ResponseEntity<>(dUploadMembers, HttpStatus.OK);
-    }
+    }*/
 }

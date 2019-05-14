@@ -593,6 +593,7 @@
             cache: false,
             timeout: 600000,
             success: function (data) {
+                console.log("tree " + JSON.stringify(data));
                 if (data.nodeStructure == null) {
                     $('#nodeCreateFirstChild').fadeIn();
                     $('#containment-wrapper').fadeOut();

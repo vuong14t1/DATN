@@ -60,7 +60,7 @@ public class MemberController {
         return mv;
     }
 
-    @GetMapping(value = "/genealogy/{idGenealogy}/pedigree/{idPedigree}/list-member-tree")
+    /*@GetMapping(value = "/genealogy/{idGenealogy}/pedigree/{idPedigree}/list-member-tree")
     public ModelAndView getListMemberTree(Principal principal,
                                           @PathVariable(value = "idGenealogy") int idGenealogy,
                                           @PathVariable(value = "idPedigree") int idPedigree
@@ -81,5 +81,5 @@ public class MemberController {
         mv = new ModelAndView();
         mv.setViewName("redirect:/genealogy");
         return mv;
-    }
+    }*/
 }

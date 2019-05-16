@@ -258,7 +258,7 @@ public class PedigreeController {
             Workbook wb = Workbook.getWorkbook(fs);
             Sheet sh = wb.getSheet(0);
             int totalRows = sh.getRows();
-            int totalColumns = sh.getColumns();
+
             for (int i = 1; i < totalRows; i++) {
                 int stt = Integer.parseInt(sh.getCell(0, i).getContents());
                 int idParent = Integer.parseInt(sh.getCell(1, i).getContents());
@@ -270,6 +270,7 @@ public class PedigreeController {
                 GioiTinh gender = getGender(sh.getCell(7, i).getContents());
                 int childIdx = Integer.parseInt(sh.getCell(8, i).getContents());
                 Date birthDay = MyUltils.getDate(sh.getCell(9, i).getContents());
+                System.out.println("birth day " + sh.getCell(9, i).getContents() + "_" + MyUltils.getStringFromDate(birthDay));
                 Date deadDay = MyUltils.getDate(sh.getCell(10, i).getContents());
                 String address = sh.getCell(11, i).getContents();
                 String degree = sh.getCell(12, i).getContents();

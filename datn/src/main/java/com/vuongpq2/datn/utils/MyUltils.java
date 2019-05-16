@@ -8,12 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MyUltils {
-    public  static SimpleDateFormat simpleDateFormatYear = new SimpleDateFormat("yyyy");
-    public  static SimpleDateFormat simpleDateFormatMonthYear = new SimpleDateFormat("MM/yyyy");
-    public  static SimpleDateFormat simpleDateFormatMonthDayYear = new SimpleDateFormat("MM/dd/yyyy");
-    public static Date getDate(String value){
+    public static SimpleDateFormat simpleDateFormatYear = new SimpleDateFormat("yyyy");
+    public static SimpleDateFormat simpleDateFormatMonthYear = new SimpleDateFormat("MM/yyyy");
+    public static SimpleDateFormat simpleDateFormatMonthDayYear = new SimpleDateFormat("MM/dd/yyyy");
+
+    public static Date getDate(String value) {
         Date result = null;
-        if(value.equals("?") ) return null;
+        if (value.equals("?")) return null;
         try {
             result = simpleDateFormatMonthDayYear.parse(value);
         } catch (ParseException e) {
@@ -31,20 +32,20 @@ public class MyUltils {
 
     public static SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
 
-    public static String getStringFromDate(Date date){
+    public static String getStringFromDate(Date date) {
         String result = "?";
-        if(date != null){
-            result= DATE_TIME_FORMAT.format(date);
+        if (date != null) {
+            result = DATE_TIME_FORMAT.format(date);
         }
         return result;
     }
 
-    public static String getIdParentByPathKey (String patchKey) {
+    public static String getIdParentByPathKey(String patchKey) {
         String[] arrId = patchKey.split("_");
         return arrId[arrId.length - 1];
     }
 
-    public static String getExtension (String fileName) {
+    public static String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 

@@ -7,6 +7,7 @@ public class DInfoFormAddChild {
     private int id;
     private String name;
     private List<DHusbandOrWife> husbandOrWifes;
+    private List<Integer> listChildIndex = new ArrayList<>();
 
     public DInfoFormAddChild() {
         husbandOrWifes = new ArrayList<>();
@@ -34,5 +35,13 @@ public class DInfoFormAddChild {
 
     public void setHusbandOrWifes(List<DHusbandOrWife> husbandOrWifes) {
         this.husbandOrWifes = husbandOrWifes;
+    }
+
+    public List<Integer> getListChildIndex() {
+        return listChildIndex;
+    }
+
+    public void setListChildIndex(List<Integer> listChildIndex) {
+        this.listChildIndex = listChildIndex;
     }
 }

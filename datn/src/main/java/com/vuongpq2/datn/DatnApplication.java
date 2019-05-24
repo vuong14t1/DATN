@@ -23,11 +23,11 @@ public class DatnApplication implements CommandLineRunner {
         storageService.deleteAll();
         storageService.init();
     }
-    @Bean
+ /*   @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         //localeResolver.setDefaultLocale(Locale.US);
         localeResolver.setDefaultLocale(Locale.forLanguageTag("vi-VI"));
         return localeResolver;
-    }
+    }*/
 }

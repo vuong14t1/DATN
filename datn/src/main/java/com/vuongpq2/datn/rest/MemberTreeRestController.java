@@ -201,6 +201,13 @@ public class MemberTreeRestController {
             husbandOrWifeList.add(hw);
         }
         dInfoFormAddChild.setHusbandOrWifes(husbandOrWifeList);
+        //tim con
+        List<NodeMemberModel> nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKey(pedigreeModel.get(), NodeMemberModel.getPathkeyByParent(parent.get()));
+        for(NodeMemberModel nodeMemberModel: nodeMemberModels) {
+            if(nodeMemberModel.getRelation() != Relation.CHONG.ordinal() && nodeMemberModel.getRelation() != Relation.VO.ordinal()) {
+                dInfoFormAddChild.getListChildIndex().add(nodeMemberModel.getChildIndex());
+            }
+        }
         return new ResponseEntity<>(dInfoFormAddChild, HttpStatus.OK);
     }
 

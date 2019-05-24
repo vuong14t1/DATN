@@ -131,7 +131,7 @@
                         <input type="hidden" class="form-control" id="addChildIdParent" name="addChildIdParent"/>
                         <div class="row">
                             <div class="col-lg-6">
-                                <img src="/img/avatar-default-unknown.png" class="img-circle" alt="User Image"
+                                <img src="/img/avatar.png" class="img-circle" alt="User Image"
                                      id="addChildImgPeople" width="250px" height="250px"/>
                                 <div class="form-group row">
                                     <div class="custom-file col-lg-12 center-block">
@@ -698,6 +698,8 @@
         $("#addChildInputDegree").val("");
         $("#addChildInputDes").val("");
         $("#addChildInputDataExtra").val("");
+        updateInputGender();
+        updateInputConthu();
     };
     var addChildNode = function (sender) {
         resetAddChildNode();
@@ -731,12 +733,14 @@
                 $('#addChildIdParent').val(data.id);
                 $('#addChildInputNameParent').html(data.name);
                 $('#addChildInputIdMotherFather').html('');
-                console.log(JSON.stringify(data.husbandOrWifes));
+                console.log(JSON.stringify(data));
                 for (var i in data.husbandOrWifes) {
                     var id = data.husbandOrWifes[i].id;
                     var name = data.husbandOrWifes[i].name;
                     $("#addChildInputIdMotherFather").append('<option value="' + id + '">' + name + '</option>');
                 }
+
+                updateInputConthu(data.listChildIndex);
             },
             error: function (e) {
                 alert("Bạn không có quyền thực hiên action!");
@@ -986,31 +990,50 @@
     });
     //kiem tra neu quan he voi parent la cha hoac me thi co the chon con thu
     $("#addChildInputRelation").change(function () {
+        updateInputConthu();
+        updateInputGender();
+    });
+
+
+    function updateInputConthu (listExits) {
+        listExits = listExits === undefined? []: listExits;
         var quanhe = 0;
         $("#addChildInputRelation option:selected").each(function () {
             quanhe = $(this).val();
         });
         $("#addChildInputConThu").html('');
         if(quanhe == 3 || quanhe == 4) {
-            $("#addChildInputConThu").append('<option value="1">Con cả</option>\n');
+            if(!_.includes(listExits, 1)) {
+                $("#addChildInputConThu").append('<option value="1">Con cả</option>\n');
+            }
             for (var i = 2; i < 100; i++) {
-                $("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+                if(!_.includes(listExits, i)) {
+                    $("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+                }
             }
         }
-    });
-    $("#editChildInputRelation").change(function () {
-        var quanhe = 0;
-        $("#editChildInputRelation option:selected").each(function () {
-            quanhe = $(this).val();
+    };
+
+    function updateInputGender () {
+        var  relation = 0;
+        $('#addChildInputRelation option:selected').each(function () {
+            relation = $(this).val();
         });
-        $("#editChildInputConThu").html('');
-        if(quanhe == 3 || quanhe == 4) {
-            $("#editChildInputConThu").html('');
-            $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
-            for (var i = 2; i < 100; i++) {
-                $("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
-            }
+        $('#addChildInputGender').html('');
+        //neu la vo
+        if(relation == 1) {
+            $("#addChildInputGender").append('<option value="0">Nữ</option>');
+        }else if(relation == 2) {
+            //neu la chong
+            $("#addChildInputGender").append('<option value="1">Nam</option>');
+        }else {
+            $("#addChildInputGender").append('<option value="0">Nữ</option>');
+            $("#addChildInputGender").append('<option value="1">Nam</option>');
         }
+    }
+
+    $("#editChildInputRelation").change(function () {
+        updateInputConthu();
     });
 
     $('#addChildInputDeadDay').datepicker({autoclose: true});

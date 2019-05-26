@@ -84,7 +84,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="formGopPhaHe">
-                        <div class="row">
+                        <div >
                             <div class="form-group row">
                                 <label for="inputSelectPedigree" class="col-sm-6 col-form-label">Phả hệ sẽ gộp</label>
                                 <div class="col-sm-6">
@@ -340,8 +340,6 @@
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
-                /*{"idParent":62,"nameParent":"Phạm Văn Vân","findHusbandWifes":[{"id":-1,"name":"Không rõ"},{"id":63,"name":"Võ Thị Đừng"}]}*/
-                console.log("inputParent");
                 console.log(data);
                 for (var i in data.husbandOrWifes) {
                     var id = data.husbandOrWifes[i].id;
@@ -368,20 +366,6 @@
             processData: false, //prevent jQuery from automatically transforming the data into a query string
             timeout: 600000,
             success: function (data) {
-                /*[
-                 {
-                 "id": 1,
-                 "name": "ÔNG BÀ TỔ HỌ PHẠM",
-                 "history": "&lt;p style=&quot;text-align: center&quot;&gt;&lt;"
-                 },
-                 {
-                 "id": 2,
-                 "name": "ÔNG BÀ TỔ HỌ PHẠM 2",
-                 "history": "&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;/img/o"
-                 }
-                 ]*/
-                console.log("loadFormGopPhaHe");
-                console.log(data);
 
                 for (var i in data) {
                     var id = data[i].id;

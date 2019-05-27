@@ -441,9 +441,9 @@ public class MemberTreeRestController {
         String relation2 = CachGoiTen.getInstance().getName(member2.get().getGender(), level, higher2, isOutSide2, isParent, member2.get().getRelation(), isHigherParent2, sideRelation2);
 
         String resultRelation;
-        if(level == 0 && higher1) {
+        if(relation1.split("-").length > 1 && higher1) {
             resultRelation = relation1;
-        }else if(level == 0 && higher2) {
+        }else if(relation2.split("-").length > 1 && higher2) {
             resultRelation = relation2;
         }else {
             resultRelation = relation1 + "-" + relation2;

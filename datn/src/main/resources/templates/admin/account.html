@@ -62,7 +62,7 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var adminAccount =[[${#authentication.getPrincipal().getUsername()}]] ;
+    var adminAccount =[[${adminEmail}]] ;
     function actionFormatter(value, row, index) {
         console.log("value " + JSON.stringify(value));
         console.log("row " + JSON.stringify(row));
@@ -79,7 +79,8 @@
 
     window.actionEvents = {
         'click .view'  : function (e, value, row, index) {
-            window.location.href = ('/genealogy/' + idGenealogy + '/pedigree/' + row["id"] + "/detail");
+            toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
+            // window.location.href = ('/genealogy/' + idGenealogy + '/pedigree/' + row["id"] + "/detail");
         },
         'click .edit'  : function (e, value, row, index) {
             toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
@@ -120,7 +121,7 @@
         $('#table').bootstrapTable({
             search    : true,
             pagination: true,
-            url       : "https://" + document.location.host + '/rest/admin/account/list'
+            url       : "http://" + document.location.host + '/rest/admin/account/list'
         });
     });
 

@@ -41,40 +41,34 @@ public class AccountSeeder implements ApplicationListener<ContextRefreshedEvent>
         }
 
         // Admin account
-        if (userRepository.findByEmail("vuongadmin@gmail.com") == null) {
-            UserModel admin = new UserModel();
-            admin.setActive(1);
-            admin.setName("PQV_admin");
-            admin.setEmail("vuongadmin@gmail.com");
-            admin.setAddress("sdfsfa");
-            admin.setPassword(passwordEncoder.encode("123456"));
-            HashSet<RoleModel> roles = new HashSet<>();
-            roles.add(roleRepository.findByName("ADMIN"));
-            roles.add(roleRepository.findByName("USER"));
-            admin.setRoles(roles);
-            userRepository.save(admin);
+        for(int i = 0; i < 3; i++) {
+            if (userRepository.findByEmail("vuongadmin" + i + "@gmail.com") == null) {
+                UserModel admin = new UserModel();
+                admin.setActive(1);
+                admin.setName("PQV_admin" + i);
+                admin.setEmail("vuongadmin" + i + "@gmail.com");
+                admin.setAddress("sdfsfa");
+                admin.setPassword(passwordEncoder.encode("123456"));
+                HashSet<RoleModel> roles = new HashSet<>();
+                roles.add(roleRepository.findByName("ADMIN"));
+                roles.add(roleRepository.findByName("USER"));
+                admin.setRoles(roles);
+                userRepository.save(admin);
+            }
         }
 
-        // Member account
-        if (userRepository.findByEmail("vuong1@gmail.com") == null) {
-            UserModel user = new UserModel();
-            user.setName("PQV_user");
-            user.setEmail("vuong1@gmail.com");
-            user.setPassword(passwordEncoder.encode("123456"));
-            HashSet<RoleModel> roles = new HashSet<>();
-            roles.add(roleRepository.findByName("USER"));
-            user.setRoles(roles);
-            userRepository.save(user);
-        }
-        if (userRepository.findByEmail("vuong2@gmail.com") == null) {
-            UserModel user = new UserModel();
-            user.setName("PQV_user");
-            user.setEmail("vuong2@gmail.com");
-            user.setPassword(passwordEncoder.encode("123456"));
-            HashSet<RoleModel> roles = new HashSet<>();
-            roles.add(roleRepository.findByName("USER"));
-            user.setRoles(roles);
-            userRepository.save(user);
+        for(int i = 0; i< 10; i++) {
+            // Member account
+            if (userRepository.findByEmail("vuonguser" + i + "@gmail.com") == null) {
+                UserModel user = new UserModel();
+                user.setName("PQV_user");
+                user.setEmail("vuonguser" + i + "@gmail.com");
+                user.setPassword(passwordEncoder.encode("123456"));
+                HashSet<RoleModel> roles = new HashSet<>();
+                roles.add(roleRepository.findByName("USER"));
+                user.setRoles(roles);
+                userRepository.save(user);
+            }
         }
     }
 

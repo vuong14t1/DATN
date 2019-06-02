@@ -48,7 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/login/**","/login1/**").permitAll()//Basically I'm allowing parameters for login so locale can be added and read.
             .anyRequest().authenticated().and().formLogin().successHandler(successHandler).loginPage("/login").permitAll()
 //            .and().logout().permitAll()
-            .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
+            .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
             .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
 //            .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
     }

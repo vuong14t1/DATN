@@ -202,7 +202,13 @@ public class MemberTreeRestController {
         }
         dInfoFormAddChild.setHusbandOrWifes(husbandOrWifeList);
         //tim con
-        List<NodeMemberModel> nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKey(pedigreeModel.get(), NodeMemberModel.getPathkeyByParent(parent.get()));
+        List<NodeMemberModel> nodeMemberModels;
+        if(parent.get().getRelation() == Relation.VO.ordinal() || parent.get().getRelation() == Relation.CHONG.ordinal()) {
+            nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKey(pedigreeModel.get(), parent.get().getPatchKey());
+        }else {
+            nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKey(pedigreeModel.get(), NodeMemberModel.getPathkeyByParent(parent.get()));
+        }
+
         for(NodeMemberModel nodeMemberModel: nodeMemberModels) {
             if(nodeMemberModel.getRelation() != Relation.CHONG.ordinal() && nodeMemberModel.getRelation() != Relation.VO.ordinal()) {
                 dInfoFormAddChild.getListChildIndex().add(nodeMemberModel.getChildIndex());
@@ -263,17 +269,14 @@ public class MemberTreeRestController {
             return new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
         }
         if (editChildInputIdMother == null || editChildInputIdMother.equals("")) {
-            editChildInputIdMother = "-1";
+            editChildInputIdMother = String.valueOf(nodeMemberModel.get().getMotherFatherId());
         }
         if (editChildInputConThu.equals("")) {
-            editChildInputConThu = "-1";
+            editChildInputConThu = String.valueOf(nodeMemberModel.get().getChildIndex());
         }
 
         if (editChildInputRelation.equals("")) {
-            editChildInputRelation = "-1";
-        }
-        if (editChildInputConThu.equals("")) {
-            editChildInputConThu = "-1";
+            editChildInputRelation = String.valueOf(nodeMemberModel.get().getRelation());
         }
 
         nodeMemberModel.get().setName(editChildInputName);

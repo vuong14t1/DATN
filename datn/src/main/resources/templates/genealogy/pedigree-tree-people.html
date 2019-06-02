@@ -533,6 +533,7 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
+    var dataResAddChild = null;
     var idGenealogy = [[${idGenealogy}]];
     var idPedigree = [[${idPedigree}]];
     var idPermission = [[${idPermission}]];
@@ -739,7 +740,7 @@
                     var name = data.husbandOrWifes[i].name;
                     $("#addChildInputIdMotherFather").append('<option value="' + id + '">' + name + '</option>');
                 }
-
+                dataResAddChild = data;
                 updateInputConthu(data.listChildIndex);
             },
             error: function (e) {
@@ -990,7 +991,7 @@
     });
     //kiem tra neu quan he voi parent la cha hoac me thi co the chon con thu
     $("#addChildInputRelation").change(function () {
-        updateInputConthu();
+        updateInputConthu(dataResAddChild.listChildIndex);
         updateInputGender();
     });
 
@@ -1031,10 +1032,6 @@
             $("#addChildInputGender").append('<option value="1">Nam</option>');
         }
     }
-
-    $("#editChildInputRelation").change(function () {
-        updateInputConthu();
-    });
 
     $('#addChildInputDeadDay').datepicker({autoclose: true});
     $('#addChildInputBirthday').datepicker({autoclose: true});

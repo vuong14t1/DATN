@@ -970,6 +970,12 @@
             $("#inputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
         }
 
+        $("#editChildInputConThu").html('');
+        $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
+        for (var i = 2; i < 100; i++) {
+            $("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+        }
+
         $("#viewChildInputConThu").html('');
         $("#viewChildInputConThu").append('<option value="1">Con cả</option>\n');
         for (var i = 2; i < 100; i++) {

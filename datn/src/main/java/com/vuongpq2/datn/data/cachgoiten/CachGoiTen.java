@@ -27,7 +27,6 @@ public class CachGoiTen {
 //    public ArrayList<String> container = new ArrayList<>();
 
     private CachGoiTen() {
-        // Exists only to defeat instantiation.
         container = new HashMap<>();
         container.put(TenGoi.getKey(GioiTinh.NAM, 0, true, false, true, Relation.ME), "Anh ruột - Em ruột");
 //        container.put(TenGoi.getKey(GioiTinh.NAM,0,false,false, true, Relation.ME),"Em ruột");

@@ -1,10 +1,8 @@
 package com.vuongpq2.datn.controller;
 
 import com.vuongpq2.datn.data.Enum.Permission;
-import com.vuongpq2.datn.model.GenealogyModel;
-import com.vuongpq2.datn.model.PermissionModel;
-import com.vuongpq2.datn.model.UserModel;
-import com.vuongpq2.datn.model.UserPermissionModel;
+import com.vuongpq2.datn.model.*;
+import com.vuongpq2.datn.repository.PermissionRepository;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
 import com.vuongpq2.datn.service.GenealogyService;
@@ -16,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 public class GenealogyController {
@@ -27,6 +27,9 @@ public class GenealogyController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     @RequestMapping(value = "/genealogy", method = RequestMethod.GET)
     public ModelAndView home(Principal principal) {
@@ -62,7 +65,34 @@ public class GenealogyController {
         genealogyService.create(genealogyModel, principal.getName());
         ModelAndView mv = new ModelAndView("/genealogy/detail");
         mv.addObject("genealogy", genealogyModel);
+        List<UserModel> userModels = userRepository.findAll();
+        for(UserModel userModel: userModels) {
+            if(isAdminHeThong(userModel)) {
+                UserPermissionModel userPermissionModel = new UserPermissionModel();
+                PermissionModel permissionModel = permissionRepository.findByCode(Permission.ADMIN.getCode());
+                if(permissionModel == null) {
+                    permissionModel = new PermissionModel();
+                    permissionModel.setName("ADMIN");
+                    permissionModel.setCode(Permission.ADMIN.getCode());
+                    permissionRepository.save(permissionModel);
+                }
+                userPermissionModel.setGenealogyModel(genealogyModel);
+                userPermissionModel.setUser(userModel);
+                userPermissionModel.setPermission(permissionModel);
+                userPermissionRepository.save(userPermissionModel);
+            }
+        }
         return mv;
+    }
+
+    public boolean isAdminHeThong (UserModel userModel) {
+        Set<RoleModel> roleModelSet = userModel.getRoles();
+        for(RoleModel roleModel: roleModelSet) {
+            if(roleModel.getName().equals("ADMIN")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @GetMapping(value = "/genealogy/{id}")
@@ -76,7 +106,7 @@ public class GenealogyController {
             UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, id);
             if (userPermissionModel != null) {
                 Permission permission = Permission.byCode(userPermissionModel.getPermission().getCode());
-                if (permission == Permission.ADMIN || permission == Permission.MOD || permission == Permission.REGISTERED) {
+                if (permission == Permission.ADMIN || permission == Permission.MOD || permission == Permission.REGISTERED || permission == Permission.MEMBER) {
                     mv = new ModelAndView("/genealogy/detail");
                     mv.addObject("idPermission", permission.getCode());
                     mv.addObject("genealogy", userPermissionModel.getGenealogyModel());

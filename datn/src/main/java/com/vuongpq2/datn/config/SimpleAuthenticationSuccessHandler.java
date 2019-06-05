@@ -25,7 +25,7 @@ public class SimpleAuthenticationSuccessHandler implements AuthenticationSuccess
             if(authority.getAuthority().equals("ROLE_ADMIN")){
                 result[0] = "/admin";
 
-            }else if(authority.getAuthority().equals("ROLE_USER") || authority.getAuthority().equals("ROLE_USER_FB")) {
+            }else if(authority.getAuthority().equals("ROLE_USER")) {
                 if(!result[0].equals("/admin")) {
                     result[0] = "/genealogy";
                 }

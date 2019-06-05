@@ -78,16 +78,15 @@
 
     window.actionEvents = {
         'click .view'  : function (e, value, row, index) {
-            toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
-            // window.location.href = ('/genealogy/' + idGenealogy + '/pedigree/' + row["id"] + "/detail");
+            // toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
+            window.location.href = ('/genealogy/' + row["id"]);
         },
         'click .edit'  : function (e, value, row, index) {
-            toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
-            // window.location.href = ('/genealogy/' + idGenealogy + '/pedigree/' + row["id"] + "/edit");
+            // toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
+            window.location.href = ('/genealogy/' + row["id"] + "/edit");
         },
         'click .remove': function (e, value, row, index) {
-            toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
-/*
+            // toastr["success"]("Chức năng sắp được ra mắt.", "Thông báo")
             bootbox.confirm({
                 message: "Bạn chắc chắn muốn xóa tài khoản "+row.name+"?",
                 backdrop: true,//click ra ngoai huy
@@ -115,7 +114,7 @@
                     }
                     console.log('This was logged in the callback: ' + result);
                 }
-            });*/
+            });
         }
     };
     $(function () {

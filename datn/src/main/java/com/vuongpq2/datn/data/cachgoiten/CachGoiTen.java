@@ -46,6 +46,7 @@ public class CachGoiTen {
         container.put(TenGoi.getKey(GioiTinh.NU, 0, true, true, false, Relation.CHONG), "Chị dâu - Em chồng");
 //        container.put(TenGoi.getKey(GioiTinh.NU,0,false,false, false, Relation.ME),"Em chồng");
 
+        container.put(TenGoi.getKey(GioiTinh.NAM, 0, false, false, false, Relation.NONE), "Chồng - Vợ");
         container.put(TenGoi.getKey(GioiTinh.NAM, 0, false, false, false, Relation.ME), "Chồng - Vợ");
         container.put(TenGoi.getKey(GioiTinh.NU, 0, false, true, false, Relation.VO), "Vợ - Chồng");
         container.put(TenGoi.getKey(GioiTinh.NAM, 0, false, true, false, Relation.CHONG), "Chồng - Vợ");

@@ -224,7 +224,9 @@ public class PedigreeController {
             nodeMemberModel.setGender(value.getGender().ordinal());
             nodeMemberModel.setChildIndex(value.getChildIdx());
             nodeMemberModel.setLifeIndex(value.getLiftIdx());
-            String img = nodeMemberModel.getGender() == GioiTinh.NAM.ordinal()? "/img/avatar-default-nam.png" : "/img/avatar-default-nu.png";
+            Random rd = new Random();
+            String img = nodeMemberModel.getGender() == GioiTinh.NAM.ordinal()? "/img/avatar-default-nam_"+ (rd.nextInt(3) + 1)+ ".png" : "/img/avatar-default-nu_" + (rd.nextInt(4) + 1) + ".png";
+            System.out.println("image " + img);
             nodeMemberModel.setImage(value.getImage().equals("") ? img: value.getImage());
             nodeMemberModel.setRelation(value.getRelation().ordinal());
             descriptionMemberModel.setNickName(value.getNickName());

@@ -27,6 +27,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @RestController
 @Transactional
@@ -145,7 +146,8 @@ public class MemberTreeRestController {
         nodeMemberModel.setGender(Integer.parseInt(addChildInputGender));
         nodeMemberModel.setName(addChildInputName);
         nodeMemberModel.setPedigree(pedigreeModel.get());
-        String img = nodeMemberModel.getGender() == GioiTinh.NAM.ordinal()? "/img/avatar-default-nam.png" : "/img/avatar-default-nu.png";
+        Random rd = new Random();
+        String img = nodeMemberModel.getGender() == GioiTinh.NAM.ordinal()? "/img/avatar-default-nam_"+ (rd.nextInt(3) + 1)+ ".png" : "/img/avatar-default-nu_" + (rd.nextInt(4) + 1) + ".png";
         nodeMemberModel.setImage(img);
         nodeMemberModel.setPatchKey(NodeMemberModel.getPathkeyByParent(parent.isPresent() ? parent.get() : null));
         descriptionMemberModel.setNickName(addChildInputNickName);

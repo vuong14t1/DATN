@@ -1128,6 +1128,35 @@
                 $("#btnXacNhanXemQuanHe").prop("disabled", true);
                 $.ajax({
                     type: "GET",
+                    url: "/rest/member-tree/view-two-member-tree/" + idXemQuanHe1 + "/" + idXemQuanHe2,
+                    processData: false, //prevent jQuery from automatically transforming the data into a query string
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    success: function (data) {
+                        console.log("tree " + JSON.stringify(data));
+                        $('#table').bootstrapTable("removeAll");
+                        if (data.nodeStructure == null) {
+                            $('#nodeCreateFirstChild').fadeIn();
+                            $('#containment-wrapper').fadeOut();
+                        } else {
+                            $('#nodeCreateFirstChild').hide();
+                            $('#containment-wrapper').fadeIn();
+                            new Treant(data, initViewDetailNode);
+                            $('#modalAddChild').modal('hide');
+                            $('#modalViewInfo').modal('hide');
+                            $('#modalEditInfo').modal('hide');
+                        }
+                        console.log("SUCCESS : ", data);
+                    },
+                    error: function (e) {
+                        console.log("ERROR : ", e);
+                    }
+                });
+
+
+                $.ajax({
+                    type: "GET",
                     url: "/rest/people/relation/" + idXemQuanHe1 + "/" + idXemQuanHe2,
                     processData: false, //prevent jQuery from automatically transforming the data into a query string
                     timeout: 600000,

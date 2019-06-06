@@ -503,6 +503,26 @@ public class MemberTreeRestController {
     ) {
         ChartConfig chartConfig = new ChartConfig();
         Optional<NodeMemberModel> findNodeMember = nodeMemberService.findById(idMemberTree);
+        addChildByPatchKey(findNodeMember, chartConfig, false);
+        return chartConfig;
+    }
+
+    @GetMapping(value = "/rest/member-tree/view-two-member-tree/{idMemberTree1}/{idMemberTree2}", produces = "application/json")
+    public ChartConfig getViewOneMemberTree(Principal principal,
+                                            @PathVariable(name = "idMemberTree1") int idMemberTree1,
+                                            @PathVariable(name = "idMemberTree2") int idMemberTree2
+    ) {
+        System.out.println("idMember1" + idMemberTree1);
+        System.out.println("idMember2" + idMemberTree2);
+        ChartConfig chartConfig = new ChartConfig();
+        Optional<NodeMemberModel> findNodeMember1 = nodeMemberService.findById(idMemberTree1);
+        addChildByPatchKey(findNodeMember1, chartConfig, true);
+        Optional<NodeMemberModel> findNodeMember2 = nodeMemberService.findById(idMemberTree2);
+        addChildByPatchKey(findNodeMember2, chartConfig, true);
+        return chartConfig;
+    }
+
+    public void addChildByPatchKey (Optional<NodeMemberModel> findNodeMember, ChartConfig chartConfig, boolean addChildV2) {
         String patchKey = findNodeMember.get().getPatchKey();
         System.out.println("patch key" + patchKey);
         String[] listIdNodeMember = patchKey.split("_");
@@ -527,7 +547,11 @@ public class MemberTreeRestController {
                     text.setTitle(MyUltils.getStringFromDate(nodeMemberModelMother.get().getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(nodeMemberModelMother.get().getDescriptionMemberModel().getDeadDay()));
                     text.setName(nodeMemberModelMother.get().getName());
                     child.setText(text);
-                    chartConfig.addChild(child);
+                    if(addChildV2) {
+                        chartConfig.addChildVersion2(child);
+                    }else {
+                        chartConfig.addChild(child);
+                    }
                 }
                 Child child = new Child();
                 child.setHTMLid(nodeMemberModel.get().getId() + "");
@@ -544,7 +568,11 @@ public class MemberTreeRestController {
                 text.setTitle(MyUltils.getStringFromDate(nodeMemberModel.get().getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(nodeMemberModel.get().getDescriptionMemberModel().getDeadDay()));
                 text.setName(nodeMemberModel.get().getName());
                 child.setText(text);
-                chartConfig.addChild(child);
+                if(addChildV2) {
+                    chartConfig.addChildVersion2(child);
+                }else {
+                    chartConfig.addChild(child);
+                }
             }
         }
 
@@ -565,7 +593,11 @@ public class MemberTreeRestController {
             text.setTitle(MyUltils.getStringFromDate(nodeMemberModelMother.get().getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(nodeMemberModelMother.get().getDescriptionMemberModel().getDeadDay()));
             text.setName(nodeMemberModelMother.get().getName());
             child.setText(text);
-            chartConfig.addChild(child);
+            if(addChildV2) {
+                chartConfig.addChildVersion2(child);
+            }else {
+                chartConfig.addChild(child);
+            }
         }
 
         Child child = new Child();
@@ -583,7 +615,10 @@ public class MemberTreeRestController {
         text.setTitle(MyUltils.getStringFromDate(findNodeMember.get().getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(findNodeMember.get().getDescriptionMemberModel().getDeadDay()));
         text.setName(findNodeMember.get().getName());
         child.setText(text);
-        chartConfig.addChild(child);
-        return chartConfig;
+        if(addChildV2) {
+            chartConfig.addChildVersion2(child);
+        }else {
+            chartConfig.addChild(child);
+        }
     }
 }

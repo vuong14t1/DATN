@@ -144,12 +144,6 @@ public class ChartConfig {
                     }else {
 
                         Child node = null;
-//                        if (relation == Relation.ME) {
-//                            //neu moi quan he la me thi tim node gan nhat la cha
-//                            node = findNodeByIdParent(parent, child.getIdFather());
-//                        }else {
-//                            //neu moi quan he la cha thi tim node gan nhat la me
-//                        }
                         node = findNodeByIdMother(parent, child.getIdMother());
                         //TH khong tim thay id me
                         if(node == null) {
@@ -163,26 +157,6 @@ public class ChartConfig {
                         }
                         childs.add(child);
                         node.setChildren(childs);
-//                        if (node != null) {
-//                            childs = node.getChildren();
-//                            if(childs == null) {
-//                                childs= new ArrayList<>();
-//                            }
-//                            childs.add(child);
-//                            node.setChildren(childs);
-//                        }else {
-//                            //TH khong tim thay cha hoac me thi tu dong tao node unknown
-////                            System.out.println("unknow" + parent.toString() + "| child " + child);
-//                            Child childUnknown = parent.getChildrenUnknown();
-//                            if (relation == Relation.ME) {
-//                                childUnknown.setRelation(Relation.CHONG.getCode());
-//                            }else {
-//                                childUnknown.setRelation(Relation.VO.getCode());
-//                            }
-//                            childUnknown.setChildrenDropLevel(child.getChildrenDropLevel());
-//                            childUnknown.getChildren().add(child);
-//
-//                        }
                     }
 
                     break;
@@ -200,6 +174,86 @@ public class ChartConfig {
             }
         }
     }
+
+    public void addChildVersion2(Child child) {
+        if(isExistChildInNode(nodeStructure, child)) return;
+        if (child.getPatchKey().equalsIgnoreCase("r") || nodeStructure == null) {
+            child.addHTMLclass(ClassColor.people_node_root);
+            nodeStructure = child;
+            return;
+        }
+        List<Child> childs;
+        Child parent = findNodeByPathKey(nodeStructure, child.getPatchKey());
+        if(parent != null) {
+            Relation relation = Relation.getByCode(child.getRelation());
+            switch (relation) {
+                case CHA:
+                case ME:
+                    child.addHTMLclass(GioiTinh.values()[child.getGender()]== GioiTinh.NAM ? ClassColor.people_node_son:ClassColor.people_node_daughter);
+                    int idMother = child.getIdMother();
+
+                    if(idMother == -1) {
+                        Child childUnknown = parent.getChildrenUnknown();
+                        childUnknown.setHTMLid(parent.getHTMLid());
+                        if (relation == Relation.ME) {
+                            childUnknown.setRelation(Relation.CHONG.getCode());
+                        }else {
+                            childUnknown.setRelation(Relation.VO.getCode());
+                        }
+                        childUnknown.setChildrenDropLevel(child.getChildrenDropLevel());
+                        childUnknown.getChildren().add(child);
+
+                    }else {
+
+                        Child node = null;
+                        node = findNodeByIdMother(parent, child.getIdMother());
+                        //TH khong tim thay id me
+                        if(node == null) {
+                            node = parent;
+                        }
+
+                        if (parent != nodeStructure) { parent.setCollapsed(true); }
+                        childs = node.getChildren();
+                        if(childs == null) {
+                            childs= new ArrayList<>();
+                        }
+                        childs.add(child);
+                        node.setChildren(childs);
+                    }
+
+                    break;
+                case VO:
+                case CHONG:
+                    child.addHTMLclass(GioiTinh.values()[child.getGender()]== GioiTinh.NAM ? ClassColor.people_node_husband:ClassColor.people_node_wife);
+                    childs = parent.getChildren();
+                    if(childs == null) {
+                        childs= new ArrayList<>();
+                    }
+                    if (parent != nodeStructure) { parent.setCollapsed(true); }
+                    childs.add(child);
+                    parent.setChildren(childs);
+                    break;
+            }
+        }
+    }
+
+    public boolean isExistChildInNode (Child child, Child childNeedFind) {
+        if(child == null) return false;
+        if(child.getId() == childNeedFind.getId()) {
+            return true;
+        }
+        List<Child> childs = child.getChildren();
+        if(childs == null) return false;
+
+        for (Child c: childs) {
+            boolean is = isExistChildInNode(c, childNeedFind);
+            if(is) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private Child findNodeByPathKey(Child child, String pathKey) {
         if(pathKey.equalsIgnoreCase(child.getPatchKey() + "_"+ child.getId())) {
             return child;

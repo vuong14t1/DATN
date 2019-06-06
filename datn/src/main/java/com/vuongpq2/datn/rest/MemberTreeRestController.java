@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @Transactional
@@ -482,4 +479,111 @@ public class MemberTreeRestController {
         }
         return new ResponseEntity<>(dUploadMembers, HttpStatus.OK);
     }*/
+    @PostMapping(value = "/rest/member-tree/find/{idPedigree}", produces = "application/json")
+    public Collection<DMemberTree> findMemberTree (Principal principal, @RequestParam(value = "textSearch", required = false, defaultValue = "") String strSearch, @PathVariable(value = "idPedigree") int idPedigree) {
+        UserModel userModel = userRepository.findByEmail(principal.getName());
+        Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
+        List<NodeMemberModel> nodeMemberModels = nodeMemberService.findAllByPedigreeAndNameLike(pedigreeModel.get(), "%" + strSearch + "%");
+        List<DMemberTree> dMemberTrees = new ArrayList<>(1);
+        for(NodeMemberModel nodeMemberModel: nodeMemberModels) {
+            DMemberTree dMemberTree = new DMemberTree();
+            dMemberTree.setName(nodeMemberModel.getName());
+            dMemberTree.setBirthday(MyUltils.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getBirthday()));
+            dMemberTree.setDeadday(MyUltils.getStringFromDate(nodeMemberModel.getDescriptionMemberModel().getDeadDay()));
+            dMemberTree.setGender(nodeMemberModel.getGender());
+            dMemberTree.setId(nodeMemberModel.getId());
+            dMemberTrees.add(dMemberTree);
+        }
+        return dMemberTrees;
+    }
+
+    @GetMapping(value = "/rest/member-tree/view-one-member-tree/{idMemberTree}", produces = "application/json")
+    public ChartConfig getViewOneMemberTree(Principal principal,
+                                         @PathVariable(name = "idMemberTree") int idMemberTree
+    ) {
+        ChartConfig chartConfig = new ChartConfig();
+        Optional<NodeMemberModel> findNodeMember = nodeMemberService.findById(idMemberTree);
+        String patchKey = findNodeMember.get().getPatchKey();
+        System.out.println("patch key" + patchKey);
+        String[] listIdNodeMember = patchKey.split("_");
+        for(int i = 0; i < listIdNodeMember.length; i++) {
+            if(!listIdNodeMember[i].equals("r")) {
+                Optional<NodeMemberModel> nodeMemberModel = nodeMemberService.findById(Integer.parseInt(listIdNodeMember[i]));
+                System.out.println("node id " + nodeMemberModel.get().getId() + "mother fater" + nodeMemberModel.get().getMotherFatherId());
+                if(nodeMemberModel.get().getMotherFatherId() != -1) {
+                    Optional<NodeMemberModel> nodeMemberModelMother = nodeMemberService.findById(nodeMemberModel.get().getMotherFatherId());;
+                    Child child = new Child();
+                    child.setHTMLid(nodeMemberModelMother.get().getId() + "");
+                    child.setId(nodeMemberModelMother.get().getId());
+                    child.setChildrenDropLevel(nodeMemberModelMother.get().getChildIndex());
+                    child.setRelation(nodeMemberModelMother.get().getRelation());
+                    child.setGender(nodeMemberModelMother.get().getGender());
+                    child.setImage(nodeMemberModelMother.get().getImage());
+                    child.setHTMLclass("people_chart_node");
+                    child.setPatchKey(nodeMemberModelMother.get().getPatchKey());
+                    child.setIdFather(nodeMemberModelMother.get().getParent() == null ? -1 : nodeMemberModelMother.get().getParent().getId());
+                    child.setIdMother(nodeMemberModelMother.get().getMotherFatherId() == null ? -1 : nodeMemberModelMother.get().getMotherFatherId());
+                    Text text = new Text();
+                    text.setTitle(MyUltils.getStringFromDate(nodeMemberModelMother.get().getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(nodeMemberModelMother.get().getDescriptionMemberModel().getDeadDay()));
+                    text.setName(nodeMemberModelMother.get().getName());
+                    child.setText(text);
+                    chartConfig.addChild(child);
+                }
+                Child child = new Child();
+                child.setHTMLid(nodeMemberModel.get().getId() + "");
+                child.setId(nodeMemberModel.get().getId());
+                child.setChildrenDropLevel(nodeMemberModel.get().getChildIndex());
+                child.setRelation(nodeMemberModel.get().getRelation());
+                child.setGender(nodeMemberModel.get().getGender());
+                child.setImage(nodeMemberModel.get().getImage());
+                child.setHTMLclass("people_chart_node");
+                child.setPatchKey(nodeMemberModel.get().getPatchKey());
+                child.setIdFather(nodeMemberModel.get().getParent() == null ? -1 : nodeMemberModel.get().getParent().getId());
+                child.setIdMother(nodeMemberModel.get().getMotherFatherId() == null ? -1 : nodeMemberModel.get().getMotherFatherId());
+                Text text = new Text();
+                text.setTitle(MyUltils.getStringFromDate(nodeMemberModel.get().getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(nodeMemberModel.get().getDescriptionMemberModel().getDeadDay()));
+                text.setName(nodeMemberModel.get().getName());
+                child.setText(text);
+                chartConfig.addChild(child);
+            }
+        }
+
+        if(findNodeMember.get().getMotherFatherId() != -1) {
+            Optional<NodeMemberModel> nodeMemberModelMother = nodeMemberService.findById(findNodeMember.get().getMotherFatherId());;
+            Child child = new Child();
+            child.setHTMLid(nodeMemberModelMother.get().getId() + "");
+            child.setId(nodeMemberModelMother.get().getId());
+            child.setChildrenDropLevel(nodeMemberModelMother.get().getChildIndex());
+            child.setRelation(nodeMemberModelMother.get().getRelation());
+            child.setGender(nodeMemberModelMother.get().getGender());
+            child.setImage(nodeMemberModelMother.get().getImage());
+            child.setHTMLclass("people_chart_node");
+            child.setPatchKey(nodeMemberModelMother.get().getPatchKey());
+            child.setIdFather(nodeMemberModelMother.get().getParent() == null ? -1 : nodeMemberModelMother.get().getParent().getId());
+            child.setIdMother(nodeMemberModelMother.get().getMotherFatherId() == null ? -1 : nodeMemberModelMother.get().getMotherFatherId());
+            Text text = new Text();
+            text.setTitle(MyUltils.getStringFromDate(nodeMemberModelMother.get().getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(nodeMemberModelMother.get().getDescriptionMemberModel().getDeadDay()));
+            text.setName(nodeMemberModelMother.get().getName());
+            child.setText(text);
+            chartConfig.addChild(child);
+        }
+
+        Child child = new Child();
+        child.setHTMLid(findNodeMember.get().getId() + "");
+        child.setId(findNodeMember.get().getId());
+        child.setChildrenDropLevel(findNodeMember.get().getChildIndex());
+        child.setRelation(findNodeMember.get().getRelation());
+        child.setGender(findNodeMember.get().getGender());
+        child.setImage(findNodeMember.get().getImage());
+        child.setHTMLclass("people_chart_node");
+        child.setPatchKey(findNodeMember.get().getPatchKey());
+        child.setIdFather(findNodeMember.get().getParent() == null ? -1 : findNodeMember.get().getParent().getId());
+        child.setIdMother(findNodeMember.get().getMotherFatherId() == null ? -1 : findNodeMember.get().getMotherFatherId());
+        Text text = new Text();
+        text.setTitle(MyUltils.getStringFromDate(findNodeMember.get().getDescriptionMemberModel().getBirthday()) + " - " + MyUltils.getStringFromDate(findNodeMember.get().getDescriptionMemberModel().getDeadDay()));
+        text.setName(findNodeMember.get().getName());
+        child.setText(text);
+        chartConfig.addChild(child);
+        return chartConfig;
+    }
 }

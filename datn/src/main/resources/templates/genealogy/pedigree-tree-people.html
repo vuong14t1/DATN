@@ -52,6 +52,30 @@
         <section class="content">
             <!-- Your Page Content Here -->
             <link rel="stylesheet" th:href="@{/css/jquery-ui.css}"/>
+            <div class="box box-info">
+                <!-- /.box-header -->
+                <form id="fileUploadForm" class="form" method="post" action="">
+                    <div class="input-group">
+                        <input id="textSearch" name="textSearch" type="text" class="form-control" placeholder="Search for..."/>
+                        <span class="input-group-btn">
+                                 <button id="btnSearch" class="btn btn-default" type="button" th:text="#{search}"></button>
+                            </span>
+                    </div><!-- /input-group -->
+
+                </form>
+                <table id="table">
+                    <thead>
+                    <tr>
+                        <th data-width="20%" data-sortable="true" data-field="name">Tên</th>
+                        <th data-width="20%" data-field="birthday" data-formatter="dateFormat">Ngày sinh</th>
+                        <th data-width="20%" data-field="deadday"  data-formatter="dateFormat">Ngày mất</th>
+                        <th data-width="20%" data-field="gender"  data-formatter="genderFormat">Giới tính</th>
+                        <th data-width="20%" data-formatter="actionFormatter" data-events="actionEvents"
+                            data-field="action" th:text="#{genealogy.find.table.action}"></th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
             <div class="box box-info" id="nodeXemQuanHe">
                 <div class="box-header with-border">
                     <div class="col-lg-9">
@@ -540,6 +564,15 @@
 
     var idXemQuanHe1,
         idXemQuanHe2;
+    function actionFormatter(value, row, index) {
+        console.log("value " + JSON.stringify(value));
+        console.log("row " + JSON.stringify(row));
+        console.log("index " + JSON.stringify(index));
+        var result = [];
+        result.unshift('<a href="javascript:void(0)" title="View" type="button" class="view btn btn-default"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>')
+        return result.join(' ');
+    }
+
     var readURL = function (input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -964,6 +997,14 @@
 
     };
     $(function () {
+        $('#table').bootstrapTable({
+            // search: true,
+            pagination: true
+            // url: "http://" + document.location.host + '/rest/pedigree/list/' + idGenealogy
+            // data: data
+        });
+
+
         $("#inputConThu").html('');
         $("#inputConThu").append('<option value="1">Con cả</option>\n');
         for (var i = 2; i < 100; i++) {
@@ -1050,6 +1091,19 @@
         $('#containment-wrapper').hide();
         $('#nodeCreateFirstChild').hide();
         $('[data-toggle="tooltip"]').tooltip();
+        $("#btnSearch").click(function (event) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            searchGeneleogy();
+        });
+        $('#table').hide();
+
+        $('#textSearch').on('keypress', function (e) {
+            if(e.which === 13){
+                event.preventDefault();
+                searchGeneleogy();
+            }
+        });
     });
 
     $('#btnCloseNodeXemQuanHe').click(function () {
@@ -1180,6 +1234,96 @@
             }
         });
     }
+
+    function searchGeneleogy() {
+        // Get form
+        var form = $('#fileUploadForm')[0];
+        var data = new FormData(form);
+
+        $("#btnSearch").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            enctype: 'application/x-www-form-urlencoded',
+            url: "/rest/member-tree/find/" + idPedigree,
+            data: data,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                $('#table').show();
+               /* $('#table').bootstrapTable({
+                    search: true,
+                    pagination: true,
+                    // url: "https://"+ document.location.host  +'/rest/pedigree/list/' + idGenealogy,
+                    data: data
+                });*/
+                $('#table').bootstrapTable("load",data);
+                console.log("SUCCESS : ", data);
+                $("#btnSearch").prop("disabled", false);
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+                $("#btnSearch").prop("disabled", false);
+            }
+        });
+    }
+
+    function genderFormat(value, row, index) {
+        switch (value) {
+            case 0:
+                return "Nữ";
+            case 1:
+                return "Nam";
+            case 2:
+                return "?";
+
+        }
+        return "?"
+    }
+    function dateFormat(value, row, index) {
+        if (value == null) {
+            return "";
+        }
+        return moment(value).format('DD/MM/YYYY');
+    }
+
+    window.actionEvents = {
+        'click .view'  : function (e, value, row, index) {
+            console.log("value "  + JSON.stringify(value));
+            console.log("row "  + JSON.stringify(row));
+            console.log("index "  + JSON.stringify(index));
+
+            console.log("vao day view " + row.id);
+            $.ajax({
+                type: "GET",
+                url: "/rest/member-tree/view-one-member-tree/" + row.id,
+                processData: false, //prevent jQuery from automatically transforming the data into a query string
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+                    console.log("tree " + JSON.stringify(data));
+                    $('#table').bootstrapTable("removeAll");
+                    if (data.nodeStructure == null) {
+                        $('#nodeCreateFirstChild').fadeIn();
+                        $('#containment-wrapper').fadeOut();
+                    } else {
+                        $('#nodeCreateFirstChild').hide();
+                        $('#containment-wrapper').fadeIn();
+                        new Treant(data, initViewDetailNode);
+                        $('#modalAddChild').modal('hide');
+                        $('#modalViewInfo').modal('hide');
+                        $('#modalEditInfo').modal('hide');
+                    }
+                    console.log("SUCCESS : ", data);
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                }
+            });
+        }
+    };
     /*]]>*/
 </script>
 

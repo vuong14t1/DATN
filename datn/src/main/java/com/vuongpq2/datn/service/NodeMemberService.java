@@ -38,4 +38,5 @@ public interface NodeMemberService {
     void updatePatchKey(String oldPatch, String newPatch);
 
     boolean mergerPedigree(int genealogy, int idPedigreeFrom, int idPedigreeTo, int idParent, int idMother, int childIndex);
+    List<NodeMemberModel> findAllByPedigreeAndNameLike(PedigreeModel pedigreeModel, String search);
 }

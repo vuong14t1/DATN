@@ -107,4 +107,9 @@ public class NodeMemberServiceImpl implements NodeMemberService {
     public boolean mergerPedigree(int genealogy, int idPedigreeFrom, int idPedigreeTo, int idParent, int idMother, int childIndex) {
         return false;
     }
+
+    @Override
+    public List<NodeMemberModel> findAllByPedigreeAndNameLike(PedigreeModel pedigreeModel, String search) {
+        return nodeMemberRepository.findAllByPedigreeAndNameLike(pedigreeModel, search);
+    }
 }

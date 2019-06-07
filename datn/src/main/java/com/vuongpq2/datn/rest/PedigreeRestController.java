@@ -142,14 +142,18 @@ public class PedigreeRestController {
         if(nodeParent.get().getPatchKey().equals("r")) {
             return new ResponseEntity<>("-1", HttpStatus.OK);
         }
+        Optional<PedigreeModel> pedigreeModelSelect = pedigreeRepository.findById(Integer.parseInt(idPedigree));
+        List<NodeMemberModel> listChild = nodeMemberService.findAllByPedigreeAndPatchKeyStartsWith(pedigreeModelSelect.get(), nodeParent.get().getPatchKey()+ "_" + nodeParent.get().getId());
+        if(listChild.size() <= 0) {
+            return new ResponseEntity<>("-1", HttpStatus.OK);
+        }
         PedigreeModel pedigreeModel = new PedigreeModel();
         pedigreeModel.setName(cutPedigreeName);
         pedigreeModel.setHistory(cutPedigreeHistory);
         pedigreeService.add(pedigreeModel, Integer.parseInt(idGenealogy));
         System.out.println("idPedigree " + pedigreeModel.getId());
 
-        Optional<PedigreeModel> pedigreeModelSelect = pedigreeRepository.findById(Integer.parseInt(idPedigree));
-        List<NodeMemberModel> listChild = nodeMemberService.findAllByPedigreeAndPatchKeyStartsWith(pedigreeModelSelect.get(), nodeParent.get().getPatchKey()+ "_" + nodeParent.get().getId());
+
         String keyParentSelectRoot = NodeMemberModel.getPathkeyByParent(nodeParent.get());
         nodeParent.get().setPatchKey("r");
         nodeParent.get().setPedigree(pedigreeModel);

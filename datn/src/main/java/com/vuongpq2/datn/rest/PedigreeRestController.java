@@ -2,15 +2,14 @@ package com.vuongpq2.datn.rest;
 
 import com.vuongpq2.datn.data.Enum.Relation;
 import com.vuongpq2.datn.data.GioiTinh;
-import com.vuongpq2.datn.model.NodeMemberModel;
-import com.vuongpq2.datn.model.PedigreeModel;
-import com.vuongpq2.datn.model.UserModel;
-import com.vuongpq2.datn.model.UserPermissionModel;
+import com.vuongpq2.datn.model.*;
 import com.vuongpq2.datn.repository.NodeMemberRepository;
 import com.vuongpq2.datn.repository.PedigreeRepository;
 import com.vuongpq2.datn.repository.UserPermissionRepository;
 import com.vuongpq2.datn.repository.UserRepository;
+import com.vuongpq2.datn.service.GenealogyService;
 import com.vuongpq2.datn.service.NodeMemberService;
+import com.vuongpq2.datn.service.PedigreeService;
 import com.vuongpq2.datn.utils.MyUltils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +25,10 @@ import java.util.Optional;
 public class PedigreeRestController {
     @Autowired
     PedigreeRepository pedigreeRepository;
+    @Autowired
+    GenealogyService genealogyService;
+    @Autowired
+    PedigreeService pedigreeService;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -117,6 +120,49 @@ public class PedigreeRestController {
             userPermissionModel.setPedigreeModel(pedigreeModelTo.get());
             userPermissionRepository.save(userPermissionModel);
         }
+        return new ResponseEntity<>("1", HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/rest/pedigree/curPedigree", produces = "application/json")
+    public ResponseEntity<?> cutPedigree (Principal principal,
+                                            @RequestParam(value = "idGenealogy") String idGenealogy,
+                                            @RequestParam(value = "idPedigree") String idPedigree,
+                                            @RequestParam(value = "cutPedigreeName") String cutPedigreeName,
+                                            @RequestParam(value = "cutPedigreeHistory") String cutPedigreeHistory,
+                                            @RequestParam(value = "idMember") String idMember
+
+    ) {
+        Optional<NodeMemberModel> nodeParent = nodeMemberService.findById(Integer.parseInt(idMember));
+        if(nodeParent == null) {
+            return new ResponseEntity<>("-1", HttpStatus.OK);
+        }
+        if(nodeParent.get().getRelation() == Relation.VO.ordinal() || nodeParent.get().getRelation() == Relation.CHONG.ordinal()) {
+            return new ResponseEntity<>("-1", HttpStatus.OK);
+        }
+        if(nodeParent.get().getPatchKey().equals("r")) {
+            return new ResponseEntity<>("-1", HttpStatus.OK);
+        }
+        PedigreeModel pedigreeModel = new PedigreeModel();
+        pedigreeModel.setName(cutPedigreeName);
+        pedigreeModel.setHistory(cutPedigreeHistory);
+        pedigreeService.add(pedigreeModel, Integer.parseInt(idGenealogy));
+        System.out.println("idPedigree " + pedigreeModel.getId());
+
+        Optional<PedigreeModel> pedigreeModelSelect = pedigreeRepository.findById(Integer.parseInt(idPedigree));
+        List<NodeMemberModel> listChild = nodeMemberService.findAllByPedigreeAndPatchKeyStartsWith(pedigreeModelSelect.get(), nodeParent.get().getPatchKey()+ "_" + nodeParent.get().getId());
+        String keyParentSelectRoot = NodeMemberModel.getPathkeyByParent(nodeParent.get());
+        nodeParent.get().setPatchKey("r");
+        nodeParent.get().setPedigree(pedigreeModel);
+        nodeMemberRepository.save(nodeParent.get());
+
+        for (NodeMemberModel child: listChild) {
+            String key = child.getPatchKey();
+            key = key.replace(keyParentSelectRoot, "r_" + nodeParent.get().getId());
+            child.setPatchKey(key);
+            child.setPedigree(pedigreeModel);
+            nodeMemberRepository.save(child);
+        }
+
         return new ResponseEntity<>("1", HttpStatus.OK);
     }
 

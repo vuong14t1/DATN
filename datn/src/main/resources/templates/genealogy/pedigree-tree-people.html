@@ -281,6 +281,41 @@
     </div>
     <!-- end modal add child -->
 
+    <div class="modal fade" id="modalCutPedigree" name="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Tách phả hệ từ  </h4>
+                    <h1 class="modal-title" id="cutPedigreeMember"></h1>
+                </div>
+                <div class="modal-body">
+                    <form id="cutPedigree">
+                        <div class="form-group">
+                            <label for="cutPedigreeName">Tên phả hệ</label>
+                            <input type="text" class="form-control" name="cutPedigreeName"
+                                   id="cutPedigreeName" placeholder="Nhập tên phả hệ"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="cutPedigreeHistory">Lịch sử</label>
+                            <textarea class="form-control" name="cutPedigreeHistory" id="cutPedigreeHistory"
+                                      rows="3"></textarea>
+                        </div>
+                        <button id="btnCurPedigree" type="submit" class="btn btn-warning" data-dismiss="modal">Tách phả hệ
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    </form>
+                </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--</div>-->
+            </div>
+
+        </div>
+    </div>
+    <!-- end modal add child -->
+
     <!-- Modal view child -->
     <div class="modal fade" id="modalViewInfo" name="dialog">
         <div class="modal-dialog">
@@ -638,6 +673,7 @@
                     $('#modalAddChild').modal('hide');
                     $('#modalViewInfo').modal('hide');
                     $('#modalEditInfo').modal('hide');
+                    $('#modalCutPedigree').modal('hide');
                 }
                 console.log("SUCCESS : ", data);
             },
@@ -657,6 +693,9 @@
         );
         switch (idPermission) {
             case 1:
+                result.push(
+                    '<a onclick="cutPedigree(this)"><i class="fa fa-code-fork fa-lg" data-toggle="tooltip" data-placement="top" title="Tách phả hệ"></i></a> '
+                );
                 result.push(
                     '<a onclick="deleteInfoNode(this)"><i class="fa fa-trash fa-lg" data-toggle="tooltip" data-placement="top" title="Xóa"></i></a>  '
                 );
@@ -717,6 +756,57 @@
         // $("#modalEditInfo")
         //     .modal();
     };
+
+    var cutPedigree = function (sender) {
+        var id = $(sender)
+            .parent()
+            .parent()
+            .attr('id');
+        var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        console.log("name==========" + name + " id === " + id);
+        $("#cutPedigreeMember").html(name);
+        $("#modalCutPedigree")
+            .modal();
+
+        $("#btnCurPedigree").click(function (event) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            var form = $('#cutPedigree')[0];
+            var data = new FormData(form);
+            data.append("idPedigree", idPedigree + "");
+            data.append("idGenealogy", idGenealogy + '');
+            data.append("idMember", id + '');
+            console.log(JSON.stringify(data));
+            console.log(data);
+            $("#btnCurPedigree").prop("disabled", true);
+            $.ajax({
+                type: "POST",
+                enctype: 'application/x-www-form-urlencoded',
+                url: "/rest/pedigree/curPedigree",
+                data: data,
+                processData: false, //prevent jQuery from automatically transforming the data into a query string
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (errorCode) {
+                    console.log("SUCCESS : ", errorCode);
+                    if (errorCode == '1') {
+                        loadTree();
+                    } else{
+                        toastr["error"]("Không thể tách phả hệ từ thành viên này", "Vui lòng chọn")
+                    }
+                    $("#btnCurPedigree").prop("disabled", false);
+                    $('#modalCutPedigree').modal('hide');
+                },
+                error: function (e) {
+                    console.log("ERROR : ", e);
+                    $("#btnCurPedigree").prop("disabled", false);
+                    $('#modalCutPedigree').modal('hide');
+                }
+            });
+        });
+    };
+
 
     var resetAddChildNode = function() {
         $("#addChildInputRelation").html('');
@@ -806,25 +896,6 @@
         $("#editChildInputName").val(name);
         $("#editChildInputBirthday").val(date[0]);
         $("#editChildInputDeadDay").val(date[1]);
-
-        //get select wife or husband
-/*        $.ajax({
-            type: "GET",
-            // https://localhost:89991/pedigree/1/people/3/get-info-add
-            url: "/rest/genealogy/" + idGenealogy + '/pedigree/' + idPedigree + '/people/' + idMemberTree + '/get-mother',
-            processData: false, //prevent jQuery from automatically transforming the data into a query string
-            timeout: 600000,
-            success: function (data) {
-                /!*{
-                 "id": 3,
-                 "name": "Võ Thị Đừng"
-                 }*!/
-                $('#editChildInputIdMother').html('');
-                $("#editChildInputIdMother").append('<option value="' + data.id + '">' + data.name + '</option>');
-            },
-            error: function (e) {
-            }
-        });*/
         $.ajax({
             type: "GET",
             url: "/rest/member-tree/detail/" + idMemberTree,
@@ -1146,6 +1217,7 @@
                             $('#modalAddChild').modal('hide');
                             $('#modalViewInfo').modal('hide');
                             $('#modalEditInfo').modal('hide');
+                            $('#modalCutPedigree').modal('hide');
                         }
                         console.log("SUCCESS : ", data);
                     },
@@ -1344,6 +1416,7 @@
                         $('#modalAddChild').modal('hide');
                         $('#modalViewInfo').modal('hide');
                         $('#modalEditInfo').modal('hide');
+                        $('#modalCutPedigree').modal('hide');
                     }
                     console.log("SUCCESS : ", data);
                 },

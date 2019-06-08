@@ -378,13 +378,13 @@ public class MemberTreeRestController {
                     higher2 = false;
                 }
 
-                if (parent1 != null && parent1.getLifeIndex() < member1.get().getLifeIndex()) {
+                /*if (parent1 != null && parent1.getLifeIndex() < member1.get().getLifeIndex()) {
                     parent1 = member1.get();
                 }
 
                 if (parent2 != null && parent2.getLifeIndex() < member2.get().getLifeIndex()) {
                     parent2 = member2.get();
-                }
+                }*/
 
                 if (parent1 != null && parent2 != null) {
                     higher1 = parent1.getChildIndex() < parent2.getChildIndex();
@@ -441,7 +441,10 @@ public class MemberTreeRestController {
 
         String relation1 = CachGoiTen.getInstance().getName(member1.get().getGender(), level, higher1, isOutSide1, isParent, member1.get().getRelation(), isHigherParent1, sideRelation1);
         String relation2 = CachGoiTen.getInstance().getName(member2.get().getGender(), level, higher2, isOutSide2, isParent, member2.get().getRelation(), isHigherParent2, sideRelation2);
-
+        System.out.println("relation 1" + relation1);
+        System.out.println("relation 2" + relation2);
+        System.out.println("detail 1:" + member1.get().getGender() + "_" + level + "_" + higher1 + "_" + isOutSide1 + "_" + isParent + "_" + member1.get().getRelation()+ "_" + isHigherParent1 + "_" + sideRelation1);
+        System.out.println("detail 2:" + member2.get().getGender() + "_" + level + "_" + higher2 + "_" + isOutSide2 + "_" + isParent + "_" + member2.get().getRelation()+ "_" + isHigherParent2 + "_" + sideRelation2);
         String resultRelation;
         if(relation1.split("-").length > 1 && higher1) {
             resultRelation = relation1;
@@ -449,6 +452,17 @@ public class MemberTreeRestController {
             resultRelation = relation2;
         }else {
             resultRelation = relation1 + "-" + relation2;
+        }
+
+        //kiem tra lai vi tri ai lon hon
+        String resultRelation1 = resultRelation.split("-")[0]; // cao
+        String resultRelation2 = resultRelation.split("-")[1]; // thap
+        if(higher1) {
+            //cao-thap
+            resultRelation = resultRelation1 + "-" + resultRelation2;
+        }else {
+            //thap- cao
+            resultRelation = resultRelation2 + "-" + resultRelation1;
         }
         System.out.println("member 1 goi 2 la " + relation1);
         System.out.println("member 2 goi 1 la " + relation2);

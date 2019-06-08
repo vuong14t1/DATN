@@ -2,10 +2,13 @@ package com.vuongpq2.datn.config.tree;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.vuongpq2.datn.data.ClassColor;
+import com.vuongpq2.datn.data.Enum.CompareNodeMember;
 import com.vuongpq2.datn.data.Enum.Relation;
 import com.vuongpq2.datn.data.GioiTinh;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -156,6 +159,7 @@ public class ChartConfig {
                             childs= new ArrayList<>();
                         }
                         childs.add(child);
+                        Collections.sort(childs, new CompareNodeMember());
                         node.setChildren(childs);
                     }
 
@@ -169,6 +173,7 @@ public class ChartConfig {
                     }
                     if (parent != nodeStructure) { parent.setCollapsed(true); }
                     childs.add(child);
+                    Collections.sort(childs, new CompareNodeMember());
                     parent.setChildren(childs);
                     break;
             }
@@ -218,6 +223,7 @@ public class ChartConfig {
                             childs= new ArrayList<>();
                         }
                         childs.add(child);
+                        Collections.sort(childs, new CompareNodeMember());
                         node.setChildren(childs);
                     }
 
@@ -231,6 +237,7 @@ public class ChartConfig {
                     }
                     if (parent != nodeStructure) { parent.setCollapsed(true); }
                     childs.add(child);
+                    Collections.sort(childs, new CompareNodeMember());
                     parent.setChildren(childs);
                     break;
             }

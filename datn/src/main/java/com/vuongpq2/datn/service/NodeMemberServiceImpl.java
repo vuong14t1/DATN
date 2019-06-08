@@ -64,6 +64,11 @@ public class NodeMemberServiceImpl implements NodeMemberService {
     }
 
     @Override
+    public List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndMotherFatherId(PedigreeModel pedigreeModel, String patchKey, Integer motherFatherId){
+        return nodeMemberRepository.findAllByPedigreeAndPatchKeyAndMotherFatherId(pedigreeModel, patchKey, motherFatherId);
+    }
+
+    @Override
     public List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndRelationEquals(PedigreeModel pedigreeModel, String patchKey, int relation) {
         return nodeMemberRepository.findAllByPedigreeAndPatchKeyAndRelationEquals(pedigreeModel, patchKey, relation);
     }

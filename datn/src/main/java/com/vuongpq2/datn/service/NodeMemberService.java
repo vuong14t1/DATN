@@ -20,6 +20,7 @@ public interface NodeMemberService {
     List<NodeMemberModel> findAllByPedigreeAndPatchKeyStartsWith(PedigreeModel pedigreeModel, String patchKey);
 
     List<NodeMemberModel> findAllByPedigreeAndPatchKey(PedigreeModel pedigreeModel, String patchKey);
+    List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndMotherFatherId(PedigreeModel pedigreeModel, String patchKey, Integer motherFatherId);
 
     List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndRelationEquals(PedigreeModel pedigreeModel, String patchKey, int relation);
 

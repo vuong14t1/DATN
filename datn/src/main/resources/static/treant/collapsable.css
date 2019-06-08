@@ -20,10 +20,10 @@ body { background: #fff; }
 .Treant .node.collapsed .collapse-switch { background: none; }
 
 .Treant .collapse-switch { width: 100px; height: 100px; border: none; }
-.Treant .node.people_node_root { background-color: #0000f8; }
+.Treant .node.people_node_root { background-color: #f8b937; }
 .Treant .node.people_node_husband { background-color: #fc93ff; }
 .Treant .node.people_node_wife { background-color: #20ccff; }
-.Treant .node.people_node_son { background-color: #0000ff; }
+.Treant .node.people_node_son { background-color: #2bff8e; }
 .Treant .node.people_node_daughter { background-color: #ff0080; }
 .Treant .node.people_node_unknown { background-color: rgba(188, 189, 180, 0.53); }
 

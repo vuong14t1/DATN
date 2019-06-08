@@ -56,7 +56,7 @@
                 <!-- /.box-header -->
                 <form id="fileUploadForm" class="form" method="post" action="">
                     <div class="input-group">
-                        <input id="textSearch" name="textSearch" type="text" class="form-control" placeholder="Search for..."/>
+                        <input id="textSearch" name="textSearch" type="text" class="form-control" placeholder="Tìm kiếm thành viên trong cây phả hệ"/>
                         <span class="input-group-btn">
                                  <button id="btnSearch" class="btn btn-default" type="button" th:text="#{search}"></button>
                             </span>
@@ -186,7 +186,7 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="addChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
+                                    <label for="addChildInputConThu" id="lbAddChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
                                     <div class="col-sm-6">
                                         <select name="addChildInputConThu" class="form-control"
                                                 id="addChildInputConThu">
@@ -354,7 +354,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="viewChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
+                                    <label for="viewChildInputConThu" id="lbViewChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
                                     <div class="col-sm-6">
                                         <select name="viewChildInputConThu" class="form-control"
                                                 id="viewChildInputConThu" readonly="true">
@@ -490,7 +490,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="editChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
+                                    <label for="editChildInputConThu" id="lbEditChildInputConThu" class="col-sm-6 col-form-label">Con thứ</label>
                                     <div class="col-sm-6">
                                         <select name="editChildInputConThu" class="form-control"
                                                 id="editChildInputConThu">
@@ -921,6 +921,7 @@
                     $("#editChildInputRelation").val(data.relation + '').attr("selected", true);
                 }
                 $("#editChildInputGender").val(data.gender + '').attr("selected", true);
+                updateEditConthu(data.relation);
                 $("#editChildInputConThu").val(data.childIndex + '').attr("selected", true);
                 $("#editChildInputAddress").val(data.address);
                 $("#editChildInputDes").val(data.des);
@@ -1021,10 +1022,13 @@
                 if (data.nameParent) {
                     if(data.relation == 3 || data.relation == 4) {
                         $("#viewChildNameParent").html("Con của " + data.nameParent);
+                        $("#lbViewChildInputConThu").html("Con thứ");
                     }else if(data.relation == 1) {
                         $("#viewChildNameParent").html("Vợ của " + data.nameParent);
+                        $("#lbViewChildInputConThu").html("Vợ thứ");
                     }else if(data.relation == 2) {
                         $("#viewChildNameParent").html("Chồng của " + data.nameParent);
+                        $("#lbViewChildInputConThu").html("Chồng thứ");
                     }
                 }
                 if (data.img) $("#viewChildImgPeople").attr("src", data.img);
@@ -1047,6 +1051,10 @@
                     default:
                         $("#viewChildInputGender").val("Bê đê");
 
+                }
+                updateViewConthu(data.relation);
+                if(data.childIndex == -1) {
+                    $("#lbVewChildInputConThu").html("");
                 }
                 $("#viewChildInputConThu").val(data.childIndex + '').attr("selected", true);
                 $("#viewChildInputAddress").val(data.address);
@@ -1122,6 +1130,7 @@
         });
         $("#addChildInputConThu").html('');
         if(quanhe == 3 || quanhe == 4) {
+            $("#lbAddChildInputConThu").html('Con thứ');
             if(!_.includes(listExits, 1)) {
                 $("#addChildInputConThu").append('<option value="1">Con cả</option>\n');
             }
@@ -1129,6 +1138,61 @@
                 if(!_.includes(listExits, i)) {
                     $("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
                 }
+            }
+        }else if(quanhe == 1){
+            $("#lbAddChildInputConThu").html('Vợ thứ');
+            $("#addChildInputConThu").append('<option value="1">Vợ cả</option>\n');
+            for (var i = 2; i < 100; i++) {
+                $("#addChildInputConThu").append('<option value=' + i + '>Vợ ' + i + '</option>\n');
+            }
+        }else {
+            $("#lbAddChildInputConThu").html('Chồng thứ');
+            for (var i = 1; i < 100; i++) {
+                $("#addChildInputConThu").append('<option value=' + i + '>Chồng ' + i + '</option>\n');
+            }
+        }
+    };
+
+    function updateViewConthu (quanhe) {
+        $("#viewChildInputConThu").html('');
+        if(quanhe == 3 || quanhe == 4) {
+            $("#lbViewChildInputConThu").html('Con thứ');
+            $("#viewChildInputConThu").append('<option value="1">Con cả</option>\n');
+            for (var i = 2; i < 100; i++) {
+                $("#viewChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+            }
+        }else if(quanhe == 1){
+            $("#lbViewChildInputConThu").html('Vợ thứ');
+            $("#viewChildInputConThu").append('<option value="1">Vợ cả</option>\n');
+            for (var i = 2; i < 100; i++) {
+                $("#viewChildInputConThu").append('<option value=' + i + '>Vợ ' + i + '</option>\n');
+            }
+        }else {
+            $("#lbViewChildInputConThu").html('Chồng thứ');
+            for (var i = 1; i < 100; i++) {
+                $("#viewChildInputConThu").append('<option value=' + i + '>Chồng ' + i + '</option>\n');
+            }
+        }
+    };
+
+    function updateEditConthu (quanhe) {
+        $("#editChildInputConThu").html('');
+        if(quanhe == 3 || quanhe == 4) {
+            $("#lbEditChildInputConThu").html('Con thứ');
+            $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
+            for (var i = 2; i < 100; i++) {
+                $("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+            }
+        }else if(quanhe == 1){
+            $("#lbEditChildInputConThu").html('Vợ thứ');
+            $("#editChildInputConThu").append('<option value="1">Vợ cả</option>\n');
+            for (var i = 2; i < 100; i++) {
+                $("#editChildInputConThu").append('<option value=' + i + '>Vợ ' + i + '</option>\n');
+            }
+        }else {
+            $("#lbEditChildInputConThu").html('Chồng thứ');
+            for (var i = 1; i < 100; i++) {
+                $("#editChildInputConThu").append('<option value=' + i + '>Chồng ' + i + '</option>\n');
             }
         }
     };

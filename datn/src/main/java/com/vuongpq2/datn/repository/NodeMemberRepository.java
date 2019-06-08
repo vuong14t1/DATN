@@ -15,6 +15,7 @@ public interface NodeMemberRepository extends JpaRepository<NodeMemberModel, Int
     List<NodeMemberModel> findAllByPedigreeAndPatchKeyStartsWithOrderByPatchKeyAscMotherFatherIdAscRelationAsc(PedigreeModel pedigreeModel, String patchKeyStartsKey);
 
     List<NodeMemberModel> findAllByPedigreeAndPatchKey(PedigreeModel pedigreeModel, String patchKeyStartsKey);
+    List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndMotherFatherId(PedigreeModel pedigreeModel, String patchKeyStartsKey, Integer idMotherOrFather);
 
     List<NodeMemberModel> findAllByPedigreeAndPatchKeyAndRelationEquals(PedigreeModel pedigreeModel, String patchKeyStartsKey, Integer relation);
 

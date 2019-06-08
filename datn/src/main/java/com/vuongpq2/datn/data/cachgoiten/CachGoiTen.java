@@ -28,13 +28,13 @@ public class CachGoiTen {
 
     private CachGoiTen() {
         container = new HashMap<>();
-        container.put(TenGoi.getKey(GioiTinh.NAM, 0, true, false, true, Relation.ME), "Anh ruột - Em ruột");
+        container.put(TenGoi.getKey(GioiTinh.NAM, 0, true, false, true, Relation.ME), "Anh - Em");
 //        container.put(TenGoi.getKey(GioiTinh.NAM,0,false,false, true, Relation.ME),"Em ruột");
 
         container.put(TenGoi.getKey(GioiTinh.NAM, 0, true, false, false, Relation.ME), "Anh - Em");
 //        container.put(TenGoi.getKey(GioiTinh.NAM,0,false,false, false, Relation.ME),"Em họ");
 
-        container.put(TenGoi.getKey(GioiTinh.NU, 0, true, false, true, Relation.ME), "Chị ruột - Em ruột");
+        container.put(TenGoi.getKey(GioiTinh.NU, 0, true, false, true, Relation.ME), "Chị - Em");
 //        container.put(TenGoi.getKey(GioiTinh.NU,0,false,false, true, Relation.ME),"Em gái ruột");
 
         container.put(TenGoi.getKey(GioiTinh.NU, 0, true, false, false, Relation.ME), "Chị - Em");

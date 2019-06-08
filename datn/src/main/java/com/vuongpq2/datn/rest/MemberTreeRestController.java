@@ -203,7 +203,7 @@ public class MemberTreeRestController {
         //tim con
         List<NodeMemberModel> nodeMemberModels;
         if(parent.get().getRelation() == Relation.VO.ordinal() || parent.get().getRelation() == Relation.CHONG.ordinal()) {
-            nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKey(pedigreeModel.get(), parent.get().getPatchKey());
+            nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKeyAndMotherFatherId(pedigreeModel.get(), parent.get().getPatchKey(), parent.get().getId());
         }else {
             nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKey(pedigreeModel.get(), NodeMemberModel.getPathkeyByParent(parent.get()));
         }
@@ -362,8 +362,18 @@ public class MemberTreeRestController {
         if (level == 0) {
             //TH cung cha or me
             if (isParent) {
-                higher1 = member1.get().getChildIndex() < member2.get().getChildIndex();
-                higher2 = member2.get().getChildIndex() < member1.get().getChildIndex();
+                //xet TH khac me or cha
+                if(member1.get().getMotherFatherId() != member2.get().getMotherFatherId()) {
+                    Optional<NodeMemberModel> motherOrFather1 = nodeMemberService.findById(member1.get().getMotherFatherId());
+                    Optional<NodeMemberModel> motherOrFather2 = nodeMemberService.findById(member2.get().getMotherFatherId());
+                    higher1 = motherOrFather1.get().getChildIndex() < motherOrFather2.get().getChildIndex();
+                    higher2 = motherOrFather2.get().getChildIndex() < motherOrFather1.get().getChildIndex();
+                }else {
+                    //TH cung cha or me
+                    higher1 = member1.get().getChildIndex() < member2.get().getChildIndex();
+                    higher2 = member2.get().getChildIndex() < member1.get().getChildIndex();
+                }
+
             } else {
                 //TH khac cha hoac me thi thi so sanh  child index cua cha hoac me
                 NodeMemberModel parent1 = member1.get().getParent();
@@ -446,12 +456,17 @@ public class MemberTreeRestController {
         System.out.println("detail 1:" + member1.get().getGender() + "_" + level + "_" + higher1 + "_" + isOutSide1 + "_" + isParent + "_" + member1.get().getRelation()+ "_" + isHigherParent1 + "_" + sideRelation1);
         System.out.println("detail 2:" + member2.get().getGender() + "_" + level + "_" + higher2 + "_" + isOutSide2 + "_" + isParent + "_" + member2.get().getRelation()+ "_" + isHigherParent2 + "_" + sideRelation2);
         String resultRelation;
-        if(relation1.split("-").length > 1 && higher1) {
+        if(relation1 != null && relation1.split("-").length > 1 && higher1) {
             resultRelation = relation1;
-        }else if(relation2.split("-").length > 1 && higher2) {
+        }else if(relation2 != null && relation2.split("-").length > 1 && higher2) {
             resultRelation = relation2;
         }else {
-            resultRelation = relation1 + "-" + relation2;
+            //result relation luon la cao-thap
+            if(higher1) {
+                resultRelation = relation1 + "-" + relation2;
+            }else {
+                resultRelation = relation2 + "-" + relation1;
+            }
         }
 
         //kiem tra lai vi tri ai lon hon

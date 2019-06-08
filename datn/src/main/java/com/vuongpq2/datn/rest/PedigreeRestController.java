@@ -2,6 +2,8 @@ package com.vuongpq2.datn.rest;
 
 import com.vuongpq2.datn.data.Enum.Relation;
 import com.vuongpq2.datn.data.GioiTinh;
+import com.vuongpq2.datn.data.model.DInfoMerger;
+import com.vuongpq2.datn.data.model.DMergerInfoPedigree;
 import com.vuongpq2.datn.model.*;
 import com.vuongpq2.datn.repository.NodeMemberRepository;
 import com.vuongpq2.datn.repository.PedigreeRepository;
@@ -45,6 +47,36 @@ public class PedigreeRestController {
             return null;
         }
         return pedigreeRepository.findAllByGenealogyModel_Id(idGenealogy);
+    }
+
+    @GetMapping(value = "/rest/pedigree/list/{idGenealogy}/{idParentMerger}", produces = "application/json")
+    public ResponseEntity<?> getInfoMergerPedigree(Principal principal, @PathVariable(value = "idGenealogy", required = false) int idGenealogy, @PathVariable(value = "idParentMerger", required = false) int idParentMerger) {
+        if (principal == null) {
+            return null;
+        }
+        DInfoMerger dInfoMerger = new DInfoMerger();
+        List<PedigreeModel> pedigreeModels = pedigreeRepository.findAllByGenealogyModel_Id(idGenealogy);
+        for(PedigreeModel pedigreeModel: pedigreeModels) {
+            DMergerInfoPedigree dMergerInfoPedigree = new DMergerInfoPedigree();
+            dMergerInfoPedigree.setId(pedigreeModel.getId());
+            dMergerInfoPedigree.setName(pedigreeModel.getName());
+            dInfoMerger.getInfoPedigreeList().add(dMergerInfoPedigree);
+        }
+        //tim con
+        Optional<NodeMemberModel> parent = nodeMemberService.findById(idParentMerger);
+        List<NodeMemberModel> nodeMemberModels;
+        if(parent.get().getRelation() == Relation.VO.ordinal() || parent.get().getRelation() == Relation.CHONG.ordinal()) {
+            nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKeyAndMotherFatherId(parent.get().getPedigree(), parent.get().getPatchKey(), parent.get().getId());
+        }else {
+            nodeMemberModels = nodeMemberService.findAllByPedigreeAndPatchKey(parent.get().getPedigree(), NodeMemberModel.getPathkeyByParent(parent.get()));
+        }
+
+        for(NodeMemberModel nodeMemberModel: nodeMemberModels) {
+            if(nodeMemberModel.getRelation() != Relation.CHONG.ordinal() && nodeMemberModel.getRelation() != Relation.VO.ordinal()) {
+                dInfoMerger.getListChildIndex().add(nodeMemberModel.getChildIndex());
+            }
+        }
+        return new ResponseEntity<>(dInfoMerger, HttpStatus.OK);
     }
 
     @PostMapping(value = "/rest/genealogy/{idGenealogy}/pedigree/{idPedigree}/delete", produces = "application/json")
@@ -96,11 +128,20 @@ public class PedigreeRestController {
 
         List<NodeMemberModel> parentSelectList = nodeMemberService.findAllByPedigreeAndPatchKey(pedigreeModelSelect.get(), "r");
         NodeMemberModel parentSelect = parentSelectList.get(0);
+        //set lai life index la  the he tiep theo
+        parentSelect.setLifeIndex(parent.get().getLifeIndex() + 1);
+        System.out.println("parent select idx " + parentSelect.getLifeIndex());
         String keyParentSelectRoot = NodeMemberModel.getPathkeyByParent(parentSelect);
         for (NodeMemberModel nodeMemberModel: nodeMemberModelListSelect) {
+            if(nodeMemberModel.getId() == parentSelect.getId()) {
+                continue;
+            }
             String key = nodeMemberModel.getPatchKey();
             key = key.replace(keyParentSelectRoot, keyParent + "_" + parentSelect.getId());
             nodeMemberModel.setPatchKey(key);
+            System.out.println("pre child select idx " + nodeMemberModel.getLifeIndex());
+            nodeMemberModel.setLifeIndex(nodeMemberModel.getLifeIndex() + parentSelect.getLifeIndex() - 1);
+            System.out.println("child select idx " + nodeMemberModel.getLifeIndex());
             nodeMemberModel.setPedigree(pedigreeModelTo.get());
             nodeMemberRepository.save(nodeMemberModel);
         }

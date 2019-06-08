@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragments/user :: head"></head>
-
+<script src="https://cdn.jsdelivr.net/npm/wheelnav@1.7.1/js/dist/raphael.min.js"></script>
 <body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
 <div class="wrapper">
 
@@ -315,7 +315,48 @@
         </div>
     </div>
     <!-- end modal add child -->
+    <!-- Modal gop Pha he child -->
+    <div class="modal fade" id="modalGopPhaHe" name="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Gộp phả hệ (Quyền Quản Trị) </h4>
+                    <h1 class="modal-title" id="mergerPedigreeNameParent"></h1>
+                </div>
+                <div class="modal-body">
+                    <form id="formGopPhaHe">
+                        <div >
+                            <div class="form-group row">
+                                <label for="inputSelectPedigree" class="col-sm-6 col-form-label">Chọn phả hệ cần gộp</label>
+                                <div class="col-sm-6">
+                                    <select name="inputSelectPedigree" class="form-control" id="inputSelectPedigree">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputIndexChild" class="col-sm-6 col-form-label">Con thứ</label>
+                                <div class="col-sm-6">
+                                    <select name="inputIndexChild" class="form-control" id="inputIndexChild">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btnSubmitGopPhaHe" type="submit" class="btn btn-warning" data-dismiss="modal">Xác
+                            Nhận Gộp
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    </form>
+                </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--</div>-->
+            </div>
 
+        </div>
+    </div>
+    <!-- end modal  gop Pha he child -->
     <!-- Modal view child -->
     <div class="modal fade" id="modalViewInfo" name="dialog">
         <div class="modal-dialog">
@@ -596,7 +637,7 @@
     var idGenealogy = [[${idGenealogy}]];
     var idPedigree = [[${idPedigree}]];
     var idPermission = [[${idPermission}]];
-
+    var idParentMerger = -1;
     var idXemQuanHe1,
         idXemQuanHe2;
     function actionFormatter(value, row, index) {
@@ -662,7 +703,6 @@
             cache: false,
             timeout: 600000,
             success: function (data) {
-                console.log("tree " + JSON.stringify(data));
                 if (data.nodeStructure == null) {
                     $('#nodeCreateFirstChild').fadeIn();
                     $('#containment-wrapper').fadeOut();
@@ -674,8 +714,8 @@
                     $('#modalViewInfo').modal('hide');
                     $('#modalEditInfo').modal('hide');
                     $('#modalCutPedigree').modal('hide');
+                    $('#modalGopPhaHe').modal('hide');
                 }
-                console.log("SUCCESS : ", data);
             },
             error: function (e) {
                 console.log("ERROR : ", e);
@@ -695,6 +735,9 @@
             case 1:
                 result.push(
                     '<a onclick="cutPedigree(this)"><i class="fa fa-code-fork fa-lg" data-toggle="tooltip" data-placement="top" title="Tách phả hệ"></i></a> '
+                );
+                result.push(
+                    '<a onclick="mergePedigree(this)"><i class="fa fa-compress fa-lg" data-toggle="tooltip" data-placement="top" title="Gộp phả hệ"></i></a>  '
                 );
                 result.push(
                     '<a onclick="deleteInfoNode(this)"><i class="fa fa-trash fa-lg" data-toggle="tooltip" data-placement="top" title="Xóa"></i></a>  '
@@ -807,7 +850,21 @@
         });
     };
 
+    var mergePedigree = function (sender) {
+        var id = $(sender)
+            .parent()
+            .parent()
+            .attr('id');
+        idParentMerger = id;
+        var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
+        console.log("name==========" + name + " id === " + id);
+        $("#mergerPedigreeNameParent").html("Gộp phả hệ vào: " + name);
+        $("#modalGopPhaHe")
+            .modal();
+        loadFormGopPhaHe();
 
+
+    };
     var resetAddChildNode = function() {
         $("#addChildInputRelation").html('');
         $("#addChildInputRelation").append('<option value="3">Cha</option>');
@@ -857,7 +914,6 @@
                 $('#addChildIdParent').val(data.id);
                 $('#addChildInputNameParent').html(data.name);
                 $('#addChildInputIdMotherFather').html('');
-                console.log(JSON.stringify(data));
                 for (var i in data.husbandOrWifes) {
                     var id = data.husbandOrWifes[i].id;
                     var name = data.husbandOrWifes[i].name;
@@ -1086,19 +1142,19 @@
 
         $("#inputConThu").html('');
         $("#inputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {
+        for (var i = 2; i < 50; i++) {
             $("#inputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
         }
 
         $("#editChildInputConThu").html('');
         $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {
+        for (var i = 2; i < 50; i++) {
             $("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
         }
 
         $("#viewChildInputConThu").html('');
         $("#viewChildInputConThu").append('<option value="1">Con cả</option>\n');
-        for (var i = 2; i < 100; i++) {
+        for (var i = 2; i < 50; i++) {
             $("#viewChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
         }
 
@@ -1134,7 +1190,7 @@
             if(!_.includes(listExits, 1)) {
                 $("#addChildInputConThu").append('<option value="1">Con cả</option>\n');
             }
-            for (var i = 2; i < 100; i++) {
+            for (var i = 2; i < 50; i++) {
                 if(!_.includes(listExits, i)) {
                     $("#addChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
                 }
@@ -1142,12 +1198,12 @@
         }else if(quanhe == 1){
             $("#lbAddChildInputConThu").html('Vợ thứ');
             $("#addChildInputConThu").append('<option value="1">Vợ cả</option>\n');
-            for (var i = 2; i < 100; i++) {
+            for (var i = 2; i < 50; i++) {
                 $("#addChildInputConThu").append('<option value=' + i + '>Vợ ' + i + '</option>\n');
             }
         }else {
             $("#lbAddChildInputConThu").html('Chồng thứ');
-            for (var i = 1; i < 100; i++) {
+            for (var i = 1; i < 50; i++) {
                 $("#addChildInputConThu").append('<option value=' + i + '>Chồng ' + i + '</option>\n');
             }
         }
@@ -1158,18 +1214,18 @@
         if(quanhe == 3 || quanhe == 4) {
             $("#lbViewChildInputConThu").html('Con thứ');
             $("#viewChildInputConThu").append('<option value="1">Con cả</option>\n');
-            for (var i = 2; i < 100; i++) {
+            for (var i = 2; i < 50; i++) {
                 $("#viewChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
             }
         }else if(quanhe == 1){
             $("#lbViewChildInputConThu").html('Vợ thứ');
             $("#viewChildInputConThu").append('<option value="1">Vợ cả</option>\n');
-            for (var i = 2; i < 100; i++) {
+            for (var i = 2; i < 50; i++) {
                 $("#viewChildInputConThu").append('<option value=' + i + '>Vợ ' + i + '</option>\n');
             }
         }else {
             $("#lbViewChildInputConThu").html('Chồng thứ');
-            for (var i = 1; i < 100; i++) {
+            for (var i = 1; i < 50; i++) {
                 $("#viewChildInputConThu").append('<option value=' + i + '>Chồng ' + i + '</option>\n');
             }
         }
@@ -1180,18 +1236,18 @@
         if(quanhe == 3 || quanhe == 4) {
             $("#lbEditChildInputConThu").html('Con thứ');
             $("#editChildInputConThu").append('<option value="1">Con cả</option>\n');
-            for (var i = 2; i < 100; i++) {
+            for (var i = 2; i < 50; i++) {
                 $("#editChildInputConThu").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
             }
         }else if(quanhe == 1){
             $("#lbEditChildInputConThu").html('Vợ thứ');
             $("#editChildInputConThu").append('<option value="1">Vợ cả</option>\n');
-            for (var i = 2; i < 100; i++) {
+            for (var i = 2; i < 50; i++) {
                 $("#editChildInputConThu").append('<option value=' + i + '>Vợ ' + i + '</option>\n');
             }
         }else {
             $("#lbEditChildInputConThu").html('Chồng thứ');
-            for (var i = 1; i < 100; i++) {
+            for (var i = 1; i < 50; i++) {
                 $("#editChildInputConThu").append('<option value=' + i + '>Chồng ' + i + '</option>\n');
             }
         }
@@ -1240,6 +1296,104 @@
             }
         });
     });
+    $("#btnSubmitGopPhaHe").click(function (event) {
+        //stop submit the form, we will post it manually.
+        event.preventDefault();
+        //hiện xác nhân
+        bootbox.confirm({
+            message: "Tất cả các con của Phả hệ hiện tại sẽ được chuyển vào phả hệ vói, bạn chắc chắn",
+            backdrop: true,//click ra ngoai huy
+            className: 'bb-alternate-modal',// giật giật
+            buttons: {
+                confirm: {label: 'Đồng ý', className: 'btn-success'},
+                cancel: {label: 'Hủy', className: 'btn-danger'}
+            },
+            callback: function (result) {
+                if (result) {
+                    actionGopPhaHe();
+                }
+            }
+        });
+    });
+    var actionGopPhaHe = function () {
+        var form = $('#formGopPhaHe')[0];
+        var data = new FormData(form);
+        data.append("idGenealogy", idGenealogy + '');
+        data.append("inputPedigreeTo", idPedigree + '');
+        data.append("inputParent", idParentMerger + '');
+        data.append("inputMotherOrFather", '-1');
+        console.log(data);
+        $("#btnSubmitGopPhaHe").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            enctype: 'application/x-www-form-urlencoded',
+            url: "/rest/pedigree/merge-pedigree",
+            data: data,
+            processData: false, //prevent jQuery from automatictoastr.optionsally transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (errorCode) {
+                console.log("SUCCESS : ", errorCode);
+                $('#modalGopPhaHe').modal('hide');
+                loadTree();
+                if (errorCode == '1') {
+                    toastr["success"]("Đã gộp thành công", "Thông báo");
+                } else {
+                    toastr["error"]("Không thể Gộp, vui lòng thử lại", "Lỗi");
+                }
+                $("#btnSubmitGopPhaHe").prop("disabled", false);
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+                $("#btnSubmitGopPhaHe").prop("disabled", false);
+            }
+        });
+    };
+
+    var loadFormGopPhaHe = function () {
+        $('#inputSelectPedigree').html("");
+        $.ajax({
+            type: "GET",
+            // https://localhost:89991/pedigree/1/people/3/get-info-add
+            url: "/rest/pedigree/list/" + idGenealogy + "/" + idParentMerger,
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            timeout: 600000,
+            success: function (data) {
+                console.log("merger pedigree " + JSON.stringify(data));
+                for (var i in data.infoPedigreeList) {
+                    var id = data.infoPedigreeList[i].id;
+                    var name = data.infoPedigreeList[i].name;
+                    if(id != idPedigree) {
+                        $("#inputSelectPedigree").append('<option value="' + id + '">' + name + '</option>');
+                    }
+                }
+
+                $("#inputIndexChild").html('');
+                if(!_.includes(data.listChildIndex, 1)) {
+                    $("#inputIndexChild").append('<option value="1">Con cả</option>\n');
+                }
+                for (var i = 2; i < 50; i++) {
+                    if(!_.includes(data.listChildIndex, i)) {
+                        $("#inputIndexChild").append('<option value=' + i + '>Con thứ ' + i + '</option>\n');
+                    }
+                }
+
+                $("#inputSelectPedigree").removeAttr('disabled');
+                $("#inputIndexChild").removeAttr('disabled');
+                $("#btnSubmitGopPhaHe").removeAttr('disabled');
+
+                $("#inputSelectPedigree").val(id).attr("selected", true);
+            },
+            error: function (e) {
+
+                $("#inputPedigreeTo").attr('disabled', 'disabled');
+                $("#inputSelectPedigree").attr('disabled', 'disabled');
+                $("#inputIndexChild").attr('disabled', 'disabled');
+                $("#btnSubmitGopPhaHe").attr('disabled', 'disabled');
+            }
+        });
+    };
 
     $('#btnCloseNodeXemQuanHe').click(function () {
         $('#nodeXemQuanHe').fadeOut();

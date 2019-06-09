@@ -194,17 +194,26 @@ public class PedigreeRestController {
         pedigreeService.add(pedigreeModel, Integer.parseInt(idGenealogy));
         System.out.println("idPedigree " + pedigreeModel.getId());
 
-
+        int lifeIdxParentBefore = nodeParent.get().getLifeIndex();
         String keyParentSelectRoot = NodeMemberModel.getPathkeyByParent(nodeParent.get());
         nodeParent.get().setPatchKey("r");
         nodeParent.get().setPedigree(pedigreeModel);
+        System.out.println("life idx before parent " + nodeParent.get().getLifeIndex());
+        int ofsLifeIdx = lifeIdxParentBefore - 1;
+        nodeParent.get().setLifeIndex(1);
         nodeMemberRepository.save(nodeParent.get());
 
         for (NodeMemberModel child: listChild) {
+            if(child.getId() == nodeParent.get().getId()) {
+                continue;
+            }
             String key = child.getPatchKey();
             key = key.replace(keyParentSelectRoot, "r_" + nodeParent.get().getId());
             child.setPatchKey(key);
             child.setPedigree(pedigreeModel);
+            System.out.println("life idx before child " + child.getLifeIndex());
+            child.setLifeIndex(child.getLifeIndex() - ofsLifeIdx);
+            System.out.println("life idx after child " + child.getLifeIndex());
             nodeMemberRepository.save(child);
         }
 

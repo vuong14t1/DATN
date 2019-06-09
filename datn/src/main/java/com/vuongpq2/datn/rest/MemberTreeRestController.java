@@ -117,7 +117,7 @@ public class MemberTreeRestController {
         parent = nodeMemberService.findById(Integer.parseInt(addChildIdParent));
         if (!parent.isPresent()) {
             nodeMemberModel.setParent(null);
-            nodeMemberModel.setLifeIndex(0);
+            nodeMemberModel.setLifeIndex(1);
         } else {
             //neu truong hop them vao bang nut me hoac cha la con cua parent
             if (parent.get().getRelation() == Relation.VO.ordinal() || parent.get().getRelation() == Relation.CHONG.ordinal()) {

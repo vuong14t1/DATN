@@ -866,11 +866,7 @@
 
     };
     var resetAddChildNode = function() {
-        $("#addChildInputRelation").html('');
-        $("#addChildInputRelation").append('<option value="3">Cha</option>');
-        $("#addChildInputRelation").append('<option value="4">Mẹ</option>');
-        $("#addChildInputRelation").append('<option value="2">Chồng</option>');
-        $("#addChildInputRelation").append('<option value="1">Vợ</option>');
+
         $("#addChildInputName").val("");
         $("#addChildInputNickName").val("");
         $("#addChildInputAddress").val("");
@@ -891,8 +887,6 @@
             .attr('id');
         var srcImg = sender.parentElement.parentElement.getElementsByTagName('img')[0].getAttribute('src');
         var idMemberTree = sender.parentElement.parentElement.getAttribute('id');
-        var relation = sender.parentElement.parentElement.getAttribute('relation');
-        console.log("relation " + relation);
         console.log("add child node " + sender.parentElement.parentElement);
         var name = sender.parentElement.parentElement.getElementsByClassName('node-name')[0].innerHTML;
         var date = sender.parentElement.parentElement.getElementsByClassName('node-title')[0].innerHTML;
@@ -904,6 +898,8 @@
             .val(idMemberTree);
         $("#modalAddChild")
             .modal();
+
+
 
         //get select wife or husband
         $.ajax({
@@ -922,6 +918,29 @@
                 }
                 dataResAddChild = data;
                 updateInputConthu(data.listChildIndex);
+
+                // update moi quan he, neu vo hoac chong va nam hoac nu khi add child
+                var relation = data.relation;
+                var gender = data.gender;
+                if(relation == 1) {
+                    //neu la vo
+                    $("#addChildInputRelation").html('');
+                    $("#addChildInputRelation").append('<option value="4">Mẹ</option>');
+                }else if (relation == 2) {
+                    //neu la chong
+                    $("#addChildInputRelation").html('');
+                    $("#addChildInputRelation").append('<option value="3">Cha</option>');
+                }else {
+                    $("#addChildInputRelation").html('');
+                    //neu la nu
+                    if(gender == 0) {
+                        $("#addChildInputRelation").append('<option value="4">Mẹ</option>');
+                        $("#addChildInputRelation").append('<option value="2">Chồng</option>');
+                    }else {
+                        $("#addChildInputRelation").append('<option value="3">Cha</option>');
+                        $("#addChildInputRelation").append('<option value="1">Vợ</option>');
+                    }
+                }
             },
             error: function (e) {
                 alert("Bạn không có quyền thực hiên action!");

@@ -6,11 +6,29 @@ import java.util.List;
 public class DInfoFormAddChild {
     private int id;
     private String name;
+    private int relation;
+    private int gender;
     private List<DHusbandOrWife> husbandOrWifes;
     private List<Integer> listChildIndex = new ArrayList<>();
 
     public DInfoFormAddChild() {
         husbandOrWifes = new ArrayList<>();
+    }
+
+    public int getRelation() {
+        return relation;
+    }
+
+    public void setRelation(int relation) {
+        this.relation = relation;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
     }
 
     public int getId() {

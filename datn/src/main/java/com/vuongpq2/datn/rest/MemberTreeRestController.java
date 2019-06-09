@@ -184,6 +184,8 @@ public class MemberTreeRestController {
         DInfoFormAddChild dInfoFormAddChild = new DInfoFormAddChild();
         dInfoFormAddChild.setId(parent.get().getId());
         dInfoFormAddChild.setName(parent.get().getName());
+        dInfoFormAddChild.setRelation(parent.get().getRelation());
+        dInfoFormAddChild.setGender(parent.get().getGender());
         int relationNeedFind = parent.get().getGender() == GioiTinh.NAM.ordinal() ? Relation.VO.ordinal() : Relation.CHONG.ordinal();
         Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
         List<NodeMemberModel> listHusbandWifes = nodeMemberService.findAllByPedigreeAndPatchKeyAndRelationEquals(pedigreeModel.get(), NodeMemberModel.getPathkeyByParent(parent.get()), relationNeedFind);

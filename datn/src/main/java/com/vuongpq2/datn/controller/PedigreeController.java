@@ -175,6 +175,7 @@ public class PedigreeController {
         mv.addObject("idGenealogy",idGenealogy);
         return mv;
     }
+
     @RequestMapping(value = "/genealogy/{idGenealogy}/pedigree/{idPedigree}/import", method = RequestMethod.POST)
     public ResponseEntity<?> uploadListPeople(
             @RequestParam(value = "idGenealogy",required = false,defaultValue = "") int idGenealogy,

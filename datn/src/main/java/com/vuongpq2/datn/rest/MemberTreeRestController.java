@@ -313,8 +313,6 @@ public class MemberTreeRestController {
             //xoa cac key con cua no
             String childPatchKey = NodeMemberModel.getPathkeyByParent(parent.get());
             Optional<PedigreeModel> pedigreeModel = pedigreeService.findById(idPedigree);
-            //xoa chinh no
-            nodeMemberService.deleteById(parent.get().getId());
 
             //TH co moi quan he la vo hoac chong(no co patch key giong thang con) thi chi xoa nhung thang co patch key giong no
             if (parent.get().getRelation() == Relation.VO.ordinal() || parent.get().getRelation() == Relation.CHONG.ordinal()) {
@@ -322,6 +320,11 @@ public class MemberTreeRestController {
             }
 
             nodeMemberService.deleteAllByPedigreeAndPatchKeyStartsWith(pedigreeModel.get(), childPatchKey);
+            if (parent.get().getRelation() != Relation.VO.ordinal() && parent.get().getRelation() != Relation.CHONG.ordinal()) {
+                //xoa chinh no
+                nodeMemberService.deleteById(parent.get().getId());
+            }
+
             return new ResponseEntity<>("1", HttpStatus.OK);
         }
         return new ResponseEntity<>("1", HttpStatus.NOT_FOUND);
@@ -608,7 +611,7 @@ public class MemberTreeRestController {
         }
 
         if(findNodeMember.get().getMotherFatherId() != -1) {
-            Optional<NodeMemberModel> nodeMemberModelMother = nodeMemberService.findById(findNodeMember.get().getMotherFatherId());;
+            Optional<NodeMemberModel> nodeMemberModelMother = nodeMemberService.findById(findNodeMember.get().getMotherFatherId());
             Child child = new Child();
             child.setHTMLid(nodeMemberModelMother.get().getId() + "");
             child.setId(nodeMemberModelMother.get().getId());

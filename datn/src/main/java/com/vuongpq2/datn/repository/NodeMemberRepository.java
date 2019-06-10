@@ -27,7 +27,7 @@ public interface NodeMemberRepository extends JpaRepository<NodeMemberModel, Int
 
     void deleteAllByIdOrPatchKeyStartsWith(Integer id, String patchKey);
 
-    void deleteAllByPedigreeAndPatchKeyStartsWith (PedigreeModel pedigreeModel, String patchKey);
+    void deleteAllByPedigreeAndPatchKeyStartsWith(PedigreeModel pedigreeModel, String patchKey);
 
     @Modifying(clearAutomatically = true)
     @Query( nativeQuery = true, value = "update node_member set node_member.patch_key = REPLACE( node_member.patch_key ,:oldKey ,:newKey) where node_member.patch_key like concat(:oldKey,'%')")

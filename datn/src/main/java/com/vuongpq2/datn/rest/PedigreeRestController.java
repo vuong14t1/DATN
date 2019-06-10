@@ -197,6 +197,9 @@ public class PedigreeRestController {
         int lifeIdxParentBefore = nodeParent.get().getLifeIndex();
         String keyParentSelectRoot = NodeMemberModel.getPathkeyByParent(nodeParent.get());
         nodeParent.get().setPatchKey("r");
+        nodeParent.get().setParent(null);
+        nodeParent.get().setChildIndex(-1);
+        nodeParent.get().setRelation(-1);
         nodeParent.get().setPedigree(pedigreeModel);
         System.out.println("life idx before parent " + nodeParent.get().getLifeIndex());
         int ofsLifeIdx = lifeIdxParentBefore - 1;

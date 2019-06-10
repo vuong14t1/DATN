@@ -49,7 +49,7 @@ public class GenealogyRestController {
             String his = gene.getHistory();
             int length = Math.min(his.length(), 50);
             his = his.substring(0, length);
-            item.setHistory(HtmlUtils.htmlEscape(his));
+            item.setHistory(his);
             UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, gene.getId());
             if (userPermissionModel != null) {
                 item.setPermission(userPermissionModel.getPermission().getCode());
@@ -63,12 +63,10 @@ public class GenealogyRestController {
         if(principal == null) {
             return new ResponseEntity<>("success" , HttpStatus.NOT_FOUND);
         }
-        if(getPermission(principal.getName(), id) == Permission.ADMIN.getCode()) {
-            userPermissionRepository.deleteAllByGenealogyId(id);
-            pedigreeRepository.deleteAllByGenealogyModel(genealogyService.findById(id).get());
-            genealogyService.delete(id);
 
-        }
+        userPermissionRepository.deleteAllByGenealogyId(id);
+        pedigreeRepository.deleteAllByGenealogyModel(genealogyService.findById(id).get());
+        genealogyService.delete(id);
         return new ResponseEntity<>("success" , HttpStatus.OK);
     }
 
@@ -83,7 +81,7 @@ public class GenealogyRestController {
             String his = g.getHistory();
             int length = Math.min(his.length(), 50);
             his = his.substring(0, length);
-            dGenealogyModel.setHistory(HtmlUtils.htmlEscape(his));
+            dGenealogyModel.setHistory(his);
             dGenealogyModel.setName(g.getName());
             UserPermissionModel userPermissionModel = userPermissionRepository.findTopByUserAndGenealogy_Id(userModel, g.getId());
             if(userPermissionModel != null) {

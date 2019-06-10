@@ -46,9 +46,9 @@ public class GenealogyController {
     public ModelAndView add(Principal principal, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("/genealogy/detail-add");
         GenealogyModel genealogy = new GenealogyModel();
-        genealogy.setName("ABC");
-        genealogy.setHistory("h");
-        genealogy.setThuyTo("thh");
+        genealogy.setName(".");
+        genealogy.setHistory(".");
+        genealogy.setThuyTo(".");
         mv.addObject("genealogy", genealogy);
         return mv;
     }

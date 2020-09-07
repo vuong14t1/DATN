@@ -96,7 +96,7 @@
                             <button class="btn btn-success" id="btnXacNhanXemQuanHe"><span> Xem </span></button>
                             <button class="btn btn-warning" id="btnResetXemQuanHe"><span> Chọn Lại </span></button>
                         </p>
-                        <div id="resultXemQuanHe">
+                        <div id="resultXemQuanHe" class="text-center">
                             <p></p>
                             <p class="pull-right"></p>
                         </div>
@@ -820,7 +820,6 @@
             data.append("idGenealogy", idGenealogy + '');
             data.append("idMember", id + '');
             console.log(JSON.stringify(data));
-            console.log(data);
             $("#btnCurPedigree").prop("disabled", true);
             $.ajax({
                 type: "POST",
@@ -916,8 +915,7 @@
                     var name = data.husbandOrWifes[i].name;
                     $("#addChildInputIdMotherFather").append('<option value="' + id + '">' + name + '</option>');
                 }
-                dataResAddChild = data;
-                updateInputConthu(data.listChildIndex);
+                dataResAddChild = data
 
                 // update moi quan he, neu vo hoac chong va nam hoac nu khi add child
                 var relation = data.relation;
@@ -941,6 +939,8 @@
                         $("#addChildInputRelation").append('<option value="1">Vợ</option>');
                     }
                 }
+                updateInputConthu(data.listChildIndex);
+                updateInputGender();
             },
             error: function (e) {
                 alert("Bạn không có quyền thực hiên action!");
@@ -1478,8 +1478,8 @@
                         var name1 = $("#imgPeopleRelationName1").text();
                         var name2 = $("#imgPeopleRelationName2").text();
                         $("#resultXemQuanHe").html(
-                            '<p>' + name1 + ' là ' + data[0] + ' '+  name2 + '</p>' +
-                            '<p class="pull-right">' + name2 + ' là ' + data[1] + ' ' + name1 + ' </p>'
+                            '<p>' + name1 + ' là ' + '<h3>' + data[0] + '</h3>' + ' '+  name2 + '</p>' +
+                            '<p>' + name2 + ' là ' + '<h3>' + data[1] + '</h3>' + ' ' + name1 + ' </p>'
                         );
                         $("#btnXacNhanXemQuanHe").prop("disabled", false);
                     },

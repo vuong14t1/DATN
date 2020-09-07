@@ -1,9 +1,12 @@
 package com.vuongpq2.datn.data_seeder;
 
+import com.vuongpq2.datn.model.NodeMemberModel;
 import com.vuongpq2.datn.model.RoleModel;
 import com.vuongpq2.datn.model.UserModel;
+import com.vuongpq2.datn.repository.NodeMemberRepository;
 import com.vuongpq2.datn.repository.RoleRepository;
 import com.vuongpq2.datn.repository.UserRepository;
+import com.vuongpq2.datn.service.NodeMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -11,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Component
 public class AccountSeeder implements ApplicationListener<ContextRefreshedEvent> {
@@ -23,6 +27,12 @@ public class AccountSeeder implements ApplicationListener<ContextRefreshedEvent>
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private NodeMemberService nodeMemberService;
+
+    @Autowired
+    private NodeMemberRepository nodeMemberRepository;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent arg0) {
@@ -39,7 +49,11 @@ public class AccountSeeder implements ApplicationListener<ContextRefreshedEvent>
             roleModel.setName("USER");
             roleRepository.save(roleModel);
         }
-
+/*        List<NodeMemberModel> nodeMemberModels = nodeMemberService.findAll();
+        for(NodeMemberModel  nodeMemberModel: nodeMemberModels) {
+            nodeMemberModel.setLifeIndex(nodeMemberModel.getLifeIndex() + 1);
+            nodeMemberRepository.save(nodeMemberModel);
+        }*/
         // Admin account
         for(int i = 0; i < 3; i++) {
             if (userRepository.findByEmail("vuongadmin" + i + "@gmail.com") == null) {
